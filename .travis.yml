@@ -35,7 +35,7 @@ after_success:
   - cd ..
   - gem install bundler -v '1.17.3'
   - which ruby
-  - which bunder
+  - which bundler
   - ruby -v
   - bundler -v
   - bundle install
