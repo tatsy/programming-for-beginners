@@ -34,6 +34,10 @@ after_success:
   - git checkout gh-pages
   - cd ..
   - gem install bundler -v '1.17.3'
+  - which ruby
+  - which bunder
+  - ruby -v
+  - bundler -v
   - bundle install
   - jekyll build
   - cd _site
