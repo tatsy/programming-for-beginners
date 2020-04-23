@@ -38,7 +38,7 @@ after_success:
   - cd _site
   - git add --all
   - git commit -m "Commit from Travis CI for build $TRAVIS_BUILD_NUMBER ."
-  - git push --force --quiet https://$GH_TOKEN@github.com/tatsy/OpenGLCourseJP.git gh-pages:gh-pages
+  - git push --force --quiet https://$GH_TOKEN@github.com/tatsy/cpp-python-beginners.git gh-pages:gh-pages
 
 git:
   submodules: false
