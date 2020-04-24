@@ -26,10 +26,11 @@
   <link rel="shortcut icon" href="{{ '/public/favicon.ico' | absolute_url }}">
   <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ '/atom.xml' | absolute_url }}">
 
-  {%- include mathjax.html -%}
-
   <script type="text/javascript" src="{{ '/public/js/jquery.min.js' | relative_url }}"></script>
   <script type="text/javascript" src="{{ '/public/js/lightbox.min.js' | relative_url }}"></script>
+
+  {%- include mathjax.html -%}
+
 
   {% if site.google_analytics_id %}
   <script>
