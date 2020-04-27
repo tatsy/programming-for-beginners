@@ -1,12 +1,12 @@
 ---
 layout: post
-title: 線形回帰
+title: "ロジスティック回帰 - その1 -"
 categories: [python]
 ---
 
 ## ロジスティック回帰の概要
 
-[バイナリファイルの読み込み]({% post_url 2020-04-24-read-binary%})で読み込んだMNISTのデータを使って、単純な線形モデルで数字を予想する。
+[バイナリファイルの読み込み]({% link _python/read-binary.md %})で読み込んだMNISTのデータを使って、単純な線形モデルで数字を予想する。
 
 一般に線形回帰、といったときにはデータベクトル $\mathbf{x}$ を入力として、何らかの推定値 $\mathbf{y}$ を線形式、すなわち
 
@@ -55,7 +55,7 @@ X = X.astype('float32')
 
 ```python
 from sklearn.linear_model import LogisticRegression
-clf = LogisticRegression(random_state=0, multi_class='multinomial').fit(X, y)
+clf = LogisticRegression(random_state=0, multi_class='multinomial', max_iter=20).fit(X, y)
 ```
 
 少し時間がかかるが、しばらくすると学習が終わる。なお上記のコード内での `y` は整数型のラベルを格納したNumPyの配列で良い(分かりやすくするために名前を変更した)。
@@ -75,7 +75,3 @@ acc = (pred_labels == y_test).mean()
 ```
 
 ただしく学習できていれば90%程度の正解率となるはずである。
-
-## ロジスティック回帰を再現する
-
-上記の通り、ロジスティック回帰による識別モデルは、線形変換とsoftmax関数の組み合わせである。softmax関数にはパラメータ変数は含まれないので、回帰モデル自体のパラメータは行列 $\mathb{A}$ とバイアスベクトル $\mathbf{b}$ のみである。

@@ -17,10 +17,6 @@ author:
 github:
   repo:              https://github.com/tatsy/cpp-python-beginners
 
-# Gems
-plugins:
-  - jekyll-paginate
-
 # Custom vars
 version:             1.0.0
 google_analytics_id: #UA-XXXX-Y
@@ -31,3 +27,15 @@ highlighter: rouge
 kramdown:
   input: GFM
   syntax_highlighter: rouge
+
+# Collections
+include: ["_python"]
+
+collections:
+  python:
+    output: true
+    permalink: /:collection/:path/
+
+  cpp:
+    output: true
+    permalink: /:collection/:path/
