@@ -46,4 +46,17 @@
     color: #d44950;
     font-style: normal;
   }
+
+  table.images {
+    table-layout: fixed;
+
+    td {
+      text-align: center;
+    }
+
+    p {
+      margin: 0px;
+      padding: 0px;
+    }
+  }
 }

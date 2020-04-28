@@ -54,10 +54,10 @@ conda install numpy scipy matplotlib scikit-learn scikit-image opencv
 conda install -c conda-forge jupyterlab
 ```
 
-二つ目のコマンドにある`-c conda-forge`というのは`conda-forge`というチャンネルから必要なパッケージをインストールせよ、という意味だ。デフォルトのconda環境には存在しないものも`conda-forge`チャネルには存在していることが多い。もちろん他にも様々なチャネルが存在していて、以下で使うPyTorchなどは`torch`というチャネルからインストールできる。
+二つ目のコマンドにある`-c conda-forge`というのは`conda-forge`というチャンネルから必要なパッケージをインストールせよ、という意味だ。デフォルトのconda環境には存在しないものも`conda-forge`チャネルには存在していることが多い。もちろん他にも様々なチャネルが存在していて、以下で使うPyTorchなどは`pytorch`というチャネルからインストールできる。
 
 ```shell
-conda install -c torch torch torchvision
+conda install -c pytorch pytorch torchvision
 ```
 
 補足だが、ウェブ上にはAnacondaとpyenvを共存させるようなやり方を説明している記事がなぜか多い。が、これはあまり意味がないことだ。なぜならAnacondaは仮想環境ごとにPythonのバージョンを変えられるし、パッケージのインストールにpipを使ってもいい(pyenvを使っている人はcondaに欲しいパッケージがないことを気にしているようだ...)。
