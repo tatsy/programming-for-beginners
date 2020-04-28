@@ -4,7 +4,6 @@ tagline:             'Programming for everyone!'
 description:         '初心者向けC++/Pythonプログラミング'
 url:                 https://tatsy.github.io
 baseurl:             '/cpp-python-beginners'
-paginate:            5
 permalink:           pretty
 
 # About/contact
@@ -29,8 +28,6 @@ kramdown:
   syntax_highlighter: rouge
 
 # Collections
-include: ["_python"]
-
 collections:
   python:
     output: true
