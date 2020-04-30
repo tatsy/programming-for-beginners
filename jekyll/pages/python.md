@@ -27,7 +27,8 @@ permalink: /python/
 * [ロジスティック回帰 -その1-]({% link _python/logistic-regression-01.md %})
 * [ロジスティック回帰 -その2-]({% link _python/logistic-regression-02.md %})
 * [画像中の図形検出]({% link _python/figure-detection.md %})
-* [数独ソルバーを作る]({% link _python/solve-sudoku.md %})
+* [数独を解く]({% link _python/solve-sudoku.md %})
+* [(課題)画像中の数独問題を解こう]({% link _python/assignment-sudoku.md %})
 
 ## 深層学習による画像生成の基礎
 
