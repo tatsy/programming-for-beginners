@@ -56,7 +56,7 @@ n_images, height, width = struct.unpack('>iii', fp.read(4 * 3))
 それ以後は1枚1枚の画像の情報が書かれている。1枚の画像の各画素は白黒の値が0-255 (1バイト符号なし整数)で書かれていて、それが28x28=784画素分ある。故に画像1枚分のデータは784バイトになる。
 
 ```python
-pixels = struct.unpack('>B', fp.read(1 * 28 * 28))
+pixels = struct.unpack('>' + 'B' * 28 * 28, fp.read(1 * 28 * 28))
 ```
 
 このままでは画像として表示できないので、これを **NumPy** の配列に変更して、形を変更しよう。
