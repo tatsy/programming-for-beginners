@@ -32,7 +32,8 @@ permalink: /python/
 
 ## 深層学習による画像生成の基礎
 
-* [PyTorchによるロジスティック回帰]({% link _python/logistic-regression-pytorch.md %})
 * [畳み込みニューラルネット]({% link _python/convolutional-network.md %})
-* [変分オートエンコーダ(VAE)]({% link _python/vae.md %})
 * [敵対的生成ネットワーク(GAN)]({% link _python/gan.md %})
+* [条件付き画像生成 (CGAN)]({% link _python/conditional-gan.md %})
+* [GANの学習安定化テクニック]({% link _python/stabilize-gan-training.md %})
+* [(課題)GANによる高品質画像生成レース]({% link _python/assignment-gan.md %})
