@@ -32,6 +32,17 @@ permalink: /python/
 
 ## 深層学習による画像生成の基礎
 
+<table class="images">
+<tr>
+  <td style="text-align: center; width: 50%;">{{ '**教師画像**' | markdownify }}</td>
+  <td style="text-align: center; width: 50%;">{{ '**出力画像**' | markdownify }}</td>
+</tr>
+<tr>
+  <td>{% include lightbox.html src="/public/images/gan/x_real_150.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/gan/x_fake_150.jpg" style="width: 100%;" %}</td>
+</tr>
+</table>
+
 * [畳み込みニューラルネット]({% link _python/convolutional-network.md %})
 * [敵対的生成ネットワーク(GAN)]({% link _python/gan.md %})
 * [条件付き画像生成 (CGAN)]({% link _python/conditional-gan.md %})

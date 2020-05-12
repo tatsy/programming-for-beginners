@@ -28,10 +28,10 @@ class MnistDataset(torch.utils.data.Dataset):
 
         if self.mode == 'train':
             self.image_file = 'train-images-idx3-ubyte'
-            self.label_file = 'train-labels-idx1.ubyte'
+            self.label_file = 'train-labels-idx1-ubyte'
         elif self.mode == 'test':
-            self.image_file = 't10k-images-idx3.ubyte'
-            self.label_file = 't10k-labels-idx1.ubyte'
+            self.image_file = 't10k-images-idx3-ubyte'
+            self.label_file = 't10k-labels-idx1-ubyte'
         else:
             raise Exception('MNIST dataset mode must be "train" or "test"')
         
@@ -59,6 +59,10 @@ class MnistDataset(torch.utils.data.Dataset):
             pixels = struct.unpack('>' + 'B' * n_pixels, fp.read(n_pixels))
             pixels = np.asarray(pixels, dtype='uint8').reshape((n_images, 1, height, width))
 
+            # 画像サイズを2べきにしておく
+            pixels = np.pad(pixels, [(0, 0), (0, 0), (2, 2), (2, 2)], mode='constant', constant_values=0)
+            pixels = (pixels / 255.0).astype('float32')
+
         return pixels
 
     def _load_labels(self, filename):
@@ -68,7 +72,7 @@ class MnistDataset(torch.utils.data.Dataset):
                 raise Exception('Magic number does not match!')
 
             n_labels = struct.unpack('>i', fp.read(4))[0]
-            labels = struct.unpack('>' + 'B' * n_labels)
+            labels = struct.unpack('>' + 'B' * n_labels, fp.read(n_labels))
             labels = np.asarray(labels, dtype='uint8')
 
         return labels
