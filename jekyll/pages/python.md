@@ -18,8 +18,8 @@ permalink: /python/
   <td style="text-align: center; width: 50%;">{{ '**出力画像**' | markdownify }}</td>
 </tr>
 <tr>
-  <td>{% include lightbox.html src="/public/images/sudoku/level_3.jpg" style="width: 100%;" %}</td>
-  <td>{% include lightbox.html src="/public/images/sudoku/level_3_ans.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/sudoku/level_3_small.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/sudoku/level_3_ans_small.jpg" style="width: 100%;" %}</td>
 </tr>
 </table>
 

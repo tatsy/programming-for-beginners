@@ -9,8 +9,8 @@ title: 画像中の数独を解こう
   <td style="text-align: center; width: 50%;">{{ '**出力画像**' | markdownify }}</td>
 </tr>
 <tr>
-  <td>{% include lightbox.html src="/public/images/sudoku/level_3.jpg" style="width: 100%;" %}</td>
-  <td>{% include lightbox.html src="/public/images/sudoku/level_3_ans.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/sudoku/level_3_small.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/sudoku/level_3_ans_small.jpg" style="width: 100%;" %}</td>
 </tr>
 </table>
 
@@ -25,13 +25,15 @@ title: 画像中の数独を解こう
   <td style="text-align: center; width: 50%;">{{ '**レベル3**' | markdownify }}</td>
 </tr>
 <tr>
-  <td>{% include lightbox.html src="/public/images/sudoku/level_1.jpg" style="width: 100%;" %}</td>
-  <td>{% include lightbox.html src="/public/images/sudoku/level_2.jpg" style="width: 100%;" %}</td>
-  <td>{% include lightbox.html src="/public/images/sudoku/level_3.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/sudoku/level_1_small.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/sudoku/level_2_small.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/sudoku/level_3_small.jpg" style="width: 100%;" %}</td>
 </tr>
 </table>
 
-**ヒント:**
+上記の入力データはサイズを落としてあるので、元々の画像は[こちら]({% link public/images/sudoku/inputs.zip %})からダウンロードして下さい。
+
+### ヒント
 
 処理の大きな流れは以下の通りである。
 
