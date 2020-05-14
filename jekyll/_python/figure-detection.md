@@ -58,8 +58,8 @@ canny = cv2.Canny(gray, 100, 200)
 モルフォロジー演算は構造要素と呼ばれる小さな画像のようなものを入力の二値画像にしたがって繰り返す操作に対応する。したがって、OpenCV(やMATLABなどの他のライブラリ)では、モルフォロジー演算の関数は二値画像と構造要素を引数にとる。OpenCVを用いる場合には、dilationとerosionはそれぞれ以下のようなコードで実現される。
 
 ```python
-res_erode = cv2.erode(binary, np.ones((5, 5), dtype=binary.dtype))
 res_dilate = cv2.dilate(binary, np.ones((5, 5), dtype=binary.dtype))
+res_erode = cv2.erode(binary, np.ones((5, 5), dtype=binary.dtype))
 ```
 
 エッジを統合する場合、エッジが白色の領域に検出されているとすると、先にdilation、次にerosionの順序で処理を施す。dilationにより二重のエッジのそれぞれが太くなり、重なることで、太い1本のエッジとなる。その後、erosionをかけることで、そのエッジが細くなり、1本の細いエッジとなる。
