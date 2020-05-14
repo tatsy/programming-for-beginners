@@ -3,7 +3,7 @@ title:               cpp-python-beginners
 tagline:             'Programming for everyone!'
 description:         '初心者向けC++/Pythonプログラミング'
 url:                 https://tatsy.github.io
-baseurl:             '/cpp-python-beginners'
+baseurl:             '/programming-for-beginners'
 permalink:           pretty
 
 # About/contact
@@ -14,7 +14,7 @@ author:
 
 # GitHub
 github:
-  repo:              https://github.com/tatsy/cpp-python-beginners
+  repo:              https://github.com/tatsy/programming-for-beginners
 
 # Custom vars
 version:             1.0.0
