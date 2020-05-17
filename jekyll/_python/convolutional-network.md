@@ -73,7 +73,9 @@ class MnistDataset(torch.utils.data.Dataset):
 
             n_labels = struct.unpack('>i', fp.read(4))[0]
             labels = struct.unpack('>' + 'B' * n_labels, fp.read(n_labels))
-            labels = np.asarray(labels, dtype='uint8')
+
+            # 誤差関数用にlongで表しておく
+            labels = np.asarray(labels, dtype='int64')
 
         return labels
 ```
@@ -104,7 +106,7 @@ class LeNet5(nn.Module):
         super(Net, self).__init__()
 
         self.net = nn.Sequential(
-            nn.Conv2d(1, 6, kernel_size=5, stride=1, padding=2),
+            nn.Conv2d(1, 6, kernel_size=5, stride=1, padding=0),
             nn.MaxPool2d(kernel_size=2, stride=2),
             nn.Sigmoid(),
             nn.Conv2d(6, 16, kernel_size=5, stride=1, padding=0),
@@ -170,6 +172,9 @@ for epoch in range(n_epochs):
 images = data['images']
 labels = data['labels']
 
+# トレーニングモードに変更
+net.train()
+
 # 勾配の初期化
 net.zero_grad()
 
@@ -186,7 +191,7 @@ loss.backward()
 optim.step()
 ```
 
-より複雑なネットワークになればネットワークへのデータ転送や誤差の評価は複雑にはなるが、基本的な流れはほとんど変わらない。なお上記のコードに現れる `criterion` は誤差を評価する損失関数で対数softmax関数を最終出力に用いた場合には `nn.NNLLoss` (非負対数尤度, Non-Negative Likelihood)を用いる。
+より複雑なネットワークになればネットワークへのデータ転送や誤差の評価は複雑にはなるが、基本的な流れはほとんど変わらない。なお上記のコードに現れる `criterion` は誤差を評価する損失関数で、ネットワークの最終出力に`log_softmax`用いた場合には `nn.NLLLoss` (非負対数尤度, Non-Negative Likelihood)を用いる。 (効率は落ちるが通常の`softmax`を使った場合には `nn.CrossEntropyLoss` を使う)。
 
 ```python
 criterion = nn.NLLLoss()
@@ -199,4 +204,3 @@ MNISTの例であれば、上記のコードで5エポックほど学習すれ�
 さて、それでは、ここから精度をさらに上げるにはどうしたら良いだろうか？まずは、ネットワークの非線形性を向上し、誤差逆伝播の効率をあげるため、活性化関数をReLU (rectified linear unit) に変更するとよいだろう。加えて、学習の効率を向上させるためにバッチ正規化を入れると良い。すると、5エポックを待つことなく、あっという間に90%以上の精度は出るはずだ。
 
 これ以外にも、様々な学習のテクニックがあるが、それらについては、ネット上にも多くの記事や実装があるので、各自調べてみてほしい。
-
