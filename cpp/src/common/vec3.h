@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <functional>
 
 class Vec3 {
@@ -64,66 +65,66 @@ public:
 };
 
 // Basic arithmetics
-Vec3 operator+(const Vec3 &v1, const Vec3 &v2) {
+inline Vec3 operator+(const Vec3 &v1, const Vec3 &v2) {
     Vec3 ret = v1;
     ret += v2;
     return ret;
 }
 
-Vec3 operator-(const Vec3 &v1, const Vec3 &v2) {
+inline Vec3 operator-(const Vec3 &v1, const Vec3 &v2) {
     Vec3 ret = v1;
     ret -= v2;
     return ret;
 }
 
-Vec3 operator*(const Vec3 &v1, const Vec3 &v2) {
+inline Vec3 operator*(const Vec3 &v1, const Vec3 &v2) {
     Vec3 ret = v1;
     ret *= v2;
     return ret;
 }
 
-Vec3 operator*(const Vec3 &v1, double s) {
+inline Vec3 operator*(const Vec3 &v1, double s) {
     Vec3 ret = v1;
     ret *= s;
     return ret;
 }
 
-Vec3 operator*(double s, const Vec3 &v2) {
+inline Vec3 operator*(double s, const Vec3 &v2) {
     Vec3 ret = v2;
     ret *= s;
     return ret;
 }
 
-Vec3 operator/(const Vec3 &v1, const Vec3 &v2) {
+inline Vec3 operator/(const Vec3 &v1, const Vec3 &v2) {
     Vec3 ret = v1;
-    v1 /= v2;
+    ret /= v2;
     return ret;
 }
 
-Vec3 operator/(const Vec3 &v1, double s) {
+inline Vec3 operator/(const Vec3 &v1, double s) {
     Vec3 ret = v1;
     ret /= s;
     return ret;
 }
 
 // GLSL like vector arithmetics
-double dot(const Vec3 &v1, const Vec3 &v2) {
+inline double dot(const Vec3 &v1, const Vec3 &v2) {
     const Vec3 temp = v1 * v2;
     return temp.x + temp.y + temp.z;
 }
 
-Vec3 cross(const Vec3 &v1, const Vec3 &v2) {
+inline Vec3 cross(const Vec3 &v1, const Vec3 &v2) {
     const double x = v1.y * v2.z - v1.z * v2.y;
     const double y = v1.z * v2.x - v1.x * v2.z;
     const double z = v1.x * v2.y - v1.y * v2.x;
     return Vec3(x, y, z);
 }
 
-double length(const Vec3 &v) {
+inline double length(const Vec3 &v) {
     return std::sqrt(dot(v, v));
 }
 
-Vec3 normalized(const Vec3 &v) {
+inline Vec3 normalized(const Vec3 &v) {
     return v / length(v);
 }
 

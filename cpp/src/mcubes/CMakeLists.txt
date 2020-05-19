@@ -5,6 +5,9 @@ target_include_directories(${BUILD_TARGET} PUBLIC ${EIGEN3_INCLUDE_DIRS})
 target_sources(
     ${BUILD_TARGET}
     PRIVATE
+    ${COMMON_HEADERS}
+    mcubes.h
+    mcubes.cpp
     main.cpp
 )
 
