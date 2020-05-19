@@ -5,7 +5,6 @@ target_include_directories(${BUILD_TARGET} PUBLIC ${EIGEN3_INCLUDE_DIRS})
 target_sources(
     ${BUILD_TARGET}
     PRIVATE
-        ../common/mesh_read_write.h
     main.cpp
 )
 
