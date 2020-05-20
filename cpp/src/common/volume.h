@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstring>
 #include <iostream>
 #include <fstream>
 #include <memory>
@@ -69,8 +70,8 @@ struct Volume {
         //NOT_IMPL_ERROR();
         std::ifstream reader(filename.c_str(), std::ios::in | std::ios::binary);
         uint16_t *buffer = new uint16_t[sizes[0]];
-        for (int z = 0; z < sizes[2]; z++) {
-            for (int y = 0; y < sizes[1]; y++) {
+        for (uint64_t z = 0; z < sizes[2]; z++) {
+            for (uint64_t y = 0; y < sizes[1]; y++) {
                 uint16_t *ptr = data.get() + (z * sizes[1] + y) * sizes[0];
                 reader.read((char*)ptr, sizeof(uint16_t) * sizes[0]);
             }

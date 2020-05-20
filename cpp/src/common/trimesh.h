@@ -17,7 +17,7 @@ void write_obj(const std::string &filename, const std::vector<Vec3> &positions, 
         writer << "v " << p.x << " " << p.y << " " << p.z << "\n";
     }
 
-    const size_t nFaces = indices.size() / 3;
+    const int nFaces = (int)indices.size() / 3;
     for (int i = 0; i < nFaces; i++) {
         const uint32_t a = indices[i * 3 + 0] + 1;
         const uint32_t b = indices[i * 3 + 1] + 1;
@@ -43,7 +43,7 @@ void write_ply(const std::string &filename, const std::vector<Vec3> &positions, 
     writer << "property float y" << "\n";
     writer << "property float z" << "\n";
 
-    const size_t nFaces = indices.size() / 3;
+    const int nFaces = (int)indices.size() / 3;
     writer << "element face " << nFaces << "\n";
     writer << "property list uchar int vertex_indices" << "\n";
     writer << "end_header" << "\n";

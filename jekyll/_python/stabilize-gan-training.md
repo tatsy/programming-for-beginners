@@ -11,7 +11,7 @@ title: GANの学習安定化テクニック
 
 GANはGeneratorがDiscriminatorを騙せるようなきれいな画像を作り出すことができれば、よりよい画像を作ることができるが、ここにはよく知られた問題が2つある。
 
-1つ目の問題はGeneratorあるいはDiscriminatorの一方だけが早く学習していまい、もう一方のネットワークの学習が進みづらくなる問題である。この問題は初期においてはDiscriminatorの学習が進みすぎて、Generatorがどのような画像を作っても簡単に見破ってしまい、結果としてGeneratorが学習しなくなる。ただ、最近はGeneratorを安定して学習させる技術がいろいろ出てきたことで、以下にも説明するTTUR (two time-scale update rule)にもあるようにDiscriminatorの方を早く学習させるのが主流となっている。
+1つ目の問題はGeneratorあるいはDiscriminatorの一方だけが早く学習していまい、もう一方のネットワークの学習が進みづらくなる問題である。この問題は初期においてはDiscriminatorの学習が進みすぎて、Generatorがどのような画像を作っても簡単に見破ってしまい、結果としてGeneratorが学習というものだ。ただ、最近はGeneratorを安定して学習させる技術がいろいろ出てきたことで、以下にも説明するTTUR (two time-scale update rule)にもあるようにDiscriminatorの方を早く学習させるのが主流となっている。
 
 2つ目の問題はmode collapseやmissing modeと呼ばれる問題で、Generatorが最も得意な画像、例えば数字なら0、だけを作ってDiscriminatorを騙すように学習してしまうことを指す。Generatorは1-9の数字は全く作ることなく、よりよい0を作ることを目指して学習してしまう。これを防ぐためには、Discriminatorが1枚1枚の画像だけではなく、バッチの中のデータの多様性などを判断できるようにするとよく、初期においてはfeature matchingやminibatch discriminationなどが提案された。
 
@@ -34,7 +34,7 @@ lossD = criterion(y_real, torch.ones_like(y_real)) + criterion(y_fake, torch.one
 のように学習していたものを、
 
 ```python
-lossD = criterion(y_real, torch.ones_like(y_real) * 0.9) + criterion(y_fake, torch.ones_like(y_fake))
+lossD = criterion(y_real, torch.ones_like(y_real) * 0.9) + criterion(y_fake, torch.zeros_like(y_fake))
 ```
 
 のように書き換えるだけでよく、実装も簡単である。

@@ -6,6 +6,7 @@ target_sources(
     ${BUILD_TARGET}
     PRIVATE
     ${COMMON_HEADERS}
+    mcubes.cpp
     main.cpp
 )
 
