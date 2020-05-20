@@ -7,7 +7,7 @@ title: GANによる高品質画像生成レース
 
 ## データ・セット
 
-[Oxford flower dataset](https://www.robots.ox.ac.uk/~vgg/data/flowers/){: target="_blank" }の102カテゴリを使って行います。このデータセットは必ずしも正方形の画像が入っているわけではないので、画像の中心でクロップして128x128のサイズに正規化したものをお渡しします。
+[Oxford flower dataset](https://www.robots.ox.ac.uk/~vgg/data/flowers/){: target="_blank" }の102カテゴリを使って行います。
 
 ## 評価方法
 

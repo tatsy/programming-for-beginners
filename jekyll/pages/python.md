@@ -10,7 +10,7 @@ permalink: /python/
 
 ## 数独ソルバーを作る
 
-ここでは数独の本を写真で撮影して、それを画像認識することで、自動的に数独を解くソルバーを作ります。
+ここでは数独の本を写真で撮影して、それを画像認識することで、自動的に数独を解くソルバーを作る。
 
 <table class="images">
 <tr>
@@ -31,6 +31,8 @@ permalink: /python/
 * [(課題)画像中の数独問題を解こう]({% link _python/assignment-sudoku.md %})
 
 ## 深層学習による画像生成の基礎
+
+ここでは敵対的生成ネットワーク (GAN) を利用して、Oxford flower datasetから、自然な花の画像を生成することを目指す。
 
 <table class="images">
 <tr>
