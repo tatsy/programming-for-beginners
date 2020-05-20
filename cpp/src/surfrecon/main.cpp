@@ -43,7 +43,7 @@ double sign(double x) {
 }
 
 // Compactly supported RBF
-double rbf(const Vec3 &x, const Vec3 &y, double s = 0.2, double k = 1.0) {
+double rbf(const Vec3 &x, const Vec3 &y, double s = 0.05, double k = 0.1) {
     const Vec3 diff = x - y;
     const double norm2 = dot(diff, diff);
     if (norm2 > k * k) {
@@ -99,6 +99,32 @@ int main(int argc, char **argv) {
     const int nPoints = (int)positions.size();
     printf("#point: %d\n", nPoints);
 
+    // Compute bounding box
+    double minX = 1.0e20, maxX = -1.0e20;
+    double minY = 1.0e20, maxY = -1.0e20;
+    double minZ = 1.0e20, maxZ = -1.0e20;
+    for (int i = 0; i < nPoints; i++) {
+        minX = std::min(minX, positions[i].x);
+        maxX = std::max(maxX, positions[i].x);
+        minY = std::min(minY, positions[i].y);
+        maxY = std::max(maxY, positions[i].y);
+        minZ = std::min(minZ, positions[i].z);
+        maxZ = std::max(maxZ, positions[i].z);
+    }
+
+    const double maxExtent = std::max(maxX - minX, std::max(maxY - minY, maxZ - minZ)) * 1.1;
+    const Vec3 center = Vec3(minX + maxX, minY + maxY, minZ + maxZ) * 0.5;
+    const Vec3 origin = center - Vec3(maxExtent) * 0.5;
+    printf("origin: %f, %f, %f\n", origin.x, origin.y, origin.z);
+    printf("center: %f, %f, %f\n", center.x, center.y, center.z);
+    printf("size: %f\n", maxExtent);
+
+    // Normalize input data
+    for (auto &p : positions) {
+        p = (p - center) / maxExtent;
+    }
+
+    // Construct KD tree
     std::vector<Point> points;
     for (int i = 0; i < nPoints; i++) {
         auto &p = positions[i];
@@ -109,6 +135,7 @@ int main(int argc, char **argv) {
     KDTree<Point> tree;
     tree.construct(points);
 
+    // Generate off-surface points
     double dist;
     Point query, near;
     std::vector<Vec3> vertices;
@@ -118,7 +145,7 @@ int main(int argc, char **argv) {
     std::mt19937 mt(randev());
     std::uniform_real_distribution<double> distrib;
 
-    const double jitter = 0.2;
+    const double jitter = 0.1;
     for (int i = 0; i < nPoints; i++) {
         const auto p = Vec3(points[i]);
         const auto n = points[i].normal();
@@ -128,19 +155,17 @@ int main(int argc, char **argv) {
         distances.push_back(0.0);
 
         // Off-surface (outside)
-        query = p + n * jitter; // * distrib(mt);
+        query = p + n * jitter * distrib(mt);
         near = tree.nearest(query);
-        dist = dot(query - near, near.normal());
-        dist = sign(dist);
-        vertices.push_back(p);
+        dist = dot(query - near, near.normal()) / jitter;
+        vertices.push_back(query);
         distances.push_back(dist);
 
         // Off-surface (inside)
-        query = p - n * jitter; // * distrib(mt);
+        query = p - n * jitter * distrib(mt);
         near = tree.nearest(query);
-        dist = dot(query - near, near.normal());
-        dist = sign(dist);
-        vertices.push_back(p);
+        dist = dot(query - near, near.normal()) / jitter;
+        vertices.push_back(query);
         distances.push_back(dist);
     }
 
@@ -170,37 +195,20 @@ int main(int argc, char **argv) {
         }
     }
     AA.setFromTriplets(triplets.begin(), triplets.end());
-    printf("Size: %d x %d\n", (int)AA.rows(), (int)AA.cols());
 
     // Solve sparse linear system
-    printf("Solving linear system ");
+    printf("Solving linear system...\n");
+    printf("  non-zeros: %d\n", (int)AA.nonZeros());
+    printf("   mat-size: %d x %d\n", (int)AA.rows(), (int)AA.cols());
+
     Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver;
+    //Eigen::BiCGSTAB<SparseMatrix> solver;
     solver.compute(AA);
     const Eigen::VectorXd coefs = solver.solve(bb);
-    printf("-> OK!\n");
+    printf("Finish!\n");
 
-    std::cout << "#iterations:     " << solver.iterations() << std::endl;
+    std::cout << "#iterations: " << solver.iterations() << std::endl;
     std::cout << "estimated error: " << solver.error()      << std::endl;
-
-    // Compute bounding box
-    double minX = 1.0e20, maxX = -1.0e20;
-    double minY = 1.0e20, maxY = -1.0e20;
-    double minZ = 1.0e20, maxZ = -1.0e20;
-    for (int i = 0; i < nPoints; i++) {
-        minX = std::min(minX, positions[i].x);
-        maxX = std::max(maxX, positions[i].x);
-        minY = std::min(minY, positions[i].y);
-        maxY = std::max(maxY, positions[i].y);
-        minZ = std::min(minZ, positions[i].z);
-        maxZ = std::max(maxZ, positions[i].z);
-    }
-
-    const double maxExtent = std::max(maxX - minX, std::max(maxY - minY, maxZ - minZ)) * 1.1;
-    const Vec3 center = Vec3(minX + maxX, minY + maxY, minZ + maxZ) * 0.5;
-    const Vec3 origin = center - Vec3(maxExtent) * 0.5;
-    printf("origin: %f, %f, %f\n", origin.x, origin.y, origin.z);
-    printf("center: %f, %f, %f\n", center.x, center.y, center.z);
-    printf("size: %f\n", maxExtent);
 
     // Evaluate values of implicit function at latice points
     const int div = 128;
@@ -213,9 +221,9 @@ int main(int argc, char **argv) {
         #endif
         for (int j = 0; j < div; j++) {
             for (int k = 0; k < div; k++) {
-                const double px = center.x + maxExtent / div * (i - div / 2);
-                const double py = center.y + maxExtent / div * (j - div / 2);
-                const double pz = center.z + maxExtent / div * (k - div / 2);
+                const double px = ((i + 0.5) - (div * 0.5)) / div;
+                const double py = ((j + 0.5) - (div * 0.5)) / div;
+                const double pz = ((k + 0.5) - (div * 0.5)) / div;
                 const Vec3 pos(px, py, pz);
 
                 double value = 0.0;
