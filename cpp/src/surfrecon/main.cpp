@@ -43,7 +43,7 @@ double sign(double x) {
 }
 
 // Compactly supported RBF
-double rbf(const Vec3 &x, const Vec3 &y, double s = 0.05, double k = 0.1) {
+double rbf(const Vec3 &x, const Vec3 &y, double s = 0.02, double k = 0.1) {
     const Vec3 diff = x - y;
     const double norm2 = dot(diff, diff);
     if (norm2 > k * k) {
@@ -155,14 +155,14 @@ int main(int argc, char **argv) {
         distances.push_back(0.0);
 
         // Off-surface (outside)
-        query = p + n * jitter * distrib(mt);
+        query = p + n * jitter; // * distrib(mt);
         near = tree.nearest(query);
         dist = dot(query - near, near.normal()) / jitter;
         vertices.push_back(query);
         distances.push_back(dist);
 
         // Off-surface (inside)
-        query = p - n * jitter * distrib(mt);
+        query = p - n * jitter; // * distrib(mt);
         near = tree.nearest(query);
         dist = dot(query - near, near.normal()) / jitter;
         vertices.push_back(query);
@@ -172,6 +172,8 @@ int main(int argc, char **argv) {
     // Construct a sparse linear system
     const int N = vertices.size();
     SparseMatrix AA(N + 4, N + 4);
+    SparseMatrix II(N + 4, N + 4);
+    II.setIdentity();
     Eigen::VectorXd bb(N + 4);
     std::vector<Triplet> triplets;
 
@@ -200,18 +202,25 @@ int main(int argc, char **argv) {
     printf("Solving linear system...\n");
     printf("  non-zeros: %d\n", (int)AA.nonZeros());
     printf("   mat-size: %d x %d\n", (int)AA.rows(), (int)AA.cols());
+    auto ident = SparseMatrix(N + 4, N + 4);
+    ident.setIdentity();
 
-    Eigen::LeastSquaresConjugateGradient<SparseMatrix> solver;
-    //Eigen::BiCGSTAB<SparseMatrix> solver;
+    Eigen::BiCGSTAB<SparseMatrix> solver;
+    solver.setMaxIterations(500);
+    solver.setTolerance(1.0e-12);
+
+//    solver.compute(AA.transpose() * AA + 1.0e-3 * ident);
+//    const Eigen::VectorXd coefs = solver.solve(AA.transpose() * bb);
     solver.compute(AA);
     const Eigen::VectorXd coefs = solver.solve(bb);
+
     printf("Finish!\n");
 
     std::cout << "#iterations: " << solver.iterations() << std::endl;
-    std::cout << "estimated error: " << solver.error()      << std::endl;
+    std::cout << "estimated error: " << solver.error() << std::endl;
 
-    // Evaluate values of implicit function at latice points
-    const int div = 128;
+    // Evaluate values of implicit function at lattice points
+    const int div = 200;
     Volume volume(div, div, div);
 
     ProgressBar pbar(div);
@@ -221,9 +230,9 @@ int main(int argc, char **argv) {
         #endif
         for (int j = 0; j < div; j++) {
             for (int k = 0; k < div; k++) {
-                const double px = ((i + 0.5) - (div * 0.5)) / div;
-                const double py = ((j + 0.5) - (div * 0.5)) / div;
-                const double pz = ((k + 0.5) - (div * 0.5)) / div;
+                const double px = (i - (div * 0.5)) / div;
+                const double py = (j - (div * 0.5)) / div;
+                const double pz = (k - (div * 0.5)) / div;
                 const Vec3 pos(px, py, pz);
 
                 double value = 0.0;
@@ -246,7 +255,7 @@ int main(int argc, char **argv) {
 
     std::vector<Vec3> meshVerts;
     std::vector<uint32_t> meshFaces;
-    marchCubes(volume, &meshVerts, &meshFaces);
+    marchCubes(volume, &meshVerts, &meshFaces, 0.5);
 
     for (auto &p : meshVerts) {
         p = (p / div) * maxExtent + origin;
