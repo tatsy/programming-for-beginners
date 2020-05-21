@@ -1,3 +1,8 @@
+/********************** WARNING *************************
+ * This file includes INCOMPLETE implementation!
+ * Be careful!!
+ ********************************************************/
+
 #pragma once
 
 #include <vector>

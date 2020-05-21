@@ -23,9 +23,6 @@ using Triplet = Eigen::Triplet<FloatType, IndexType>;
 #include "common/volume.h"
 #include "mcubes/mcubes.h"
 
-//static const double CSRBF_RADIUS = 0.05;  // Normal point cloud
-static const double CSRBF_RADIUS = 0.02;  // Dense point cloud
-
 // Wendland's RBF
 // Morse et al. 2001,
 // "Interpolating Implicit Surfaces From Scattered Surface Data
@@ -45,7 +42,8 @@ struct Point : public Vec3 {
 };
 
 void surfaceFromPoints(const std::vector<Vec3> &positions, const std::vector<Vec3> &normals,
-                       std::vector<Vec3> *outVerts, std::vector<uint32_t> *outFaces) {
+                       std::vector<Vec3> *outVerts, std::vector<uint32_t> *outFaces,
+                       double suppRadius, int mcubeDivs) {
 
     // In this program, point cloud is first scaled and translated to be inside [-0.5, 0.5]^3 regular cube.
     // This prevents to adjust parameters for CS-RBF or off-surface positions.
@@ -93,7 +91,7 @@ void surfaceFromPoints(const std::vector<Vec3> &positions, const std::vector<Vec
         Point query, near;
 
 
-        const double jitter = CSRBF_RADIUS * 0.5;
+        const double jitter = suppRadius * 0.5;
         for (int i = 0; i < nPoints; i++) {
             const auto p = Vec3(points[i]);
             const auto n = normals[points[i].i];
@@ -134,10 +132,10 @@ void surfaceFromPoints(const std::vector<Vec3> &positions, const std::vector<Vec
 
         for (int64_t i = 0; i < N; i++) {
             std::vector<Point> knn;
-            tree.insideBall(xyz[i], CSRBF_RADIUS, &knn);
+            tree.insideBall(xyz[i], suppRadius, &knn);
 
             for (const auto &v : knn) {
-                const double phi = csrbf(xyz[i], v, CSRBF_RADIUS);
+                const double phi = csrbf(xyz[i], v, suppRadius);
                 triplets.emplace_back(i, v.i, phi);
             }
 
@@ -171,7 +169,7 @@ void surfaceFromPoints(const std::vector<Vec3> &positions, const std::vector<Vec
     printf("#error: %f\n", solver.error());
 
     // Evaluate values of implicit function at lattice points
-    const int div = 512;
+    const int div = mcubeDivs;
     Volume volume(div, div, div);
 
     ProgressBar pbar(div);
@@ -187,11 +185,11 @@ void surfaceFromPoints(const std::vector<Vec3> &positions, const std::vector<Vec
                 const Point pos(Vec3(px, py, pz));
 
                 std::vector<Point> knn;
-                tree.insideBall(pos, CSRBF_RADIUS, &knn);
+                tree.insideBall(pos, suppRadius, &knn);
 
                 double value = 0.0;
                 for (const auto &v : knn) {
-                    value += weights[v.i] * csrbf(pos, v, CSRBF_RADIUS);
+                    value += weights[v.i] * csrbf(pos, v, suppRadius);
                 }
 
                 value += weights(N + 0) * pos.x;

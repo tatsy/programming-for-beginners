@@ -34,7 +34,6 @@ permalink: "/cpp/"
 </tr>
 </table>
 
-
 * [アルゴリズムの概要]({% link _cpp/point-to-surface.md %})
 * [k-d木による最近傍探索]({% link _cpp/kdtree.md %})
 * [RBFによる関数の補間]({% link _cpp/radial-basis-function.md %})

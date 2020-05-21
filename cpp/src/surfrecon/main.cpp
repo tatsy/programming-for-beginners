@@ -48,9 +48,12 @@ void read_off(const std::string &filename, std::vector<Vec3> *positions, std::ve
 
 int main(int argc, char **argv) {
     if (argc <= 1) {
-        fprintf(stderr, "[ USAGE ] surfrecon [ *.off file ]\n");
+        fprintf(stderr, "[ USAGE ] surfrecon [ *.off file ] [ support radius ] [ #mcube divs ] \n");
         std::exit(1);
     }
+
+    const double suppRadius = argc >= 2 ? atof(argv[2]) : 0.05;
+    const int    mcubeDivs  = argc >= 3 ? atoi(argv[3]) : 256;
 
     // Load point cloud data
     std::vector<Vec3> positions;
@@ -63,7 +66,8 @@ int main(int argc, char **argv) {
 
     Timer timer;
     timer.start();
-    surfaceFromPoints(positions, normals, &vertices, &indices);
+    surfaceFromPoints(positions, normals, &vertices, &indices, suppRadius, mcubeDivs);
+    // surfaceFromPoints(positions, normals, &vertices, &indices, 0.02, 512);  // For buddha dense
     printf("Time: %f sec\n", timer.stop());
 
     // Save output mesh

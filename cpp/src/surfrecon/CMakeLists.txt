@@ -6,8 +6,6 @@ target_sources(
     ${BUILD_TARGET}
     PRIVATE
     ${COMMON_HEADERS}
-    fmm.h
-    fmm.cpp
     surface_recon.h
     surface_recon.cpp
     main.cpp
