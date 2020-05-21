@@ -29,8 +29,8 @@ permalink: "/cpp/"
   <td style="text-align: center; width: 50%;">{{ '**復元メッシュ**' | markdownify }}</td>
 </tr>
 <tr>
-  <td>{% include lightbox.html src="/public/images/march_cubes/buddha_point.jpg" style="width: 100%;" %}</td>
-  <td>{% include lightbox.html src="/public/images/march_cubes/buddha_recon.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/surf_recon/buddha_point.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/surf_recon/buddha_recon.jpg" style="width: 100%;" %}</td>
 </tr>
 </table>
 

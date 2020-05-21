@@ -42,10 +42,7 @@ class KDTree {
 public:
     KDTree() {}
     virtual ~KDTree() {
-        for (KDTreeNode<T> *node : nodes) {
-            delete node;
-        }
-        nodes.clear();
+        clear();
     }
 
     void construct(const std::vector<T>& points) {
@@ -53,15 +50,22 @@ public:
         root = constructRec(copy, 0, copy.size());
     }
 
+    void clear() {
+        for (KDTreeNode<T> *node : nodes) {
+            delete node;
+        }
+        nodes.clear();
+    }
+
     T nearest(const T& point) const {
-        std::stack<KDTreeNode<T>*> nodes;
-        nodes.push(root);
+        std::stack<KDTreeNode<T>*> node_stack;
+        node_stack.push(root);
 
         T ret;
         double minDist = 1.0e20;
-        while (!nodes.empty()) {
-            KDTreeNode<T> *node = nodes.top();
-            nodes.pop();
+        while (!node_stack.empty()) {
+            KDTreeNode<T> *node = node_stack.top();
+            node_stack.pop();
 
             const double dist = length(point - node->point);
             if (dist < minDist) {
@@ -73,21 +77,53 @@ public:
                 const double p = point[node->axis];
                 const double q = node->point[node->axis];
                 const double len = std::abs(p - q);
-                if (p < q || len < minDist) {
+                if (p < q || len <= minDist) {
                     if (node->left) {
-                        nodes.push(node->left);
+                        node_stack.push(node->left);
                     }
                 }
 
-                if (p >= q || len < minDist) {
+                if (p >= q || len <= minDist) {
                     if (node->right) {
-                        nodes.push(node->right);
+                        node_stack.push(node->right);
                     }
                 }
             }
         }
 
         return ret;
+    }
+
+    void insideBall(const T& point, double radius, std::vector<T> *outputs) const {
+        std::stack<KDTreeNode<T>*> node_stack;
+        node_stack.push(root);
+
+        while (!node_stack.empty()) {
+            KDTreeNode<T> *node = node_stack.top();
+            node_stack.pop();
+
+            const double dist = length(point - node->point);
+            if (dist < radius) {
+                outputs->push_back(node->point);
+            }
+
+            if (!node->isLeaf()) {
+                const double p = point[node->axis];
+                const double q = node->point[node->axis];
+                const double len = std::abs(p - q);
+                if (p < q || len <= radius) {
+                    if (node->left) {
+                        node_stack.push(node->left);
+                    }
+                }
+
+                if (p >= q || len <= radius) {
+                    if (node->right) {
+                        node_stack.push(node->right);
+                    }
+                }
+            }
+        }
     }
 
 private:
@@ -124,7 +160,7 @@ private:
         if (varMax == varZ) maxAxis = 2;
 
         // Sort
-        sort(points.begin() + left, points.begin() + right, [&](const T& p, const T& q){
+        std::sort(points.begin() + left, points.begin() + right, [&](const T& p, const T& q){
             return p[maxAxis] < q[maxAxis];
         });
 

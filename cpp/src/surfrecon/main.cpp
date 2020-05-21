@@ -4,54 +4,15 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include <random>
 
-#ifdef _OPENMP
-#include <omp.h>
-#endif
+#include "common/path.h"
+#include "common/timer.h"
+#include "common/vec3.h"
+#include "common/trimesh.h"
 
-#include <Eigen/Dense>
-#include <Eigen/Sparse>
+#include "surface_recon.h"
 
-using SparseMatrix = Eigen::SparseMatrix<double>;
-using Triplet = Eigen::Triplet<double>;
-
-#include "vec3.h"
-#include "kdtree.h"
-#include "volume.h"
-#include "trimesh.h"
-#include "mcubes.h"
-#include "progress.h"
-
-struct Point : public Vec3 {
-    Point() {}
-    Point(const Vec3 &v) : Vec3(v) {}
-
-    Point(double x, double y, double z, double nx = 0.0, double ny = 0.0, double nz = 0.0)
-        : Vec3(x, y, z)
-        , nx(nx), ny(ny), nz(nz) {}
-
-    Vec3 normal() const {
-        return Vec3(nx, ny, nz);
-    }
-
-    double nx = 0.0, ny = 0.0, nz = 0.0;
-};
-
-double sign(double x) {
-    return x > 0.0 ? 1.0 : -1.0;
-}
-
-// Compactly supported RBF
-double rbf(const Vec3 &x, const Vec3 &y, double s = 0.02, double k = 0.1) {
-    const Vec3 diff = x - y;
-    const double norm2 = dot(diff, diff);
-    if (norm2 > k * k) {
-        return 0.0;
-    }
-    return std::exp(-0.5 * norm2 / (s * s));
-}
-
+// Load OFF mesh file (in this program, the file stores only point cloud)
 void read_off(const std::string &filename, std::vector<Vec3> *positions, std::vector<Vec3> *normals) {
     std::ifstream reader(filename.c_str(), std::ios::in);
     if (reader.fail()) {
@@ -96,171 +57,19 @@ int main(int argc, char **argv) {
     std::vector<Vec3> normals;
     read_off(argv[1], &positions, &normals);
 
-    const int nPoints = (int)positions.size();
-    printf("#point: %d\n", nPoints);
-
-    // Compute bounding box
-    double minX = 1.0e20, maxX = -1.0e20;
-    double minY = 1.0e20, maxY = -1.0e20;
-    double minZ = 1.0e20, maxZ = -1.0e20;
-    for (int i = 0; i < nPoints; i++) {
-        minX = std::min(minX, positions[i].x);
-        maxX = std::max(maxX, positions[i].x);
-        minY = std::min(minY, positions[i].y);
-        maxY = std::max(maxY, positions[i].y);
-        minZ = std::min(minZ, positions[i].z);
-        maxZ = std::max(maxZ, positions[i].z);
-    }
-
-    const double maxExtent = std::max(maxX - minX, std::max(maxY - minY, maxZ - minZ)) * 1.1;
-    const Vec3 center = Vec3(minX + maxX, minY + maxY, minZ + maxZ) * 0.5;
-    const Vec3 origin = center - Vec3(maxExtent) * 0.5;
-    printf("origin: %f, %f, %f\n", origin.x, origin.y, origin.z);
-    printf("center: %f, %f, %f\n", center.x, center.y, center.z);
-    printf("size: %f\n", maxExtent);
-
-    // Normalize input data
-    for (auto &p : positions) {
-        p = (p - center) / maxExtent;
-    }
-
-    // Construct KD tree
-    std::vector<Point> points;
-    for (int i = 0; i < nPoints; i++) {
-        auto &p = positions[i];
-        auto &n = normals[i];
-        points.emplace_back(p.x, p.y, p.z, n.x, n.y, n.z);
-    }
-
-    KDTree<Point> tree;
-    tree.construct(points);
-
-    // Generate off-surface points
-    double dist;
-    Point query, near;
+    // Surface reconstruction
     std::vector<Vec3> vertices;
-    std::vector<double> distances;
+    std::vector<uint32_t> indices;
 
-    std::random_device randev;
-    std::mt19937 mt(randev());
-    std::uniform_real_distribution<double> distrib;
+    Timer timer;
+    timer.start();
+    surfaceFromPoints(positions, normals, &vertices, &indices);
+    printf("Time: %f sec\n", timer.stop());
 
-    const double jitter = 0.1;
-    for (int i = 0; i < nPoints; i++) {
-        const auto p = Vec3(points[i]);
-        const auto n = points[i].normal();
-
-        // On-surface
-        vertices.push_back(p);
-        distances.push_back(0.0);
-
-        // Off-surface (outside)
-        query = p + n * jitter; // * distrib(mt);
-        near = tree.nearest(query);
-        dist = dot(query - near, near.normal()) / jitter;
-        vertices.push_back(query);
-        distances.push_back(dist);
-
-        // Off-surface (inside)
-        query = p - n * jitter; // * distrib(mt);
-        near = tree.nearest(query);
-        dist = dot(query - near, near.normal()) / jitter;
-        vertices.push_back(query);
-        distances.push_back(dist);
-    }
-
-    // Construct a sparse linear system
-    const int N = vertices.size();
-    SparseMatrix AA(N + 4, N + 4);
-    SparseMatrix II(N + 4, N + 4);
-    II.setIdentity();
-    Eigen::VectorXd bb(N + 4);
-    std::vector<Triplet> triplets;
-
-    for (int i = 0; i < N; i++) {
-        for (int j = i; j < N; j++) {
-            const double phi = rbf(vertices[i], vertices[j]);
-            if (phi != 0.0) {
-                triplets.emplace_back(i, j, phi);
-                triplets.emplace_back(j, i, phi);
-            }
-        }
-        bb(i) = distances[i];
-    }
-
-    for (int i = 0; i < N; i++) {
-        const auto &v = vertices[i];
-        double pos[4] = {1.0, v.x, v.y, v.z};
-        for (int j = 0; j < 4; j++) {
-            triplets.emplace_back(i, N + j, pos[j]);
-            triplets.emplace_back(N + j, i, pos[j]);
-        }
-    }
-    AA.setFromTriplets(triplets.begin(), triplets.end());
-
-    // Solve sparse linear system
-    printf("Solving linear system...\n");
-    printf("  non-zeros: %d\n", (int)AA.nonZeros());
-    printf("   mat-size: %d x %d\n", (int)AA.rows(), (int)AA.cols());
-    auto ident = SparseMatrix(N + 4, N + 4);
-    ident.setIdentity();
-
-    Eigen::BiCGSTAB<SparseMatrix> solver;
-    solver.setMaxIterations(500);
-    solver.setTolerance(1.0e-12);
-
-//    solver.compute(AA.transpose() * AA + 1.0e-3 * ident);
-//    const Eigen::VectorXd coefs = solver.solve(AA.transpose() * bb);
-    solver.compute(AA);
-    const Eigen::VectorXd coefs = solver.solve(bb);
-
-    printf("Finish!\n");
-
-    std::cout << "#iterations: " << solver.iterations() << std::endl;
-    std::cout << "estimated error: " << solver.error() << std::endl;
-
-    // Evaluate values of implicit function at lattice points
-    const int div = 200;
-    Volume volume(div, div, div);
-
-    ProgressBar pbar(div);
-    for (int i = 0; i < div; i++) {
-        #ifdef _OPENMP
-        #pragma omp parallel for
-        #endif
-        for (int j = 0; j < div; j++) {
-            for (int k = 0; k < div; k++) {
-                const double px = (i - (div * 0.5)) / div;
-                const double py = (j - (div * 0.5)) / div;
-                const double pz = (k - (div * 0.5)) / div;
-                const Vec3 pos(px, py, pz);
-
-                double value = 0.0;
-                for (int l = 0; l < N; l++) {
-                    value += coefs(l) * rbf(pos, vertices[l]);
-                }
-                value += coefs(N + 0);
-                value += coefs(N + 1) * pos.x;
-                value += coefs(N + 2) * pos.y;
-                value += coefs(N + 3) * pos.z;
-
-                value = std::max(-1.0, std::min(value, 1.0));
-                value = (value + 1.0) * 0.5;
-
-                volume(i, j, k) = (int)(value * USHRT_MAX);
-            }
-        }
-        pbar.step();
-    }
-
-    std::vector<Vec3> meshVerts;
-    std::vector<uint32_t> meshFaces;
-    marchCubes(volume, &meshVerts, &meshFaces, 0.5);
-
-    for (auto &p : meshVerts) {
-        p = (p / div) * maxExtent + origin;
-    }
-
-    write_obj("recon.obj", meshVerts, meshFaces);
-    write_ply("recon.ply", meshVerts, meshFaces);
+    // Save output mesh
+    filepath path(argv[1]);
+    const filepath dirname = path.dirname();
+    const filepath basename = path.stem();
+    const std::string outfile = (dirname / basename + ".ply").string();
+    write_ply(outfile, vertices, indices);
 }

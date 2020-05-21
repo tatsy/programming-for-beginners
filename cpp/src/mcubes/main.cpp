@@ -1,15 +1,22 @@
 #include <iostream>
 #include <vector>
 
-#include "volume.h"
+#include "common/path.h"
+#include "common/volume.h"
+#include "common/trimesh.h"
 #include "mcubes.h"
-#include "trimesh.h"
 
 int main(int argc, char **argv) {
     if (argc <= 4) {
         fprintf(stderr, "[ USAGE ] march_cubes [ *.vol file ] [ width ] [ height ] [ dims ]");
         std::exit(1);
     }
+
+    // Output path
+    filepath path(argv[1]);
+    const filepath dirname = path.dirname();
+    const filepath basename = path.stem();
+    const std::string outfile = (dirname / basename + ".ply").string();
 
     // Load volume data
     const int sizeX = atoi(argv[2]);
@@ -24,6 +31,6 @@ int main(int argc, char **argv) {
     marchCubes(vol, &positions, &indices, -1.0, true);
 
     // Write mesh data
-    write_obj("output.obj", positions, indices);
-    write_ply("output.ply", positions, indices);
+    write_ply(outfile, positions, indices);
+    printf("Saved to: %s\n", outfile.c_str());
 }
