@@ -20,6 +20,7 @@ permalink: "/cpp/"
 * [ボリュームデータの読み込み]({% link _cpp/read-volume.md %})
 * [大津の二値化による境界値の決定]({% link _cpp/otsu-binarize.md %})
 * [マーチング・キューブ法]({% link _cpp/march-cubes.md %})
+* [課題: マーチング・キューブ法とその拡張]({% link _cpp/assignment-march-cubes.md %})
 
 ## 点群データからのメッシュ復元
 

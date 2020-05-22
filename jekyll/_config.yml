@@ -14,11 +14,15 @@ author:
 
 # GitHub
 github:
+  name:              tatsy
   repo:              https://github.com/tatsy/programming-for-beginners
 
 # Custom vars
 version:             1.0.0
 google_analytics_id: #UA-XXXX-Y
+
+plugins:
+  - jekyll-sitemap
 
 markdown: kramdown
 highlighter: rouge

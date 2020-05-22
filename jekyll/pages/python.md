@@ -28,7 +28,7 @@ permalink: /python/
 * [ロジスティック回帰 -その2-]({% link _python/logistic-regression-02.md %})
 * [画像中の図形検出]({% link _python/figure-detection.md %})
 * [数独を解く]({% link _python/solve-sudoku.md %})
-* [(課題)画像中の数独問題を解こう]({% link _python/assignment-sudoku.md %})
+* [課題: 画像中の数独問題を解こう]({% link _python/assignment-sudoku.md %})
 
 ## 深層学習による画像生成の基礎
 
@@ -49,4 +49,4 @@ permalink: /python/
 * [敵対的生成ネットワーク(GAN)]({% link _python/gan.md %})
 * [条件付き画像生成 (CGAN)]({% link _python/conditional-gan.md %})
 * [GANの学習安定化テクニック]({% link _python/stabilize-gan-training.md %})
-* [(課題)GANによる高品質画像生成レース]({% link _python/assignment-gan.md %})
+* [課題: GANによる高品質画像生成コンテスト]({% link _python/assignment-gan.md %})

@@ -65,3 +65,54 @@
   
   .highlight pre { white-space: pre; overflow: auto; }
 }
+
+.site-footer {
+  border-top: 1px solid #e8e8e8 !important;
+  padding: 20px;
+
+  .footer-heading {
+    font-size: 1.0rem;
+    margin-bottom: 15px;
+  }
+
+  .p-name {
+    color: #454545;
+  }
+
+  .footer-col-wrapper {
+    font-size: 0.8rem;
+    color: #828282;
+    margin-left: -12px;
+
+    .footer-col {
+      float: left;
+      margin-bottom: 30px;
+      padding-left: 15px;
+    }
+
+    .footer-col-1 {
+      width: calc(35% - (30px / 2));
+    }
+    .footer-col-2 {
+      width: calc(25% - (30px / 2));
+    }
+    .footer-col-3 {
+      width: calc(45% - (30px / 2));
+    }
+
+    .contact-list, .social-media-list {
+      list-style: none;
+    }
+  }
+
+  .svg-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    fill: #828282;
+    margin-right: 5px;
+    vertical-align: text-top;
+  }
+}
+
+
