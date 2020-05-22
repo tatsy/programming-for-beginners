@@ -29,8 +29,8 @@ script:
 after_success:
   - git config --global user.name "Travis CI"
   - git config --global user.email "travis@travis-ci.org"
-  - git submodule update --init -- "jekyll/_site"
-  - cd jekyll/_site
+  - git submodule update --init -- "_site"
+  - cd _site
   - git checkout gh-pages
   - cd ..
   - bundle install
