@@ -1,7 +1,7 @@
 # Setup
 title:               programming-for-beginners
 tagline:             'Programming for everyone!'
-description:         '初心者向けC++/Pythonプログラミング'
+description:         '初心者・中級者向けC++/Pythonプログラミング'
 url:                 https://tatsy.github.io
 baseurl:             '/programming-for-beginners'
 permalink:           pretty
