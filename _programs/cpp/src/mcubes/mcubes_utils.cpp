@@ -38,7 +38,7 @@ int Polygonise(GRIDCELL grid, double isolevel, TRIANGLE *triangles) {
     int cubeindex;
     XYZ vertlist[12];
 
-    static int edgeTable[256]={
+    static const int edgeTable[256]={
         0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
         0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,
         0x190, 0x99 , 0x393, 0x29a, 0x596, 0x49f, 0x795, 0x69c,
@@ -73,7 +73,7 @@ int Polygonise(GRIDCELL grid, double isolevel, TRIANGLE *triangles) {
         0x70c, 0x605, 0x50f, 0x406, 0x30a, 0x203, 0x109, 0x0
     };
 
-    static int triTable[256][16] ={
+    static const int triTable[256][16] = {
         {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
         {0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
         {0, 1, 9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -395,6 +395,68 @@ int Polygonise(GRIDCELL grid, double isolevel, TRIANGLE *triangles) {
         triangles[ntriang].p[0] = vertlist[triTable[cubeindex][i  ]];
         triangles[ntriang].p[1] = vertlist[triTable[cubeindex][i+1]];
         triangles[ntriang].p[2] = vertlist[triTable[cubeindex][i+2]];
+        ntriang++;
+    }
+
+    return ntriang;
+}
+
+int PolygonizeTet(TETRAHEDRON tet, double isolevel, TRIANGLE *triangles) {
+    static const int edgeTable[16] = {
+        0x00, 0x07, 0x29, 0x2e,
+        0x1a, 0x1d, 0x33, 0x34,
+        0x34, 0x33, 0x1d, 0x1a,
+        0x2e, 0x29, 0x07, 0x00
+    };
+
+    static const int triTable[16][7] = {
+        {-1, -1, -1, -1, -1, -1, -1},
+        {0, 1, 2, -1, -1, -1, -1},
+        {0, 5, 3, -1, -1, -1, -1},
+        {1, 2, 3, 2, 5, 3, -1},
+        {1, 3, 4, -1, -1, -1, -1},
+        {0, 3, 2, 2, 3, 4, -1},
+        {0, 5, 1, 1, 5, 4, -1},
+        {2, 5, 4, -1, -1, -1, -1},
+        {2, 4, 5, -1, -1, -1, -1},
+        {0, 1, 5, 1, 4, 5, -1},
+        {0, 2, 3, 2, 4, 3, -1},
+        {1, 4, 3, -1, -1, -1, -1},
+        {1, 3, 2, 2, 3, 5, -1},
+        {0, 3, 5, -1, -1, -1, -1},
+        {0, 2, 1, -1, -1, -1, -1},
+        {-1, -1, -1, -1, -1, -1, -1}
+    };
+
+    int tetindex = 0;
+    if (tet.val[0] < isolevel) tetindex |= 1;
+    if (tet.val[1] < isolevel) tetindex |= 2;
+    if (tet.val[2] < isolevel) tetindex |= 4;
+    if (tet.val[3] < isolevel) tetindex |= 8;
+
+    if (tetindex == 0 || tetindex == 15) {
+        return 0;
+    }
+
+    XYZ vertlist[6];
+    if (edgeTable[tetindex] & 1)
+        vertlist[0] = VertexInterp(isolevel, tet.p[0], tet.p[1], tet.val[0], tet.val[1]);
+    if (edgeTable[tetindex] & 2)
+        vertlist[1] = VertexInterp(isolevel, tet.p[0], tet.p[2], tet.val[0], tet.val[2]);
+    if (edgeTable[tetindex] & 4)
+        vertlist[2] = VertexInterp(isolevel, tet.p[0], tet.p[3], tet.val[0], tet.val[3]);
+    if (edgeTable[tetindex] & 8)
+        vertlist[3] = VertexInterp(isolevel, tet.p[1], tet.p[2], tet.val[1], tet.val[2]);
+    if (edgeTable[tetindex] & 16)
+        vertlist[4] = VertexInterp(isolevel, tet.p[2], tet.p[3], tet.val[2], tet.val[3]);
+    if (edgeTable[tetindex] & 32)
+        vertlist[5] = VertexInterp(isolevel, tet.p[1], tet.p[3], tet.val[1], tet.val[3]);
+
+    int ntriang = 0;
+    for (int i = 0; triTable[tetindex][i] != -1; i += 3) {
+        triangles[ntriang].p[0] = vertlist[triTable[tetindex][i  ]];
+        triangles[ntriang].p[1] = vertlist[triTable[tetindex][i+1]];
+        triangles[ntriang].p[2] = vertlist[triTable[tetindex][i+2]];
         ntriang++;
     }
 

@@ -2,16 +2,21 @@
 
 #include "common/vec3.h"
 
-using XYZ = Vec3;
+typedef Vec3 XYZ;
 
-typedef struct {
+struct TRIANGLE {
     XYZ p[3];
-} TRIANGLE;
+};
 
-typedef struct {
+struct GRIDCELL {
     XYZ p[8];
-    double val[8];
-} GRIDCELL;
+    double val[8] = {0};
+};
+
+struct TETRAHEDRON {
+    XYZ p[4];
+    double val[4] = {0};
+};
 
 /*
  * Linearly interpolate the position where an isosurface cuts
@@ -28,3 +33,5 @@ XYZ VertexInterp(double isolevel, XYZ p1, XYZ p2, double valp1, double valp2);
  * of totally below the isolevel.
  */
 int Polygonise(GRIDCELL grid, double isolevel, TRIANGLE *triangles);
+
+int PolygonizeTet(TETRAHEDRON tet, double isolevel, TRIANGLE *triangles);

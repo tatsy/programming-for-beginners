@@ -7,3 +7,9 @@
 
 void marchCubes(const Volume &volume, std::vector<Vec3> *vertices, std::vector<uint32_t> *indices,
                 double threshold = -1.0, bool flipFaces = false);
+
+void marchTets(const Volume &volume, std::vector<Vec3> *vertices, std::vector<uint32_t> *indices,
+               double threshold = -1.0, bool flipFaces = false);
+
+void dualContour(const Volume &volume, std::vector<Vec3> *vertices, std::vector<uint32_t> *indices,
+                 double threshold = -1.0, bool flipFaces = false);

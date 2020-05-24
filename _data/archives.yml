@@ -1,2 +1,7 @@
-cpp-template:
-  - "_programs/cpp/src/common/progress.h"
+cxx-sources:
+  - "_programs/cpp"
+  - exclude:
+    - "surfrecon"
+    - "cmake-build-debug"
+    - "cmake-build-release"
+    - ".+\/data\/.+"

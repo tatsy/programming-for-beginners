@@ -67,7 +67,7 @@ struct Volume {
     }
 
     void load(const std::string &filename) {
-        //NOT_IMPL_ERROR();
+        // {{ NOT_IMPL_ERROR();
         std::ifstream reader(filename.c_str(), std::ios::in | std::ios::binary);
         uint16_t *buffer = new uint16_t[sizes[0]];
         for (uint64_t z = 0; z < sizes[2]; z++) {
@@ -78,6 +78,7 @@ struct Volume {
         }
         delete[] buffer;
         reader.close();
+        // }}
     }
 
 private:

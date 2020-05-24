@@ -29,6 +29,7 @@ int main(int argc, char **argv) {
     std::vector<Vec3> positions;
     std::vector<uint32_t> indices;
     marchCubes(vol, &positions, &indices, -1.0, true);
+    //marchTets(vol, &positions, &indices, -1.0, true);
 
     // Write mesh data
     write_ply(outfile, positions, indices);

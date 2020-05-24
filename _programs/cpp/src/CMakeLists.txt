@@ -13,5 +13,11 @@ set(MCUBES_LIBRARY "mcubes")
 # Build targets
 # -------------------------------------
 cmake_policy(SET CMP0076 NEW)
-add_subdirectory(mcubes)
-add_subdirectory(surfrecon)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/mcubes")
+    add_subdirectory(mcubes)
+endif()
+
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/surfrecon")
+    add_subdirectory(surfrecon)
+endif()
+
