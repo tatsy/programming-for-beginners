@@ -12,6 +12,7 @@ set(MCUBES_SOURCES
     mcubes_utils.cpp
 )
 
+target_include_directories(${MCUBES_LIBRARY} PUBLIC ${EIGEN3_INCLUDE_DIRS})
 target_sources(${MCUBES_LIBRARY} PUBLIC ${MCUBES_SOURCES})
 
 get_target_property(SOURCE_LIST ${MCUBES_LIBRARY} SOURCES)
@@ -23,6 +24,7 @@ source_group("Source Files" FILES ${SOURCE_LIST})
 set(BUILD_TARGET "march_cubes")
 add_executable(${BUILD_TARGET})
 
+target_include_directories(${BUILD_TARGET} PUBLIC ${EIGEN3_INCLUDE_DIRS})
 target_sources(
     ${BUILD_TARGET}
     PRIVATE

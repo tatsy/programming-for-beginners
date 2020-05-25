@@ -34,10 +34,6 @@ XYZ VertexInterp(double isolevel, XYZ p1, XYZ p2, double valp1, double valp2) {
  * of totally below the isolevel.
  */
 int Polygonise(GRIDCELL grid, double isolevel, TRIANGLE *triangles) {
-    int i, ntriang;
-    int cubeindex;
-    XYZ vertlist[12];
-
     static const int edgeTable[256]={
         0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
         0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,
@@ -336,7 +332,7 @@ int Polygonise(GRIDCELL grid, double isolevel, TRIANGLE *triangles) {
      * Determine the index into the edge table which
      * tells us which vertices are inside of the surface
      */
-    cubeindex = 0;
+    int cubeindex = 0;
     if (grid.val[0] < isolevel) cubeindex |= 1;
     if (grid.val[1] < isolevel) cubeindex |= 2;
     if (grid.val[2] < isolevel) cubeindex |= 4;
@@ -347,11 +343,12 @@ int Polygonise(GRIDCELL grid, double isolevel, TRIANGLE *triangles) {
     if (grid.val[7] < isolevel) cubeindex |= 128;
 
     /* Cube is entirely in/out of the surface */
-    if (edgeTable[cubeindex] == 0) {
+    if (edgeTable[cubeindex] == 0 || edgeTable[cubeindex] == 255) {
         return 0;
     }
 
     /* Find the vertices where the surface intersects the cube */
+    XYZ vertlist[12];
     if (edgeTable[cubeindex] & 1)
         vertlist[0] =
                 VertexInterp(isolevel,grid.p[0],grid.p[1],grid.val[0],grid.val[1]);
@@ -390,8 +387,8 @@ int Polygonise(GRIDCELL grid, double isolevel, TRIANGLE *triangles) {
                 VertexInterp(isolevel,grid.p[3],grid.p[7],grid.val[3],grid.val[7]);
 
     /* Create the triangle */
-    ntriang = 0;
-    for (i=0;triTable[cubeindex][i]!=-1;i+=3) {
+    int ntriang = 0;
+    for (int i = 0; triTable[cubeindex][i] != -1; i += 3) {
         triangles[ntriang].p[0] = vertlist[triTable[cubeindex][i  ]];
         triangles[ntriang].p[1] = vertlist[triTable[cubeindex][i+1]];
         triangles[ntriang].p[2] = vertlist[triTable[cubeindex][i+2]];

@@ -124,7 +124,7 @@ inline double length(const Vec3 &v) {
     return std::sqrt(dot(v, v));
 }
 
-inline Vec3 normalized(const Vec3 &v) {
+inline Vec3 normalize(const Vec3 &v) {
     return v / length(v);
 }
 

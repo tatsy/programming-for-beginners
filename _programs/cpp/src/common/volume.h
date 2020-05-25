@@ -5,16 +5,15 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <array>
 
 #include "debug.h"
 
 struct Volume {
     Volume() = default;
 
-    Volume(int sizeX, int sizeY, int sizeZ) {
-        sizes[0] = sizeX;
-        sizes[1] = sizeY;
-        sizes[2] = sizeZ;
+    Volume(uint64_t sizeX, uint64_t sizeY, uint64_t sizeZ) {
+        sizes = { sizeX, sizeY, sizeZ };
         data = std::make_unique<uint16_t[]>(sizeX * sizeY * sizeZ);
     }
 
@@ -29,8 +28,8 @@ struct Volume {
         std::memcpy(data.get(), other.data.get(), sizeof(uint16_t) * totalSize);
     }
 
-    Volume(Volume &&other) noexcept
-        : Volume(other.sizes[0], other.sizes[1], other.sizes[2]) {
+    Volume(Volume &&other) noexcept {
+        sizes = other.sizes;
         data = std::move(other.data);
     }
 
@@ -44,9 +43,7 @@ struct Volume {
     friend void swap(Volume &first, Volume &second) {
         using std::swap;
         if (&first != &second) {
-            swap(first.sizes[0], second.sizes[0]);
-            swap(first.sizes[1], second.sizes[1]);
-            swap(first.sizes[2], second.sizes[2]);
+            swap(first.sizes, second.sizes);
             swap(first.data, second.data);
         }
     }
@@ -82,6 +79,6 @@ struct Volume {
     }
 
 private:
-    uint64_t sizes[3] = {0};
+    std::array<uint64_t, 3> sizes;
     std::unique_ptr<uint16_t[]> data = nullptr;
 };
