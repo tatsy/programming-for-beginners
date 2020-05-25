@@ -4,4 +4,4 @@ cxx-sources:
     - "surfrecon"
     - "cmake-build-debug"
     - "cmake-build-release"
-    - ".+\/data\/.+"
+    - ".+\\/data\\/.+"
