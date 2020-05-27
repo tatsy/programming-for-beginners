@@ -37,4 +37,6 @@ permalink: "/cpp/"
 
 * [アルゴリズムの概要]({% link _cpp/point-to-surface.md %})
 * [k-d木による最近傍探索]({% link _cpp/kdtree.md %})
+* [Eigenを用いた線形問題の解法]({% link _cpp/eigen-solve-linear-system.md %})
 * [RBFによる関数の補間]({% link _cpp/radial-basis-function.md %})
+* [課題: 点群データからのメッシュ復元]({% link _cpp/assignment-point-to-surface.md %})
