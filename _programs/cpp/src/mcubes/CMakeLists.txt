@@ -2,7 +2,7 @@
 # Marching cubes library
 # -------------------------------------
 
-add_library(${MCUBES_LIBRARY} SHARED)
+add_library(${MCUBES_LIBRARY} STATIC)
 
 set(MCUBES_SOURCES
     ${COMMON_HEADERS}

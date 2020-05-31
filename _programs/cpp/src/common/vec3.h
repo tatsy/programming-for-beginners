@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <stdexcept>
 #include <functional>
 
 class Vec3 {
@@ -107,7 +108,7 @@ inline Vec3 operator/(const Vec3 &v1, double s) {
     return ret;
 }
 
-// GLSL like vector arithmetics
+// GLSL like vector arithmetic
 inline double dot(const Vec3 &v1, const Vec3 &v2) {
     const Vec3 temp = v1 * v2;
     return temp.x + temp.y + temp.z;
