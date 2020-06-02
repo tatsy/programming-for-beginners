@@ -78,6 +78,8 @@ void surfaceFromPoints(const std::vector<Vec3> &positions, const std::vector<Vec
     // Generate off-surface points
     std::vector<Vec3> xyz;
     std::vector<double> fvals;
+
+    // {{ NOT_IMPL_ERROR();
     {
         points.clear();
         tree.clear();
@@ -115,13 +117,15 @@ void surfaceFromPoints(const std::vector<Vec3> &positions, const std::vector<Vec
             fvals.push_back(dist);
         }
     }
+    // }}
 
     // Construct a sparse linear system
     const int64_t N = xyz.size();
     SparseMatrix AA(N + 4, N + 4);
-    SparseMatrix II(N + 4, N + 4);
     Eigen::VectorXd bb(N + 4);
     std::vector<Triplet> triplets;
+
+    // {{ NOT_IMPL_ERROR();
     {
         points.clear();
         tree.clear();
@@ -141,16 +145,17 @@ void surfaceFromPoints(const std::vector<Vec3> &positions, const std::vector<Vec
 
             bb(i) = fvals[i];
         }
-    }
 
-    for (int64_t i = 0; i < N; i++) {
-        const auto &v = xyz[i];
-        double pos[4] = {v.x, v.y, v.z, 1.0};
-        for (int64_t j = 0; j < 4; j++) {
-            triplets.emplace_back(i, N + j, pos[j]);
-            triplets.emplace_back(N + j, i, pos[j]);
+        for (int64_t i = 0; i < N; i++) {
+            const auto &v = xyz[i];
+            double pos[4] = {v.x, v.y, v.z, 1.0};
+            for (int64_t j = 0; j < 4; j++) {
+                triplets.emplace_back(i, N + j, pos[j]);
+                triplets.emplace_back(N + j, i, pos[j]);
+            }
         }
     }
+    // }}
     AA.setFromTriplets(triplets.begin(), triplets.end());
 
     // Solve sparse linear system
@@ -172,38 +177,42 @@ void surfaceFromPoints(const std::vector<Vec3> &positions, const std::vector<Vec
     const int div = mcubeDivs;
     Volume volume(div, div, div);
 
-    ProgressBar pbar(div);
-    for (int i = 0; i < div; i++) {
-        #ifdef _OPENMP
-        #pragma omp parallel for
-        #endif
-        for (int j = 0; j < div; j++) {
-            for (int k = 0; k < div; k++) {
-                const double px = (i - (div * 0.5)) / div;
-                const double py = (j - (div * 0.5)) / div;
-                const double pz = (k - (div * 0.5)) / div;
-                const Point pos(Vec3(px, py, pz));
+    // {{ NOT_IMPL_ERROR();
+    {
+        ProgressBar pbar(div);
+        for (int i = 0; i < div; i++) {
+            #ifdef _OPENMP
+            #pragma omp parallel for
+            #endif
+            for (int j = 0; j < div; j++) {
+                for (int k = 0; k < div; k++) {
+                    const double px = (i - (div * 0.5)) / div;
+                    const double py = (j - (div * 0.5)) / div;
+                    const double pz = (k - (div * 0.5)) / div;
+                    const Point pos(Vec3(px, py, pz));
 
-                std::vector<Point> knn;
-                tree.insideBall(pos, suppRadius, &knn);
+                    std::vector<Point> knn;
+                    tree.insideBall(pos, suppRadius, &knn);
 
-                double value = 0.0;
-                for (const auto &v : knn) {
-                    value += weights[v.i] * csrbf(pos, v, suppRadius);
+                    double value = 0.0;
+                    for (const auto &v : knn) {
+                        value += weights[v.i] * csrbf(pos, v, suppRadius);
+                    }
+
+                    value += weights(N + 0) * pos.x;
+                    value += weights(N + 1) * pos.y;
+                    value += weights(N + 2) * pos.z;
+                    value += weights(N + 3);
+
+                    value = std::max(-1.0, std::min(value, 1.0));
+                    value = (value + 1.0) * 0.5;
+                    volume(i, j, k) = (int) (value * USHRT_MAX);
                 }
-
-                value += weights(N + 0) * pos.x;
-                value += weights(N + 1) * pos.y;
-                value += weights(N + 2) * pos.z;
-                value += weights(N + 3);
-
-                value = std::max(-1.0, std::min(value, 1.0));
-                value = (value + 1.0) * 0.5;
-                volume(i, j, k) = (int)(value * USHRT_MAX);
             }
+            pbar.step();
         }
-        pbar.step();
     }
+    // }}
 
     // Marching cubes to get iso-contour
     marchCubes(volume, outVerts, outFaces, 0.5);
