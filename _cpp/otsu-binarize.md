@@ -28,8 +28,8 @@ $$
 $$
 
 $$
-\sigma_0 = \frac{\displaystyle \sum_{i=0}^{T-1} (\mu_0 - i)^2 p(i)}{\displaystyle \sum_{i=0}^{T-1} p(i)}, \quad
-\sigma_1 = \frac{\displaystyle \sum_{i=T}^{N-1} (\mu_1 - i)^2 p(i)}{\displaystyle \sum_{i=T}^{N-1} p(i)}
+\sigma_0^2 = \frac{\displaystyle \sum_{i=0}^{T-1} (\mu_0 - i)^2 p(i)}{\displaystyle \sum_{i=0}^{T-1} p(i)}, \quad
+\sigma_1^2 = \frac{\displaystyle \sum_{i=T}^{N-1} (\mu_1 - i)^2 p(i)}{\displaystyle \sum_{i=T}^{N-1} p(i)}
 $$
 
 $$

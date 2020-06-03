@@ -52,8 +52,8 @@ int main(int argc, char **argv) {
         std::exit(1);
     }
 
-    const double suppRadius = argc >= 2 ? atof(argv[2]) : 0.05;
-    const int    mcubeDivs  = argc >= 3 ? atoi(argv[3]) : 256;
+    const double suppRadius = argc > 2 ? atof(argv[2]) : 0.05;
+    const int    mcubeDivs  = argc > 3 ? atoi(argv[3]) : 256;
 
     // Load point cloud data
     std::vector<Vec3> positions;
