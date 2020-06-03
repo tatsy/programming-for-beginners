@@ -17,27 +17,23 @@ $$
 f(\mathbf{x}) = \sum_{i=0}^{N-1} w_i \phi(\| \mathbf{x} - \mathbf{x}_i \|)
 $$
 
-これとき未知のパラメータ$w_i$を決定するためには、以下の最小二乗誤差を最小化すれば良さそうだ。
+したがって、入力点群 $\{ \mathbf{x}_i \}$と、それらに対する関数の参照値 $\{ d_i \}$が与えられているなら、各$i$について、$f(\mathbf{x}_i) = d_i$が成り立てば良いことになる。
+
+この等式を全ての$i$について考えると、行列形式として、以下のように書き直すことができる。
 
 $$
-\sum_{j=0}^{N-1} (y_j - f(x_j))^2 = \sum_{j=0}^{N-1} \left(y_j - \sum_{i=0}^{N-1} w_i \phi(\| \mathbf{x}_j - \mathbf{x}_i \|) \right)^2
-$$
-
-この式は行列形式として、以下のように書き直すことができる。
-
-$$
-\mathbf{A}^\top \mathbf{A} \mathbf{w} = \mathbf{A}^\top \mathbf{b}
+\mathbf{A} \mathbf{w} = \mathbf{d}
 $$
 
 ただし、
 
 $$
-A_{ij} = \phi(\| x_i - x_j\|), \quad b_i = y_i
+A_{ij} = \phi(\| x_i - x_j\|)
 $$
 
-従って、この補間が上手く計算できるためには$\mathbf{A}$が正則行列である必要があることが分かる。実際にはRBF関数を用いて計算された任意の行列が正則行列となるわけではない。
+であり、$\mathbf{d}$は関数の参照値$d_i$を並べたベクトルである。従って、この補間が上手く計算できるためには$\mathbf{A}$が正則行列である必要があることが分かる。しかしながら、実際にはRBF関数を用いて計算された任意の行列が正則行列となるとは限らない。
 
-RBFの性質を議論する上では上記の行列$\mathbf{A}$が正定値行列であるかどうかを議論することが多いが、例えばシグモイドカーネルと呼ばれる$\tanh(a \mathbf{x}_i^\top \mathbf{x}_j + b))$は正定値ではない。
+ちなみに、RBFの性質を議論する上では上記の行列$\mathbf{A}$が正定値行列であるかどうかを議論することが多いが、例えばシグモイドカーネルと呼ばれる$\tanh(a \mathbf{x}_i^\top \mathbf{x}_j + b))$は正定値ではない。
 
 このような場合に、上手く解を見つける方法として、RBFに多項式項を追加した以下の式が良く用いられる。
 
@@ -48,15 +44,15 @@ $$
 ここで$p(\mathbf{x})$は$\mathbf{x}$の要素に対する多項式で、三次元ベクトル$\mathbf{x} = (x, y, z)$の場合で言えば、
 
 $$
-p(\mathbf{x}) = \lambda_x x + \lambda_y y + \lambda_z z + 1
+p(\mathbf{x}) = \lambda_x x + \lambda_y y + \lambda_z z + \lambda
 $$
 
 などがそれに対応する。
 
-この場合、補間後の関数を構成するパラメータが$\lambda_x, \lambda_y, \lambda_z$だけ増加するので、その自由度の増加分を打ち消すために、以下のような条件を課す。
+この場合、補間後の関数を構成するパラメータが$\lambda_x, \lambda_y, \lambda_z, \lambda$だけ増加するので、その自由度の増加分を打ち消すために、以下のような条件を課す。
 
 $$
-\sum_{i=0}^{N-1} \lambda_x x_i = \sum_{i=0}^{N-1} \lambda_y y_i = \sum_{i=0}^{N-1} \lambda_z z_i = 0.
+\sum_{i=0}^{N-1} \lambda_x x_i = \sum_{i=0}^{N-1} \lambda_y y_i = \sum_{i=0}^{N-1} \lambda_z z_i = \sum_{i=0}^{N-1} \lambda = 0.
 $$
 
 これはより高次の多項式を用いる場合でも同様で、とある多項式が単項式$p_l(\mathbf{x})$の線形和として
@@ -115,4 +111,37 @@ $$
 
 * Morse et al. 2001, “Interpolating Implicit Surfaces From Scattered Surface Data Using Compactly Supported Radial Basis Functions”
 
-Wendland関数のようなcompact supportの関数は上記の線形問題に現れる係数行列$\mathbf{A}$が、より疎な行列となるため、計算の効率に優れる。
+Wendland関数のようなcompact supportの関数は上記の線形問題に現れる係数行列$\mathbf{A}$が、より疎な行列となるため、計算の効率に優れる。今回は計算時間をできるだけ下げる目的でcompact supportのRBFを用いる。
+
+ここまでの議論を踏まえ、上記の多項式項を含めた線形問題を定義すると、以下のようになる。
+
+$$
+\begin{pmatrix}
+\mathbf{A} & \mathbf{P} \\
+\mathbf{P}^\top & \mathbf{0}
+\end{pmatrix}
+
+\begin{pmatrix}
+\mathbf{w} \\
+\boldsymbol\lambda
+\end{pmatrix}
+
+=
+
+\begin{pmatrix}
+\mathbf{d} \\
+\mathbf{0}
+\end{pmatrix}
+$$
+
+ここで$\mathbf{P} \in \mathbf{R}^{N \times 4}$は各列が入力点群のx, y, z座標ならびに1となるような行列である。
+
+$$
+\mathbf{P} = \begin{pmatrix}
+x_0 & y_0 & z_0 & 1 \\
+\vdots & \vdots & \vdots & \vdots \\
+x_{N-1} & y_{N-1} & z_{N-1} & 1
+\end{pmatrix}
+$$
+
+上記の線形問題では係数行列が対称行列となっているので、共役勾配法やLDLT法(いずれも、半正定値行列に対して利用可能)を使うことで、効率的に解を求めることができるだろう。
