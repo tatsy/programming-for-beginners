@@ -22,6 +22,6 @@ jobs:
     # Specify the target branch (optional)
     - uses: helaili/jekyll-action@2.0.4
       env:
-        JEKYLL_PAT: ${{ secrets.GITHUB_TOKEN }}
+        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       with:
         target_branch: 'gh-pages'
