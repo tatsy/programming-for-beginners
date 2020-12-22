@@ -33,10 +33,6 @@ kramdown:
 
 # Collections
 collections:
-  python:
+  contents:
     output: true
-    permalink: /:collection/:path/
-
-  cpp:
-    output: true
-    permalink: /:collection/:path/
+    permalink: /:path/

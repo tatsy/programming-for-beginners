@@ -6,7 +6,7 @@ categories: [python]
 
 ## ロジスティック回帰の概要
 
-[バイナリファイルの読み込み]({% link _python/read-binary.md %})で読み込んだMNISTのデータを使って、単純な線形モデルで数字を予想する。
+[バイナリファイルの読み込み]({% link _contents/python/read-binary.md %})で読み込んだMNISTのデータを使って、単純な線形モデルで数字を予想する。
 
 一般に線形回帰、といったときにはデータベクトル $\mathbf{x}$ を入力として、何らかの推定値 $\mathbf{y}$ を線形式、すなわち
 
