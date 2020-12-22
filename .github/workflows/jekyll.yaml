@@ -20,7 +20,7 @@ jobs:
           ${{ runner.os }}-gems-
 
     # Specify the target branch (optional)
-    - uses: helaili/jekyll-action@2.0.4
+    - uses: helaili/jekyll-action@56f7087
       env:
         JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
       with:
