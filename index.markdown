@@ -11,6 +11,7 @@ permalink: /
 ### 環境設定など
 
 * [Gitの設定]({% link _contents/setup/git.md %})
+* [シェルの設定]({% link _contents/setup/shell.md %})
 * [Python開発環境の設定]({% link _contents/setup/python.md %})
 * [C++開発環境の設定]({% link _contents/setup/cpp.md %})
 
@@ -18,6 +19,7 @@ permalink: /
 
 ### ロジスティック回帰
 
+* [バイナリデータの読み込み]({% link _contents/python/read-binary.md %})
 * [ロジスティック回帰 -その1-]({% link _contents/python/logistic-regression-01.md %})
 * [ロジスティック回帰 -その2-]({% link _contents/python/logistic-regression-02.md %})
 
@@ -36,7 +38,6 @@ permalink: /
 </tr>
 </table>
 
-* [バイナリデータの読み込み]({% link _contents/python/read-binary.md %})
 * [画像中の図形検出]({% link _contents/python/figure-detection.md %})
 * [数独を解く]({% link _contents/python/solve-sudoku.md %})
 * [課題: 画像中の数独問題を解こう]({% link _contents/python/assignment-sudoku.md %})

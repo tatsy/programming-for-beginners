@@ -11,11 +11,11 @@ title: 環境設定
 
 ```shell
 # 仮想環境の作成
-conda create -n beginner python=3.6
+$ conda create -n beginner python=3.6
 # 仮想環境の有効化
-conda activate beginner
+$ conda activate beginner
 # 仮想環境の無効化
-conda deactivate
+$ conda deactivate
 ```
 
 仮想環境を作り終わったら`conda activate name_of_env`で仮想環境をオンに、`conda deactivate`でオフにできる。
@@ -42,7 +42,49 @@ conda install -c pytorch pytorch torchvision
 
 補足だが、ウェブ上にはAnacondaとpyenvを共存させるようなやり方を説明している記事がなぜか多い。が、これはあまり意味がないことだ。なぜならAnacondaは仮想環境ごとにPythonのバージョンを変えられるし、パッケージのインストールにpipを使ってもいい(pyenvを使っている人はcondaに欲しいパッケージがないことを気にしているようだ...)。
 
-### Jupyter Labの起動
+## Visual Studio Codeの設定
+
+Pythonのコード開発をするためのツールは多くあり、GUI環境を使うものだと、一番気が利いているのはJetBrain社が開発している[PyCharm](https://www.jetbrains.com/ja-jp/pycharm/)のように思う。特にこだわりがなく、立ち上がりが少し遅くても気にしないなら、PyCharmを使うのが良いと思う。
+
+一方で、最近はVisual Studioコードの進歩が凄まじく、いろいろなオープンソースのライブラリとの親和性も高いので、著者は最近は好んでVisual Studio Code (以下, vscode)を使っている。
+
+vscodeを使う場合には、Pythonの仮想環境にリンター(linter)と呼ばれるコードのチェックや整形を自動化するツールを入れておくと便利である。著者のお勧めの組み合わせは以下の通り。
+
+* コード規則のチェック
+  * ソースコードが読みやすく、Pythonの標準に従った書き方になっているかをチェックする
+  * `pylint`, `flake8などがある` (おすすめは`flake8`)
+* コード静的解析
+  * ソースコードを走らせずに、バグを生みそうな書き方をチェックする (これを静的解析という)
+  * `mypy`の一択
+* コードの自動整形
+  * ソースコードを規則に従うように自動的に整形してくれる
+  * `autopep8`, `yapf`, `black`などがある (おすすめは`yapf`)
+
+これらをインストールした上で、設定ファイルを開いて以下のように設定する。設定ファイルは「Ctrl + Shift + P」(MacはCtrlの代わりにCommand)を押して「Preferences: Open Setting (JSON)」という項目を検索する。
+
+```json
+{
+    ...
+    // Python
+    "python.condaPath": "/Users/tatsuya/miniconda3/bin/conda",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.formatting.provider": "yapf",
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+    ...
+}
+```
+
+インタプリタのパスについては適宜、自分のものに置き換えること。このように設定すると、ファイルを保存するたびに、文法チェックと静的解析が走り、ソースコードが自動整形される。
+
+## Jupyter Labの利用
 
 Jupyter LabはPythonをウェブブラウザ上でインタラクティブに実行できる環境であるIPython Notebook (Jupyter)を進化させて、より使いやすくしたものだ。あまり大規模なプログラムを書くのには向いていないが、ちょっとしたプログラムを試すのにはとても便利である。
 
