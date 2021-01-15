@@ -75,3 +75,7 @@ acc = (pred_labels == y_test).mean()
 ```
 
 ただしく学習できていれば90%程度の正解率となるはずである。
+
+## まとめコード
+
+<https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/logistic_regression_01.ipynb>{: target="_blank" }
