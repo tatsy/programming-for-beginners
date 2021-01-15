@@ -120,3 +120,7 @@ plt.show()
 ```
 
 {% include lightbox.html src="/public/images/read_binary/mnist_tile.jpg" %}
+
+## まとめコード
+
+<https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/read_binary.ipynb>{: target="_blank" }
