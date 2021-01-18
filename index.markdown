@@ -21,6 +21,8 @@ permalink: /
 
 ### ロジスティック回帰
 
+ここでは回帰モデルの基本ともいえるロジスティック回帰を用いた、手書き文字の認識を目指す。
+
 * [バイナリデータの読み込み]({% link _contents/python/read-binary.md %})
 * [ロジスティック回帰 -その1-]({% link _contents/python/logistic-regression-01.md %})
 * [ロジスティック回帰 -その2-]({% link _contents/python/logistic-regression-02.md %})
