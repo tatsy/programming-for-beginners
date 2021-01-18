@@ -3,9 +3,9 @@ layout: post
 title: GANによる高品質画像生成コンテスト
 ---
 
-ここまでの内容をベースにより良い画像生成を目指しましょう。
+ここまでの内容をベースにより良い画像生成を目指そう。
 
-## データ・セット
+## データセット
 
 [Oxford flower dataset](https://www.robots.ox.ac.uk/~vgg/data/flowers/){: target="_blank" }の102カテゴリを使って行います。
 
