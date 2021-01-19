@@ -94,20 +94,20 @@ $ git config --local user.email "tatsy.mail@gmail.com"
 
 ```ini
 [user]
-    name = Tatsuya Yatagawa
-    email = tatsy.mail@gmail.com
+	name = Tatsuya Yatagawa
+	email = tatsy.mail@gmail.com
 [core]
-    autocrlf = input
-    editor = nvim
+	autocrlf = input
+	editor = nvim
 [color]
-    ui = true
+	ui = true
 [push]
-    default = nothing
+	default = nothing
 [pull]
-    ff = only
+	ff = only
 [alias]
-    st = status
-    stu = status
+	st = status
+	stu = status -u
 ```
 
 ### ファイルの作成
