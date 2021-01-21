@@ -37,7 +37,7 @@ Chocolateyのインストールについては、以下のページの手順に�
 Chocolateyを使う場合はインストールは非常に簡単で、オープンソース版のPowerShellを立ち上げて、
 
 ```shell
-$ choco install oh-my-posh
+choco install oh-my-posh
 ```
 
 とするだけで良い。
@@ -89,12 +89,12 @@ Macなら[Homebrew](https://brew.sh/index_ja){: target="_blank" }, Linuxなら`a
 インストール方法は非常に簡単で、上記のサイトをおとづれて、`zsh`を立ちあげた状態でインストール用のスクリプトを実行する。
 
 ```shell
-$ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
 もしかするとCurl (Web上のファイルをCLI経由でインストールするソフトウェア)が見つからないと言われるかもしれないので、その場合は`zsh`と同様にHomebrew等でインストールする。
 
-### 補足
+### 補足: zplug
 
 ちなみに著者は[zplug](https://github.com/zplug/zplug){: target="_blank" }という`zsh`のプラグインマネージャを使っているので、興味がある人は調べてみると良い。
 
@@ -150,4 +150,34 @@ else
     alias la='ls -la --color=auto'
     alias ll='ls -la --color=auto'
 fi
+```
+
+### 補足: fish
+
+最近、注目を集めている新しめのシェルにfishというものがあります。
+
+<https://fishshell.com/>{: target="_blank" }
+
+fishはインストールした時点である程度の補完機能がついていて、そのままでもそれなりに使えるというのが特徴で、zsh + oh-my-zshの代わりにこちらを使ってみるのも良いかもしれません。
+
+fishのインストールは簡単でMacであればHomebrew, Ubuntu系であればPPAを追加することでインストール可能です(Ubuntu 19.04以降はPPA不要)
+
+```shell
+# Mac
+brew install fish
+
+# Ubuntu 19.04より前
+sudo apt-add-repository ppa:fish-shell/release-3
+sudo apt update -y
+sudo apt install fish -y
+
+# Ubuntu 19.04以降
+sudo apt install fish -y
+```
+
+また、fishにもzshと同様に[oh-my-fish](https://github.com/oh-my-fish/oh-my-fish){: target="_blank" }というツールが用意されていて、こちらを追加でインストールすることで、テーマなどの設定が簡単になります。
+
+```shell
+# fish shellを起動した状態で
+curl -L https://get.oh-my.fish | fish
 ```

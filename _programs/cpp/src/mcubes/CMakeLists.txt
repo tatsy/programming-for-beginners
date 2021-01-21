@@ -21,7 +21,7 @@ source_group("Source Files" FILES ${SOURCE_LIST})
 # -------------------------------------
 # Marching cubes executable
 # -------------------------------------
-set(BUILD_TARGET "march_cubes")
+set(BUILD_TARGET "mcubes_exe")
 add_executable(${BUILD_TARGET})
 
 target_include_directories(${BUILD_TARGET} PUBLIC ${EIGEN3_INCLUDE_DIRS})

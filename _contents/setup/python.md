@@ -10,6 +10,8 @@ title: 環境設定
 インストールが完了したら作業用のPython仮想環境を作る。WindowsならPowerShell, Macならターミナルを使う。仮想環境を作るコマンドは`conda create`でそのあとに`-n name_of_env`というように名前を指定する。合わせて、そのあとに`python=3.6`などのように書くことでライブラリ(Pythonの場合にはパッケージということが多い)をバージョンを指定した上で一緒にインストールすることができる。
 
 ```shell
+# Anaconda環境の初期化 (最初に1回だけやればいい, 自分の使っているシェルに合わせる)
+$ conda init [powershell,zsh,bash]
 # 仮想環境の作成
 $ conda create -n beginner python=3.6
 # 仮想環境の有効化

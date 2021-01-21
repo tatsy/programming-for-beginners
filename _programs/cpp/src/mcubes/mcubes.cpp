@@ -96,8 +96,8 @@ void marchCubes(const Volume &volume, std::vector<Vec3> *vertices, std::vector<u
                     cell.val[indexTable[i]] = volume(x + dx, y + dy, z + dz) / (double)USHRT_MAX;
                 }
 
-                std::memset(tris, 0, sizeof(tris));
-                int ntris = Polygonise(cell, threshold, tris);
+                std::fill(tris, tris + 16, TRIANGLE());
+                const int ntris = Polygonise(cell, threshold, tris);
 
                 for (int i = 0; i < ntris; i++) {
                     uint32_t tri[3];
@@ -175,8 +175,8 @@ void marchTets(const Volume &volume, std::vector<Vec3> *vertices, std::vector<ui
                         tet.val[j] = cell.val[tetsTable[t][j]];
                     }
 
-                    std::memset(tris, 0, sizeof(tris));
-                    int ntris = PolygonizeTet(tet, threshold, tris);
+                    std::fill(tris, tris + 16, TRIANGLE());
+                    const int ntris = PolygonizeTet(tet, threshold, tris);
 
                     for (int i = 0; i < ntris; i++) {
                         uint32_t tri[3];
