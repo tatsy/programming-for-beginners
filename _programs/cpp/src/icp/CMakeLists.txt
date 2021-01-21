@@ -7,6 +7,8 @@ target_sources(
     PRIVATE
     ${COMMON_HEADERS}
     main.cpp
+    icp.h
+    icp.cpp
 )
 
 get_target_property(SOURCE_LIST ${BUILD_TARGET} SOURCES)
