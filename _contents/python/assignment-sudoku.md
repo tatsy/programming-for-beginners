@@ -31,7 +31,7 @@ title: 画像中の数独を解こう
 </tr>
 </table>
 
-上記の入力データはサイズを落としてあるので、元々の画像は[こちら]({% link public/images/sudoku/inputs.zip %})からダウンロードして下さい。
+上記の入力データはサイズを落としてあるので、元々の画像は[こちら]({% link public/images/sudoku/inputs.zip %})からダウンロードすること。
 
 ### ヒント
 

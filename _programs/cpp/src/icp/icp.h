@@ -6,15 +6,16 @@
 
 #include "common/vec3.h"
 
-//! Align source point cloud to target point cloud using point-to-point ICP.
-void point2pointICP(const std::vector<Vec3> &target,
-                    const std::vector<Vec3> &source,
-                    Eigen::MatrixXd *rotMat,
-                    Eigen::VectorXd *trans);
+enum class ICPMetric {
+    Point2Point = 0x00,
+    Point2Plane = 0x01,
+};
 
-//! Align source point cloud to target point cloud using point-to-plane ICP.
-void point2planeICP(const std::vector<Vec3> &target,
-                    const std::vector<Vec3> &targetNorm,
-                    const std::vector<Vec3> &source,
-                    Eigen::MatrixXd *rotMat,
-                    Eigen::VectorXd *trans);
+void rigidICP(const std::vector<Vec3> &target,
+              const std::vector<Vec3> &targetNorm,
+              std::vector<Vec3> &source,
+              std::vector<Vec3> &sourceNorm,
+              ICPMetric metric,
+              int maxIters = 100,
+              double tolerance = 1.0e-4,
+              bool verbose = false);

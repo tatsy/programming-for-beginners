@@ -1,6 +1,6 @@
 #include "icp.h"
 
-#include <random>
+#include <iostream>
 #include <Eigen/Dense>
 
 using FloatType = double;
@@ -17,10 +17,29 @@ struct Point : public Vec3 {
     int i;
 };
 
-void point2pointICP(const std::vector<Vec3> &target,
-                    const std::vector<Vec3> &source,
-                    EigenMatrix *rotMat,
-                    EigenVector *trans) {
+// Rodrigues rotation matrix
+EigenMatrix rodrigues(const EigenVector &w, const double theta) {
+    const double c = std::cos(theta);
+    const double s = std::sin(theta);
+
+    const double nx = w(0);
+    const double ny = w(1);
+    const double nz = w(2);
+    EigenMatrix n(3, 3);
+    n << 0.0, -nz, ny,
+            nz, 0.0, -nx,
+            -ny, nx, 0.0;
+
+    EigenMatrix I = EigenMatrix::Identity(3, 3);
+
+    return I + n * s + (n * n) * (1.0 - c);
+}
+
+//! single point to point ICP step
+void point2pointICP_step(const std::vector<Vec3> &target,
+                         const std::vector<Vec3> &source,
+                         EigenMatrix *rotMat,
+                         EigenVector *trans) {
     // Construct Kd-tree to find closest points
     KDTree<Vec3> tree;
     tree.construct(target);
@@ -54,28 +73,12 @@ void point2pointICP(const std::vector<Vec3> &target,
     *trans = pMean - (*rotMat) * xMean;
 }
 
-EigenMatrix rodrigues(const EigenVector &w, const double theta) {
-    const double c = std::cos(theta);
-    const double s = std::sin(theta);
-
-    const double nx = w(0);
-    const double ny = w(1);
-    const double nz = w(2);
-    EigenMatrix n(3, 3);
-    n << 0.0, -nz, ny,
-         nz, 0.0, -nx,
-         -ny, nx, 0.0;
-
-    EigenMatrix I = EigenMatrix::Identity(3, 3);
-
-    return I + n * s + (n * n) * (1.0 - c);
-}
-
-void point2planeICP(const std::vector<Vec3> &target,
-                    const std::vector<Vec3> &targetNorm,
-                    const std::vector<Vec3> &source,
-                    Eigen::MatrixXd *rotMat,
-                    Eigen::VectorXd *trans) {
+//! single point to plane ICP step
+void point2planeICP_step(const std::vector<Vec3> &target,
+                         const std::vector<Vec3> &targetNorm,
+                         const std::vector<Vec3> &source,
+                         Eigen::MatrixXd *rotMat,
+                         Eigen::VectorXd *trans) {
     // Construct Kd-tree to find closest points
     std::vector<Point> points;
     for (int i = 0; i < (int)target.size(); i++) {
@@ -114,4 +117,62 @@ void point2planeICP(const std::vector<Vec3> &target,
     const EigenVector w = a / theta;
     *rotMat = rodrigues(w, theta);
     *trans = t;
+}
+
+void rigidICP(const std::vector<Vec3> &target,
+              const std::vector<Vec3> &targetNorm,
+              std::vector<Vec3> &source,
+              std::vector<Vec3> &sourceNorm,
+              ICPMetric metric,
+              int maxIters,
+              double tolerance,
+              bool verbose) {
+    // Point-to-point ICP
+    for (int it = 0; it < maxIters; it++) {
+        Eigen::MatrixXd R(3, 3);
+        Eigen::VectorXd t(3);
+        switch (metric) {
+            case ICPMetric::Point2Point:
+                point2pointICP_step(target, source, &R, &t);
+                break;
+
+            case ICPMetric::Point2Plane:
+                point2planeICP_step(target, targetNorm, source, &R, &t);
+                break;
+
+            default:
+                throw std::runtime_error("Unknown ICP metric type!");
+        }
+
+        // Apply rigid transformation
+        for (int i = 0; i < (int)source.size(); i++) {
+            Eigen::VectorXd v(3);
+            v << source[i].x, source[i].y, source[i].z;
+            Eigen::VectorXd u = R * v + t;
+            source[i] = Vec3(u(0), u(1), u(2));
+
+            Eigen::VectorXd n(3);
+            n << sourceNorm[i].x, sourceNorm[i].y, sourceNorm[i].z;
+            Eigen::VectorXd m = R * n;
+            sourceNorm[i] = Vec3(m(0), m(1), m(2));
+        }
+
+        // Check current error
+        const double error = t.norm() + (R - Eigen::MatrixXd::Identity(3, 3)).norm();
+
+        // Report
+        if (verbose) {
+            printf("*** %d iteration ***\n", it + 1);
+            printf("R = \n");
+            std::cout << R << std::endl;
+            printf("t = \n");
+            std::cout << t << std::endl;
+            printf("error = %f\n", error);
+            printf("\n");
+        }
+
+        if (error < tolerance) {
+            break;
+        }
+    }
 }

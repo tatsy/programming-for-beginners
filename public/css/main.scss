@@ -17,12 +17,6 @@ html {
   }
 }
 
-.lightbox-link {
-  img {
-    width: 50%;
-    margin: 0px;
-  }
-}
 
 .content {
   font-family: "Source Sans Pro", "メイリオ", sans-serif;
@@ -65,8 +59,6 @@ html {
 
     td {
       text-align: center;
-
-      img { width: 100%; }
     }
 
     p {
@@ -74,8 +66,45 @@ html {
       padding: 0px;
     }
   }
+
+  .lightbox-container {
+    text-align: center;
+
+    img {
+      max-height: 18em;
+      width: auto;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .lightbox-caption {
+      p {
+        margin: 0.5rem 0rem;
+      }
+    }
+  }        
+
+  @media (max-width: 40em) {
+    .lightbox-container {
+      width: 100%;
+      img {
+        width: 100%;
+      }
+    }        
+  }
   
   .highlight pre { white-space: pre; overflow: auto; }
+
+  .footnotes {
+    ol {
+      margin: 0;
+      padding-left: 1rem;
+      li p {
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
 }
 
 .site-footer {

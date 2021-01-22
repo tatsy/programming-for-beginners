@@ -3,7 +3,7 @@
 
 #include "common/path.h"
 #include "common/volume.h"
-#include "common/trimesh.h"
+#include "common/io.h"
 #include "mcubes.h"
 
 int main(int argc, char **argv) {

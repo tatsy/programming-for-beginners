@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "マーチング・キューブ法とその拡張"
+title: "課題: マーチング・キューブ法とその拡張"
 ---
 
 <table class="images">

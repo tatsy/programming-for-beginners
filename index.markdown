@@ -6,11 +6,17 @@ permalink: /
 
 ## はじめに
 
-このサイトは研究室の新入生向けにPythonを使った機械学習と、C++を使った形状処理、それぞれの基礎について勉強するために作成したものである。
+このサイトは研究室の新入生向けが、Pythonを使った機械学習と、C++を使った形状処理の基礎について勉強するために作成いたしました。
 
-執筆にあたっては、読者が**PythonとC++(あるいはC言語)での最低限のプログラミング経験を持っている**ことを前提にしているので、少しハードルが高いと感じる場合には、入門書等の基礎について勉強しておくことをお勧めする。ただし、実践から学ぶことの方が学習の効率ははるかに良いので、あまりに基礎に固執することなく、必要に応じて勉強をすすめることも大切だと思う。
+執筆にあたっては、読者がPythonとC++(あるいはC言語)での最低限のプログラミング経験を持っていることを前提にしておりますので、少しハードルが高いと感じる場合には、入門書等の基礎について勉強した後にお読みいただければ幸いです。
 
-### 環境設定など
+もし、サイトの内容に誤りなどを見つけられました場合には、著者に直接ご連絡をいただくか、GitHubのissueないしpull requestを立ち上げていただければ幸いです。
+
+<https://github.com/tatsy/programming-for-beginners>{: target="_blank" }
+
+ライセンスに関してはサイトの内容、プログラムのソースコードともにMITライセンスとしたいと思います。リンク等々は自由にしていただいて構いませんが、もし万が一、講義や研究室などでご利用いただく場合には、ご一報いただければ大変励みになります。
+
+## 環境設定
 
 * [Gitの設定]({% link _contents/setup/git.md %})
 * [シェルの設定]({% link _contents/setup/shell.md %})
@@ -38,8 +44,8 @@ permalink: /
   <td style="text-align: center; width: 50%;">{{ '**出力画像**' | markdownify }}</td>
 </tr>
 <tr>
-  <td>{% include lightbox.html src="/public/images/sudoku/level_3_small.jpg" style="width: 100%;" %}</td>
-  <td>{% include lightbox.html src="/public/images/sudoku/level_3_ans_small.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/sudoku/level_3_small.jpg" %}</td>
+  <td>{% include lightbox.html src="/public/images/sudoku/level_3_ans_small.jpg" %}</td>
 </tr>
 </table>
 
@@ -57,8 +63,8 @@ permalink: /
   <td style="text-align: center; width: 50%;">{{ '**出力画像**' | markdownify }}</td>
 </tr>
 <tr>
-  <td>{% include lightbox.html src="/public/images/gan/x_real_150.jpg" style="width: 100%;" %}</td>
-  <td>{% include lightbox.html src="/public/images/gan/x_fake_150.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/gan/x_real_150.jpg" %}</td>
+  <td>{% include lightbox.html src="/public/images/gan/x_fake_150.jpg" %}</td>
 </tr>
 </table>
 
@@ -79,8 +85,8 @@ permalink: /
   <td style="text-align: center; width: 50%;">{{ '**復元メッシュ**' | markdownify }}</td>
 </tr>
 <tr>
-  <td>{% include lightbox.html src="/public/images/march_cubes/shell_section_140.jpg" style="width: 100%;" %}</td>
-  <td>{% include lightbox.html src="/public/images/march_cubes/shell_mesh.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/march_cubes/shell_section_140.jpg" %}</td>
+  <td>{% include lightbox.html src="/public/images/march_cubes/shell_mesh.jpg" %}</td>
 </tr>
 </table>
 
@@ -88,6 +94,15 @@ permalink: /
 * [大津の二値化による境界値の決定]({% link _contents/cpp/otsu-binarize.md %})
 * [マーチング・キューブ法]({% link _contents/cpp/march-cubes.md %})
 * [課題: マーチング・キューブ法とその拡張]({% link _contents/cpp/assignment-march-cubes.md %})
+
+### Rigid-ICP法による点群データの位置揃え
+
+* [アルゴリズムの概要]({% link _contents/cpp/overview-rigid-icp.md %})
+* [k-d木による最近傍探索]({% link _contents/cpp/kdtree.md %})
+* [Eigenを用いた線形問題の解法]({% link _contents/cpp/eigen-solve-linear-system.md %})
+* [Point-to-Point ICP]({% link _contents/cpp/point-to-point-icp.md %})
+* [Point-to-Plane ICP]({% link _contents/cpp/point-to-plane-icp.md %})
+* [課題: Rigid-ICP法の実装]({% link _contents/cpp/assignment-rigid-icp.md %})
 
 ### 点群データからのメッシュ復元
 
@@ -97,13 +112,11 @@ permalink: /
   <td style="text-align: center; width: 50%;">{{ '**復元メッシュ**' | markdownify }}</td>
 </tr>
 <tr>
-  <td>{% include lightbox.html src="/public/images/surf_recon/buddha_point.jpg" style="width: 100%;" %}</td>
-  <td>{% include lightbox.html src="/public/images/surf_recon/buddha_recon.jpg" style="width: 100%;" %}</td>
+  <td>{% include lightbox.html src="/public/images/surf_recon/buddha_point.jpg" %}</td>
+  <td>{% include lightbox.html src="/public/images/surf_recon/buddha_recon.jpg" %}</td>
 </tr>
 </table>
 
-* [アルゴリズムの概要]({% link _contents/cpp/point-to-surface.md %})
-* [k-d木による最近傍探索]({% link _contents/cpp/kdtree.md %})
-* [Eigenを用いた線形問題の解法]({% link _contents/cpp/eigen-solve-linear-system.md %})
+* [アルゴリズムの概要]({% link _contents/cpp/overview-surface-recon.md %})
 * [RBFによる関数の補間]({% link _contents/cpp/radial-basis-function.md %})
-* [課題: 点群データからのメッシュ復元]({% link _contents/cpp/assignment-point-to-surface.md %})
+* [課題: 点群データからのメッシュ復元]({% link _contents/cpp/assignment-surface-recon.md %})
