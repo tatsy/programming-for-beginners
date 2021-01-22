@@ -11,7 +11,7 @@ def wrap_and_flush(zipfile, dest, source)
   reader.readlines().each do |line|
     match = line.match(ignore_start)
     if not match.nil?
-      writer.write(match[1] + match[2] + "\n")
+      writer.write(match[1] + match[2].strip + "\n")
       ignoring = true
     end
 

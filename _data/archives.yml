@@ -1,4 +1,4 @@
-cxx-sources:
+cpp-beginners:
   - "_programs/cpp"
   - exclude:
     - "cmake-build-debug"

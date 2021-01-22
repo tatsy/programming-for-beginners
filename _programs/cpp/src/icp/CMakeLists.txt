@@ -9,6 +9,8 @@ target_sources(
     main.cpp
     icp.h
     icp.cpp
+    svd.h
+    svd.cpp
 )
 
 get_target_property(SOURCE_LIST ${BUILD_TARGET} SOURCES)
