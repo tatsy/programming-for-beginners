@@ -14,8 +14,6 @@ Programming for Beginners
 
 <https://github.com/tatsy/programming-for-beginners>{: target="_blank" }
 
-ライセンスに関してはサイトの内容、プログラムのソースコードともにMITライセンスとしたいと思います。リンク等々は自由にしていただいて構いませんが、もし万が一、講義や研究室などでご利用いただく場合には、ご一報いただければ大変励みになります。
-
 ライセンス
 ---
 

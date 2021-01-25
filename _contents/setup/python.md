@@ -7,6 +7,11 @@ title: 環境設定
 
 [Miniconda](https://docs.conda.io/en/latest/miniconda.html){: target="_blank" } にアクセスして、手順に従いインストールする。Windowsならばインストーラがあるので、それほど難しくはないだろう。MacやLinuxの場合にはシェルスクリプトを使うことになるが、これでも難しくはない。最初はシェルを使うことに慣れないだろうが、これからはずっと使うことになる。慣れよう。
 
+**注意**  
+WindowsでMinicondaをインストールする場合は、非推奨ではあるが、環境変数の`PATH`にMinicondaを設定するように以下の画面でチェックをいれること。
+
+{% include lightbox.html src="/public/images/setup/miniconda_add_path.jpg" %}
+
 インストールが完了したら作業用のPython仮想環境を作る。WindowsならPowerShell, Macならターミナルを使う。仮想環境を作るコマンドは`conda create`でそのあとに`-n name_of_env`というように名前を指定する。合わせて、そのあとに`python=3.6`などのように書くことでライブラリ(Pythonの場合にはパッケージということが多い)をバージョンを指定した上で一緒にインストールすることができる。
 
 ```shell

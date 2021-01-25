@@ -13,18 +13,27 @@ Windowsのシェルは2021年現在、過渡期にあって、いくつかのシ
   * Windowsに昔からあるシェル。最初の選択肢にはならないと思うが、Windowsのシステム設定変更などでたまに使う時がある。
 * PowerShell (`pwsh.exe`)
   * コマンドプロンプトの改善のために導入されたシェル。デフォルトでも入っているが[オープンソース版](https://docs.microsoft.com/ja-jp/powershell/){: target="_blank" }もあり、こちらの方が機能が多い。
-* Linux Subsystem
+* Windows Subsystem for Linux (WSL)
   * Windows上にUbuntuなどのLinux仮想環境を作って、その上で動かすシェル。Linuxのシェルと同じように使えるが、WindowsとLinux仮想環境でファイルシステムが分かれているので、その分ディスクを圧迫するのが気にはなる。
 
-以下ではPowerShellの設定方法について述べるが、Windows Subsystemを使う場合は、その下に示すMac/Linux用の設定に従うと良い。
+以下ではPowerShellの設定方法について述べるが、WSLを使う場合は、その下に示すMac/Linux用の設定に従うと良い。
 
-### PowerShellの設定
+### PowerShellのインストール
+
+GitHubのリポジトリからWindows用のインストーラ(拡張子が`.msi`になっているもの)で、特にこだわりがなければ最新のものをダウンロード、インストールする。
+
+<https://github.com/PowerShell/PowerShell/releases>{: target="_blank" }
+
+インストールの途中で、右クリックのメニューに「PowerShellで開く」という項目を追加するかどうかを尋ねられるので、ここのチェックは入れておくことを推奨する。
+
+{% include lightbox.html src="/public/images/setup/powershell_setup.jpg" %}
+
 
 ### Chocolateyのインストール
 
 PowerShellでは[Chocolatey](https://chocolatey.org/){: target="_blank" }というパッケージマネージャが使用可能で、これを使うと、ややブラックボックスにはなるものの、ライブラリやプログラムのインストールが自動化できる。今回はPowerShellの設定のためだけにChocolateyを使うが、個人的にはプログラムのライブラリなどは、個別に手動でインストールした方が良い気がする。
 
-Chocolateyのインストールについては、以下のページの手順に従う。
+Chocolateyのインストールについては、以下のページの手順に従う。ところどころ、管理者としてPowerShellを起動していないと失敗することがあるので注意すること。
 
 <https://chocolatey.org/install>{: target="_blank" }
 
@@ -34,19 +43,52 @@ Chocolateyのインストールについては、以下のページの手順に�
 
 * <https://github.com/JanDeDobbeleer/oh-my-posh>
 
-Chocolateyを使う場合はインストールは非常に簡単で、オープンソース版のPowerShellを立ち上げて、
+インストールにあたっては、まずPowerShellのスクリプト実行設定を確認する。
 
-```shell
-choco install oh-my-posh
+```powershell
+Get-ExecutionPolicy
 ```
 
-とするだけで良い。
+この結果は、特に変更していなければ`RemoteSigned`となっているはずなので、以下のようにタイプして、設定を`Bypass`に設定し直す。なおChocolateyをインストールした場合には、この設定はすでに済んでいると思われる。
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process
+```
+
+設定後、`oh-my-posh`と必要なGitのモジュールをインストールする。
+
+```powershell
+Install-Module posh-git -Scope CurrentUser
+Install-Module oh-my-posh -Scope CurrentUser
+```
+
+これで必要なモジュールのインストールは完了なので、次回立ち上げ時以降、自動的にoh-my-poshが働くように設定ファイルを編集する。
+
+```powershell
+notepad $profile
+```
+
+もし設定ファイルが存在しなければ、作成するかどうかを尋ねられるので、作成する。するとNotepad(メモ帳)でファイルが開くので以下の内容を追記して保存する。
+
+```powershell
+Import-Module posh-git
+Import-Module oh-my-posh
+Set-Theme Paradox
+```
+
+なお`Set-Theme`の部分は[oh-my-posh](https://github.com/JanDeDobbeleer/oh-my-posh#themes){: target="_blank" }のGitリポジトリにあるものを見て、好きなものを使用すると良い。
 
 ### Nerdフォントのインストール
 
 [Nerdフォント](https://www.nerdfonts.com/){: target="_blank" }と呼ばれるemojiがサポートされたフォントを使うと、シェルの見た目がきれいになり使う意欲が湧く(個人差あり)。ただし、PowerShellをそのまま使う場合にはフォントの設定がうまくいかない可能性があるので、ここではフォントをインストールするにとどめて、設定については、以下のWindows Terminalというシェルで行う。
 
 <https://www.nerdfonts.com/>{: target="_blank" }
+
+なお、日本語のフォルダ名なども合わせてフォントを置き換えたい場合には**Cica**と呼ばれるフォントを使うのが良い。
+
+<https://github.com/miiton/Cica>{: target="_blank" }
+
+こちらもGitHubの[リリースページ](https://github.com/miiton/Cica/releases){: target="_blank" }からフォントがダウンロードできる。
 
 ### Windows Terminal
 
@@ -74,13 +116,15 @@ Windows Terminalは表示に使うフォントを設定ファイルで管理で�
 
 ## Mac/Linux
 
-MacとLinuxの場合はデフォルトのシェルが`bash`というシェルになっている。例えばMacでターミナルを立ち上げると、`bash`のソフトウェアが走って、ターミナル上に入力を受け付ける画面を表示する。
+MacやLinuxにはデフォルトで「ターミナル」というソフトウェアが用意されているが、おすすめはMacなら[iTerm](https://iterm2.com/){: target="_blank"}、Linuxなら[Byobu](https://www.byobu.org/)というソフトウェアを使うと、タブの数を増やしたり、画面を分割したりできる。
+
+これらのターミナル環境の中では、MacとLinuxともに`bash`というシェルを使用するように設定されている(ターミナルはCUI操作を行うソフト、シェルはコマンドを受け取ってOS上で命令を実行するソフトウェアのこと)。例えばMacでターミナルを立ち上げると、`bash`のソフトウェアが走って、ターミナル上に入力を受け付ける画面を表示する。
 
 筆者はあまり`bash`は使ったことがなく、より拡張性などが優れている(と思われる)`zsh`をよく使っている。というわけで`zsh`を使う方法を紹介する。最低限の設定であれば非常に簡単で、まずは以下の手順で`zsh`と`oh-my-zsh`をインストールすると良い。
 
 ### Zshのインストール
 
-Macなら[Homebrew](https://brew.sh/index_ja){: target="_blank" }, Linuxなら`apt-get`(Debian系)とか`yum` (CentOS系)で`zsh`を入れる。
+Macなら[Homebrew](https://brew.sh/index_ja){: target="_blank" }, Linuxなら`apt-get`(Debian系)とか`yum` (CentOS系)で`zsh`を入れる。ちなみに、最近は`Fish`というシェルも人気らしく、興味があれば下の補足の項を見て欲しい。
 
 ### Oh-my-zshのインストール
 
