@@ -198,13 +198,13 @@ fi
 
 ### 補足: fish
 
-最近、注目を集めている新しめのシェルにfishというものがあります。
+最近、注目を集めている新しめのシェルにfishというものがある (2021年1月現在)。
 
 <https://fishshell.com/>{: target="_blank" }
 
-fishはインストールした時点である程度の補完機能がついていて、そのままでもそれなりに使えるというのが特徴で、zsh + oh-my-zshの代わりにこちらを使ってみるのも良いかもしれません。
+fishはインストールした時点である程度の補完機能がついていて、そのままでもそれなりに使えるというのが特徴で、zsh + oh-my-zshの代わりにこちらを使ってみるのも良いかもしれない。
 
-fishのインストールは簡単でMacであればHomebrew, Ubuntu系であればPPAを追加することでインストール可能です(Ubuntu 19.04以降はPPA不要)
+fishのインストールは簡単でMacであればHomebrew, Ubuntu系であればPPAを追加することでインストール可能(Ubuntu 19.04以降はPPA不要)
 
 ```shell
 # Mac
@@ -219,7 +219,7 @@ sudo apt install fish -y
 sudo apt install fish -y
 ```
 
-また、fishにもzshと同様に[oh-my-fish](https://github.com/oh-my-fish/oh-my-fish){: target="_blank" }というツールが用意されていて、こちらを追加でインストールすることで、テーマなどの設定が簡単になります。
+また、fishにもzshと同様に[oh-my-fish](https://github.com/oh-my-fish/oh-my-fish){: target="_blank" }というツールが用意されており、こちらを追加でインストールすることで、テーマなどの設定が簡単になる。
 
 ```shell
 # fish shellを起動した状態で
