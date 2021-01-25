@@ -12,7 +12,10 @@ Programming for Beginners
 
 もし、サイトの内容に誤りなどを見つけられました場合には、著者に直接ご連絡をいただくか、GitHubのissueないしpull requestを立ち上げていただければ幸いです。
 
-<https://github.com/tatsy/programming-for-beginners>{: target="_blank" }
+ウェブサイト
+---
+
+<https://tatsy.github.io/programming-for-beginners>
 
 ライセンス
 ---
