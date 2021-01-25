@@ -15,17 +15,12 @@ option(WITH_OPENMP "Use OpenMP" ON)
 # ----------
 # C++ compiler setting
 # ----------
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if (UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g -Wall")
-    if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-        set(CXX_FS_LIBRARY "c++fs")
-    else()
-        set(CXX_FS_LIBRARY "stdc++fs")
-    endif()
 endif()
 
 # ----------

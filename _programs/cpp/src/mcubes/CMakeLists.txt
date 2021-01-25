@@ -4,19 +4,17 @@
 
 add_library(${MCUBES_LIBRARY} STATIC)
 
-set(MCUBES_SOURCES
-    ${COMMON_HEADERS}
+set(SOURCE_FILES
     mcubes.h
     mcubes.cpp
     mcubes_utils.h
-    mcubes_utils.cpp
-)
+    mcubes_utils.cpp)
 
 target_include_directories(${MCUBES_LIBRARY} PUBLIC ${EIGEN3_INCLUDE_DIRS})
-target_sources(${MCUBES_LIBRARY} PUBLIC ${MCUBES_SOURCES})
+target_sources(${MCUBES_LIBRARY} PUBLIC ${SOURCE_FILES} ${COMMON_HEADERS})
 
-get_target_property(SOURCE_LIST ${MCUBES_LIBRARY} SOURCES)
-source_group("Source Files" FILES ${SOURCE_LIST})
+source_group("Source Files" FILES ${SOURCE_FILES})
+source_group("Common Headers" FILES ${COMMON_HEADERS})
 
 # -------------------------------------
 # Marching cubes executable

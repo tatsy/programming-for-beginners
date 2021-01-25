@@ -9,6 +9,7 @@ using IndexType = int64_t;
 using EigenMatrix = Eigen::MatrixXd;
 using EigenVector = Eigen::VectorXd;
 
+#include "common/io.h"
 #include "common/kdtree.h"
 #include "common/debug.h"
 #include "svd.h"
@@ -29,18 +30,14 @@ EigenMatrix rodrigues(const EigenVector &w, const double theta) {
     const double wy = w(1);
     const double wz = w(2);
     EigenMatrix K(3, 3);
-    K << 0.0, -wz, wy,
-         wz, 0.0, -wx,
-         -wy, wx, 0.0;
+    K << 0.0, -wz, wy, wz, 0.0, -wx, -wy, wx, 0.0;
 
     EigenMatrix I = EigenMatrix::Identity(3, 3);
     return I + K * s + (K * K) * (1.0 - c);
 }
 
 //! single point to point ICP step
-void point2pointICP_step(const std::vector<Vec3> &target,
-                         const std::vector<Vec3> &source,
-                         EigenMatrix *rotMat,
+void point2pointICP_step(const std::vector<Vec3> &target, const std::vector<Vec3> &source, EigenMatrix *rotMat,
                          EigenVector *trans) {
     // Construct Kd-tree to find closest points
     KDTree<Vec3> tree;
@@ -49,6 +46,10 @@ void point2pointICP_step(const std::vector<Vec3> &target,
     // {{ NOT_IMPL_ERROR();
 
     // Match closest point pairs
+    // Hint:
+    // Construct here that two matrices X and P,
+    // whose elements are positions of source vertices (X),
+    // and those for closest points of the sources (P)
     const int nPoints = (int)source.size();
     EigenMatrix X(nPoints, 3);
     EigenMatrix P(nPoints, 3);
@@ -60,12 +61,18 @@ void point2pointICP_step(const std::vector<Vec3> &target,
     }
 
     // Subtract xMean, pMean from X, P
+    // Hint:
+    // Row-wise or column-wise mean (also sum, max, min etc.) of Eigen matrices
+    // can be easily calculate using "rowwise()" or "colwise()".
     const EigenVector xMean = X.colwise().mean();
     const EigenVector pMean = P.colwise().mean();
     X.rowwise() -= xMean.transpose();
     P.rowwise() -= pMean.transpose();
 
     // Solve with SVD to obtain R
+    // Hint:
+    // An SVD method "eigenSVD" is already given in "svd.h".
+    // See its arguments carefully when using it.
     const EigenMatrix M = P.transpose() * X;
     EigenMatrix U, V;
     EigenVector sigma;
@@ -77,6 +84,10 @@ void point2pointICP_step(const std::vector<Vec3> &target,
     diagH << 1.0, 1.0, detVU;
 
     // Output
+    // Hint:
+    // Be careful that arguments for output matrices and vectors
+    // are represented as "pointers". Therefore, you should insert
+    // values for them with "asterisk" like "*lhs = rhs".
     *rotMat = U * diagH.asDiagonal() * V.transpose();
     *trans = pMean - (*rotMat) * xMean;
 
@@ -84,11 +95,8 @@ void point2pointICP_step(const std::vector<Vec3> &target,
 }
 
 //! single point to plane ICP step
-void point2planeICP_step(const std::vector<Vec3> &target,
-                         const std::vector<Vec3> &targetNorm,
-                         const std::vector<Vec3> &source,
-                         Eigen::MatrixXd *rotMat,
-                         Eigen::VectorXd *trans) {
+void point2planeICP_step(const std::vector<Vec3> &target, const std::vector<Vec3> &targetNorm,
+                         const std::vector<Vec3> &source, Eigen::MatrixXd *rotMat, Eigen::VectorXd *trans) {
     // Construct Kd-tree to find closest points
     std::vector<Point> points;
     for (int i = 0; i < (int)target.size(); i++) {
@@ -101,7 +109,10 @@ void point2planeICP_step(const std::vector<Vec3> &target,
     // {{ NOT_IMPL_ERROR();
 
     // Construct linear system
-    const int nPoints = (int) source.size();
+    // Hint:
+    // prepare matrix A and vector b
+    // A is 6x6 matrix, and b is 6-D vector
+    const int nPoints = (int)source.size();
     EigenMatrix A(6, 6);
     EigenVector b(6);
     A.setZero();
@@ -119,16 +130,25 @@ void point2planeICP_step(const std::vector<Vec3> &target,
     }
 
     // Solve
+    // Hint:
+    // Use "Eigen::PartialPivLU" to solve the system
     Eigen::PartialPivLU<EigenMatrix> lu(A);
     EigenVector u = lu.solve(b);
 
     // Substitute to instances a, t
+    // Hint:
+    // Eigen matrices and vectors can be initialized
+    // with its elements by "<<" operator.
     EigenVector a(3);
     a << u(0), u(1), u(2);
     EigenVector t(3);
     t << u(3), u(4), u(5);
 
     // Reproduce rotation matrix
+    // Hint:
+    // Remember that vector "a" is the multiple of
+    // the direction of rotation axis and
+    // the degree of rotation angle.
     const double theta = a.norm();
     const EigenVector w = a / theta;
     *rotMat = rodrigues(w, theta);
@@ -137,29 +157,23 @@ void point2planeICP_step(const std::vector<Vec3> &target,
     // }}
 }
 
-void rigidICP(const std::vector<Vec3> &target,
-              const std::vector<Vec3> &targetNorm,
-              std::vector<Vec3> &source,
-              std::vector<Vec3> &sourceNorm,
-              ICPMetric metric,
-              int maxIters,
-              double tolerance,
-              bool verbose) {
+void rigidICP(const std::vector<Vec3> &target, const std::vector<Vec3> &targetNorm, std::vector<Vec3> &source,
+              std::vector<Vec3> &sourceNorm, ICPMetric metric, int maxIters, double tolerance, bool verbose) {
     // Point-to-point ICP
     for (int it = 0; it < maxIters; it++) {
         Eigen::MatrixXd R(3, 3);
         Eigen::VectorXd t(3);
         switch (metric) {
-            case ICPMetric::Point2Point:
-                point2pointICP_step(target, source, &R, &t);
-                break;
+        case ICPMetric::Point2Point:
+            point2pointICP_step(target, source, &R, &t);
+            break;
 
-            case ICPMetric::Point2Plane:
-                point2planeICP_step(target, targetNorm, source, &R, &t);
-                break;
+        case ICPMetric::Point2Plane:
+            point2planeICP_step(target, targetNorm, source, &R, &t);
+            break;
 
-            default:
-                throw std::runtime_error("Unknown ICP metric type!");
+        default:
+            throw std::runtime_error("Unknown ICP metric type!");
         }
 
         // Apply rigid transformation
@@ -188,6 +202,10 @@ void rigidICP(const std::vector<Vec3> &target,
             printf("error = %f\n", error);
             printf("\n");
         }
+
+        char outfile[256];
+        sprintf(outfile, "intermediate_%03d.off", it);
+        write_off(std::string(outfile), source, sourceNorm);
 
         if (error < tolerance) {
             break;
