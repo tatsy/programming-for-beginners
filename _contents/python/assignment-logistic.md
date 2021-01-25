@@ -13,6 +13,8 @@ title: ロジスティック回帰の改善
 
 このデータセットでは10種類の平仮名に対して、オリジナルのMNISTと同様に60000文字の訓練データと10000文字のテストデータが与えられている。
 
+{% include lightbox.html src="/public/images/logistic/kmnist_examples.jpg" %}
+
 ## 評価方法
 
 提出されたプログラムを同環境で実行して、その精度を競う。ただし、プログラムを提出する際には、IPython NotebookではなくPythonの`*.py`ファイルでプログラムを作成し、

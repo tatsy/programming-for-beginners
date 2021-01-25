@@ -25,7 +25,9 @@ permalink: /
 
 ### ロジスティック回帰
 
-ここでは回帰モデルの基本ともいえるロジスティック回帰を用いた、手書き文字の認識を目指す。
+ここでは回帰モデルの基本ともいえるロジスティック回帰を用いた、手書き文字(数字および日本語のくずし字)の認識を目指す。
+
+{% include lightbox.html src="/public/images/logistic/kmnist_examples.jpg" %}
 
 * [バイナリデータの読み込み]({% link _contents/python/read-binary.md %})
 * [ロジスティック回帰 -その1-]({% link _contents/python/logistic-regression-01.md %})
@@ -100,6 +102,8 @@ permalink: /
 * [課題: マーチング・キューブ法とその拡張]({% link _contents/cpp/assignment-march-cubes.md %})
 
 ### Rigid-ICP法による点群データの位置揃え
+
+{% include lightbox.html src="/public/images/rigid_icp/point2plane.gif" style="border: 1px solid #efefef;" %}
 
 * [アルゴリズムの概要]({% link _contents/cpp/overview-rigid-icp.md %})
 * [k-d木による最近傍探索]({% link _contents/cpp/kdtree.md %})
