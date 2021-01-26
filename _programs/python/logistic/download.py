@@ -1,26 +1,19 @@
-import gzip
 import os
 import sys
+import gzip
 
 import requests
 
-url = 'http://yann.lecun.com/exdb/mnist/'
-x_train_file = 'train-images-idx3-ubyte.gz'
-y_train_file = 'train-labels-idx1-ubyte.gz'
-x_test_file = 't10k-images-idx3-ubyte.gz'
-y_test_file = 't10k-labels-idx1-ubyte.gz'
-
 curdir = os.path.abspath(os.path.dirname(__file__))
-outdir = os.path.join(curdir, 'mnist')
 
 CHUNK_SIZE = 32768
 
 
-def main():
+def download(name, url, files):
+    outdir = os.path.join(curdir, name)
     if not os.path.exists(outdir):
         os.makedirs(outdir)
 
-    files = [x_train_file, y_train_file, x_test_file, y_test_file]
     for f in files:
         # Download files
         session = requests.Session()
@@ -44,10 +37,34 @@ def main():
 
         # Unzip
         unzip_file = os.path.splitext(local_file)[0]
-        with open(unzip_file, 'wb') as fout, gzip.open(local_file,
-                                                       'rb') as fin:
+        with open(unzip_file, 'wb') as fout, gzip.open(local_file, 'rb') as fin:
             data = fin.read()
             fout.write(data)
+
+        os.remove(local_file)
+
+
+def main():
+    urls = [
+        ('mnist', 'http://yann.lecun.com/exdb/mnist/'),
+        ('kmnist', 'http://codh.rois.ac.jp/kmnist/dataset/kmnist/'),
+    ]
+
+    target = 0
+    while target <= 0:
+        for i, (name, url) in enumerate(urls):
+            print('[%d] %s: %s' % (i + 1, name, url))
+        target = input('Choose dataset to download: ')
+        target = int(target)
+
+    name, url = urls[target - 1]
+    files = [
+        'train-images-idx3-ubyte.gz',
+        'train-labels-idx1-ubyte.gz',
+        't10k-images-idx3-ubyte.gz',
+        't10k-labels-idx1-ubyte.gz',
+    ]
+    download(name, url, files)
 
 
 if __name__ == '__main__':

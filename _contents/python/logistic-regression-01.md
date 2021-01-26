@@ -18,8 +18,8 @@ $$
 
 $$
 \begin{aligned}
-    \mathbf{y} = \text{sigmoid}(\mathbf{Ax} + \mathbf{b}) \\
-    \mathbf{y} = \text{softmax}(\mathbf{Ax} + \mathbf{b}) \\
+    \mathbf{y} &= \text{sigmoid}(\mathbf{Ax} + \mathbf{b}) \\
+    \mathbf{y} &= \text{softmax}(\mathbf{Ax} + \mathbf{b}) \\
 \end{aligned}
 $$
 
@@ -27,8 +27,8 @@ $$
 
 $$
 \begin{aligned}
-    \text{sigmoid}(x) = \frac{1}{1 + e^{-x}} \\
-    \text{softmax}(\mathbf{x})_i = \frac{e^{x_i}}{\sum_{k=1}^d e^{x_k}}
+    \text{sigmoid}(x) &= \frac{1}{1 + e^{-x}} \\
+    \text{softmax}(\mathbf{x})_i &= \frac{e^{x_i}}{\sum_{k=1}^d e^{x_k}}
 \end{aligned}
 $$ 
 
@@ -55,7 +55,8 @@ X = X.astype('float32')
 
 ```python
 from sklearn.linear_model import LogisticRegression
-clf = LogisticRegression(random_state=0, multi_class='multinomial', max_iter=20).fit(X, y)
+clf = LogisticRegression(random_state=0, multi_class='multinomial', max_iter=20)
+clf.fit(X, y)
 ```
 
 少し時間がかかるが、しばらくすると学習が終わる。なお上記のコード内での `y` は整数型のラベルを格納したNumPyの配列で良い(分かりやすくするために名前を変更した)。

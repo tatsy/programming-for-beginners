@@ -1,0 +1,13 @@
+name: beginners
+channels:
+  - conda-forge
+dependencies:
+  - python>=3
+  - numpy
+  - scipy
+  - opencv
+  - requests
+  - matplotlib
+  - scikit-learn
+  - scikit-image
+  - conda-forge::jupyterlab

@@ -66,9 +66,10 @@ pixels = np.asarray(pixels, dtype='uint8')
 pixels = pixels.reshape((height, width))
 ```
 
-試しに表示してみる。
+次に**Matplotlib**を使って、この画像を表示してみる。
 
 ```python
+import matplotlib.pyplot as plt
 plt.imshow(pixels)
 plt.show()
 ```
