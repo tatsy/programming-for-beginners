@@ -174,7 +174,7 @@ $$
 
 ## まとめコード
 
-<https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/logistic_regression_02.ipynb>{: target="_blank" }
+<https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/logistic/logistic_regression_02.ipynb>{: target="_blank" }
 
 ## 補足
 

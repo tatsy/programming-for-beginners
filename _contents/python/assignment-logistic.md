@@ -35,7 +35,7 @@ $ python train_kmnist.py
 
 ## 始め方
 
-* [ロジスティック回帰 -その2-]({% link _contents/python/logistic-regression-02.md %})のコードを[GitHub](https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/logistic_regression_02.ipynb)からダウンロードし、Jupyter NotebookからPythonソースコード (`*.py`)形式でエクスポートする。
+* [ロジスティック回帰 -その2-]({% link _contents/python/logistic-regression-02.md %})のコードを[GitHub](https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/logistic/logistic_regression_02.ipynb)からダウンロードし、Jupyter NotebookからPythonソースコード (`*.py`)形式でエクスポートする。
 * 適宜、ファイルのパスをKMNISTのものに置き換えて学習、評価を行う
 
 ## ヒント

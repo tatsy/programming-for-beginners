@@ -124,4 +124,4 @@ plt.show()
 
 ## まとめコード
 
-<https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/read_binary.ipynb>{: target="_blank" }
+<https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/logistic/read_binary.ipynb>{: target="_blank" }
