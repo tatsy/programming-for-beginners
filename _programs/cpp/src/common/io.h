@@ -9,7 +9,8 @@
 #include "vec3.h"
 
 //! Write OBJ file
-void write_obj(const std::string &filename, const std::vector<Vec3> &positions, const std::vector<uint32_t> &indices) {
+inline void write_obj(const std::string &filename, const std::vector<Vec3> &positions,
+                      const std::vector<uint32_t> &indices) {
     std::ofstream writer(filename.c_str(), std::ios::out);
     if (writer.fail()) {
         throw std::runtime_error("Failed to open file: " + filename);
@@ -31,47 +32,55 @@ void write_obj(const std::string &filename, const std::vector<Vec3> &positions, 
 }
 
 //! Write PLY file
-void write_ply(const std::string &filename, const std::vector<Vec3> &positions, const std::vector<uint32_t> &indices) {
+inline void write_ply(const std::string &filename, const std::vector<Vec3> &positions,
+                      const std::vector<uint32_t> &indices) {
     std::ofstream writer(filename.c_str(), std::ios::out | std::ios::binary);
     if (writer.fail()) {
         throw std::runtime_error("Failed to open file: " + filename);
     }
 
-    writer << "ply" << "\n";
-    writer << "format binary_little_endian 1.0" << "\n";
+    writer << "ply"
+           << "\n";
+    writer << "format binary_little_endian 1.0"
+           << "\n";
 
     const size_t nVerts = positions.size();
     writer << "element vertex " << nVerts << "\n";
-    writer << "property float x" << "\n";
-    writer << "property float y" << "\n";
-    writer << "property float z" << "\n";
+    writer << "property float x"
+           << "\n";
+    writer << "property float y"
+           << "\n";
+    writer << "property float z"
+           << "\n";
 
     const int nFaces = (int)indices.size() / 3;
     writer << "element face " << nFaces << "\n";
-    writer << "property list uchar int vertex_indices" << "\n";
-    writer << "end_header" << "\n";
+    writer << "property list uchar int vertex_indices"
+           << "\n";
+    writer << "end_header"
+           << "\n";
 
     for (const auto &p : positions) {
-        float buf[3] = {(float)p.x, (float)p.y, (float)p.z};
-        writer.write((char*)buf, sizeof(float) * 3);
+        float buf[3] = { (float)p.x, (float)p.y, (float)p.z };
+        writer.write((char *)buf, sizeof(float) * 3);
     }
 
     for (int i = 0; i < nFaces; i++) {
         const uint8_t k = 3;
-        writer.write((char*)&k, sizeof(uint8_t));
+        writer.write((char *)&k, sizeof(uint8_t));
 
         const uint32_t a = indices[i * 3 + 0];
         const uint32_t b = indices[i * 3 + 1];
         const uint32_t c = indices[i * 3 + 2];
-        uint32_t buf[3] = {a, b, c};
-        writer.write((char*)buf, sizeof(uint32_t) * 3);
+        uint32_t buf[3] = { a, b, c };
+        writer.write((char *)buf, sizeof(uint32_t) * 3);
     }
 
     writer.close();
 }
 
 // Load OFF mesh file (in this program, the file stores only point cloud)
-void read_off(const std::string &filename, std::vector<Vec3> *positions, std::vector<Vec3> *normals = nullptr) {
+inline void read_off(const std::string &filename, std::vector<Vec3> *positions, std::vector<Vec3> *normals = nullptr) {
     std::ifstream reader(filename.c_str(), std::ios::in);
     if (reader.fail()) {
         throw std::runtime_error("Failed to open file: " + filename);
@@ -109,7 +118,8 @@ void read_off(const std::string &filename, std::vector<Vec3> *positions, std::ve
 }
 
 // Write OFF mesh file (only point cloud will be written)
-void write_off(const std::string &filename, const std::vector<Vec3> &positions, const std::vector<Vec3> &normals = std::vector<Vec3>()) {
+inline void write_off(const std::string &filename, const std::vector<Vec3> &positions,
+                      const std::vector<Vec3> &normals = std::vector<Vec3>()) {
     std::ofstream writer(filename.c_str(), std::ios::out);
     if (writer.fail()) {
         throw std::runtime_error("Failed to open file: " + filename);

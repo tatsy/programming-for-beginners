@@ -17,6 +17,10 @@ def wrap_and_flush(zipfile, dest, source)
 
     if not ignoring
       writer.write(line)
+    elsif not line.include?("{{") and not line.include?("}}")
+      if line.strip.empty? or line.strip.start_with?("//")
+        writer.write(line)
+      end
     end
 
     if line.strip == ignore_end
