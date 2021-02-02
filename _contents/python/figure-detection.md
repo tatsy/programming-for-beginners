@@ -171,3 +171,6 @@ cv2.putText(result, text, (px + 10, py + 10), font, 1.0, (255, 255, 255), 2, cv2
 
 {% include lightbox.html src="/public/images/figure_detection/detection.jpg" %}
 
+## まとめコード
+
+<https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/sudoku/detect_figure.ipynb>{: target="_blank" }
