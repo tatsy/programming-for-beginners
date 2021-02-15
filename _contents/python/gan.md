@@ -63,7 +63,7 @@ x = torch.tanh(x)
 return x
 ```
 
-### Disriminatorの実装
+### Discriminatorの実装
 
 Discriminatorの基本ブロックは、GeneratorのそれのReLUがLeaky ReLUに置き換わったものになる。Leaky ReLUは入力の値が負のときに一定の傾きを持った線形関数を当てはめる活性化関数である。Radfordらの論文には負の値に対して与える傾きは0.2が良いと書かれている。
 
@@ -106,8 +106,8 @@ Adamはこの2つの考え方をあわせたもので、モーメンタムを使
 Radfordらの論文では、Adamのパラメータとして`lr=2.0e-4`, `beta1=0.5`, `beta2=0.9`を使うことが推奨されているので、これに従ってGeneratorとDiscriminatorのそれぞれに対してOptimizerを定義する。
 
 ```python
-optimG = torch.optim.Adam(lr=2.0e-4, betas=(0.5, 0.9))
-optimD = torch.optim.Adam(lr=2.0e-4, betas=(0.5, 0.9))
+optimG = torch.optim.Adam(netG.parameters(), lr=2.0e-4, betas=(0.5, 0.9))
+optimD = torch.optim.Adam(netD.parameters(), lr=2.0e-4, betas=(0.5, 0.9))
 ```
 
 ### 学習ループ

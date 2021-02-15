@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 環境設定
+title: Python開発環境の設定
 ---
 
 ## Minicondaのインストール
