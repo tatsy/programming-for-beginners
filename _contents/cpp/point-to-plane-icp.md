@@ -89,7 +89,7 @@ $$
 \mathbf{a} \\
 \mathbf{t}
 \end{pmatrix}
-+ (\mathbf{x} - \mathbf{p}) \cdot \mathbf{n}
+- (\mathbf{p} - \mathbf{x}) \cdot \mathbf{n}
 $$
 
 以上から、$\mathbf{a}$と$\mathbf{t}$を連結したベクトルを$\mathbf{u} \in \mathbb{R}^6$とすることで、式\eqref{eq:least-squares}の最適化問題は、$\mathbf{s}$, $\mathbf{r}$を適当なベクトルとして、以下のように書き直せる。
@@ -114,7 +114,7 @@ $$
 \right] \in \mathbb{R}^{6 \times 6} \\
 \mathbf{b} &= \sum_{i=1}^{N} \left[
 \begin{pmatrix} \mathbf{x} \times \mathbf{n} \\ \mathbf{n} \end{pmatrix}
-(\mathbf{x}_i - \mathbf{p}_i) \cdot \mathbf{n}_i
+(\mathbf{p}_i - \mathbf{x}_i) \cdot \mathbf{n}_i
 \right] \in \mathbb{R}^{6}
 \end{aligned}
 $$
