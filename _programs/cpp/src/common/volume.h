@@ -66,6 +66,10 @@ struct Volume {
     void load(const std::string &filename) {
         // {{ NOT_IMPL_ERROR();
         std::ifstream reader(filename.c_str(), std::ios::in | std::ios::binary);
+        if (reader.fail()) {
+            throw std::runtime_error("Failed to open file: " + filename);
+        }
+
         uint16_t *buffer = new uint16_t[sizes[0]];
         for (uint64_t z = 0; z < sizes[2]; z++) {
             for (uint64_t y = 0; y < sizes[1]; y++) {

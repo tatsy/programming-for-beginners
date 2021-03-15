@@ -17,6 +17,8 @@ int main(int argc, char **argv) {
     const filepath dirname = path.dirname();
     const filepath basename = path.stem();
     const std::string outfile = (dirname / basename + ".ply").string();
+    std::cout << " Input: " << argv[1] << std::endl;
+    std::cout << "Output: " << outfile << std::endl;
 
     // Load volume data
     const int sizeX = std::atoi(argv[2]);

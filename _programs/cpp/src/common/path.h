@@ -55,7 +55,7 @@ private:
     void cleanup() {
         size_t pos = -1;
         while ((pos = path_.find_first_of("\\")) != std::string::npos) {
-            path_.replace(pos, 2, "/");
+            path_.replace(pos, 1, "/");
         }
     }
 
