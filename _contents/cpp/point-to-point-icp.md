@@ -12,7 +12,7 @@ title: Point to Point ICP
 まず、点群$\mathcal{X}$の点$\mathbf{x}\_i$を$\mathcal{Y}$上で一番近い点に射影する演算子$P_\mathcal{Y}$を考える。これは2点間のユークリッド距離をノルム$\\| \cdot \\|$を用いて表すこととして、以下のように定義される。
 
 $$
-P_{\mathcal{Y}}(\mathbf{x}) = \arg\max_{\mathbf{y} \in \mathcal{Y}} \| \mathbf{x} - \mathbf{y} \|
+P_{\mathcal{Y}}(\mathbf{x}) = \arg\min_{\mathbf{y} \in \mathcal{Y}} \| \mathbf{x} - \mathbf{y} \|
 $$
 
 以後は簡単のために、射影後の点を$\mathbf{p}\_i = P_{\mathcal{Y}}(\mathbf{x}_i)$のように表すこととする。ICPの各ステップでは点群$\mathcal{X}$の各点$\mathbf{x}\_i$を、この最近傍点$\mathbf{p}\_i$に近づけるように剛体変換する。

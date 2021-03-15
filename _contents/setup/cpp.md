@@ -25,6 +25,10 @@ C言語、あるいはC++はPythonと異なり、コンパイルが必要な言�
 **CLion**  
 <https://www.jetbrains.com/ja-jp/clion/>{: target="_blank" }
 
+### 注意
+
+Visual Studioでは初期状態でC++のコンパイラがインストールされないので、インストール時に「C++によるデスクトップ開発」という項目にチェックを入れてください。
+
 
 ## CMakeの利用
 
