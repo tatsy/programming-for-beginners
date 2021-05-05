@@ -25,5 +25,5 @@ title: GANによる高品質画像生成コンテスト
 
 * Google Colaboratoryのページを開き、適当なノートを作成する。その後、Google Driveに移動し「Colab Notebooks」というフォルダが作成されていることを確認する。
 * 「Colab Notebooks」の中にOxford flower datasetを展開したものを「OxfordFlower」というフォルダ名で配置する
-* Colab上で学習を行う[サンプルプログラム (単純なDCGAN)](https://github.com/tatsy/programming-for-beginners/_programs/python/DCGAN_flower.ipynb){: target="_blank" } をダウンロードし、同じく「Colab Notebooks」に配置する。
+* Colab上で学習を行う[サンプルプログラム (単純なDCGAN)](https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/gan/DCGAN_flower.ipynb){: target="_blank" } をダウンロードし、同じく「Colab Notebooks」に配置する。
 * Colabで上記のサンプルプログラムを開き、実行してみる。上手く実行できたら、以後、これを改良して、より良い画像が生成されるように改良する。
