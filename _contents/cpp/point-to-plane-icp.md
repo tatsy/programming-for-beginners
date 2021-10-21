@@ -5,7 +5,7 @@ title: Point to Plane ICP
 
 ## 問題の定式化
 
-Point to **Plane** ICPはPoint to Point ICPとは異なり、目的位置を表す点群に法線方向が与えられていることを前提にします。ここで言う**Plane**というのは目的位置の点を通り、法線に直交するような平面のことを指す。
+Point to **Plane** ICPはPoint to Point ICPとは異なり、目的位置を表す点群に法線方向が与えられていることを前提とする。ここで言う**Plane**というのは目的位置の点を通り、法線に直交するような平面のことを指す。
 
 従って、Point to Plane ICPでは最適化問題が各頂点$\mathbf{x}_i$の最近傍点$\mathbf{p}_i$とその最近傍点の法線$\mathbf{n}_i$を用いて以下のように定義される。
 
