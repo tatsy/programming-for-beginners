@@ -83,8 +83,8 @@ $$
 
 $$
 \begin{aligned}
-    A_{ij}^{t+1} &= A_{ij}^t + \alpha \frac{\partial L}{\partial A_{ij}} \\
-    b_{i}^{t+1} &= b_i^t + \alpha \frac{\partial L}{\partial b_i}
+    A_{ij}^{t+1} &= A_{ij}^t - \alpha \frac{\partial L}{\partial A_{ij}} \\
+    b_{i}^{t+1} &= b_i^t - \alpha \frac{\partial L}{\partial b_i}
 \end{aligned}
 $$
 
