@@ -83,7 +83,7 @@ problem = [numbers[c] for line in problem.split('\n') if line != '' for c in lin
 
 ```python
 k = 3 * (i // 3)
-l = 3 * (k // 3)
+l = 3 * (j // 3)
 blk_nums = problem[k:k+3, l:l+3]
 ```
 

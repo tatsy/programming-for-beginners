@@ -206,3 +206,7 @@ criterion = nn.NLLLoss()
 次に誤差関数の振動だが、通常のSGDを使うと、ミニバッチ内のデータが十分にデータ全体を近似していない場合に、あまり良い勾配が得られず、そのために誤差関数が良い方向に収束していかないことがある。これを防ぐために、慣性 (momentum)を使う方法や、各パラメータに対する勾配の大きさを元に更新に使う勾配量を調整する方法が多数提案されている。代表的なものはSGD + momentum (PyTorchの場合はSGDの引数にmomentumを入れる), RMSprop, AdaGrad, AdaDelta, Adamなどだ。
 
 上記の改良を加えて上手く学習ができれば、1エポックも回せば軽く90%以上の精度が得られるようになるだろう。これ以外にも、様々な学習のテクニックがあるが、それらについては、ネット上にも多くの記事や実装があるので、各自調べてみてほしい。
+
+## まとめコード
+
+<https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/gan/convolution-network.ipynb>
