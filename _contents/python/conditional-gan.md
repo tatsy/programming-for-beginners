@@ -34,3 +34,7 @@ y = netD(x_and_c)
 以下は前回同様10エポック(Colabで13分程度)学習して得られる生成画像である。このように、短い学習時間でも、十分にそれらしい画像が得られていることが分かる。
 
 {% include lightbox.html src="/public/images/gan/mnist_x_fake_class_tile.jpg" %}
+
+## まとめコード
+
+<https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/gan/DCGAN_mnist_class.ipynb>

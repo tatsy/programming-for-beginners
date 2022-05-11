@@ -175,7 +175,7 @@ optimD.step()
 
 ## まとめコード (次項のCGANと同じ)
 
-
+<https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/gan/DCGAN_mnist_class.ipynb>
 
 ## 補足: 変分オートエンコーダ
 
