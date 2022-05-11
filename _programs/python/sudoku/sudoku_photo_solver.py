@@ -1,13 +1,13 @@
 import os
 import argparse
 
-import pytesseract
-from PIL import Image
-
-import numpy as np
 import cv2
+import numpy as np
+import pytesseract
 import matplotlib.pyplot as plt
+from PIL import Image
 from sklearn.linear_model import LogisticRegression
+
 
 def timer(func):
     """ Decorator to measure execution time """
@@ -69,7 +69,7 @@ def detect_frame(edge_image):
     # Detect contour
     maxlen = 0.0
     maxarc = None
-    _, contours, _ = cv2.findContours(edge_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(edge_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     # Search longest contour with 4 points
     for cnt in contours:
@@ -94,8 +94,8 @@ def extract_sudoku(gray, src_pts):
     center = np.mean(src_pts, axis=1)
     pts = []
     for p in src_pts:
-        dx = center[0] - p[0]
-        dy = center[1] - p[1]
+        dx = p[0] - center[0]
+        dy = p[1] - center[1]
         theta = np.arctan2(dy, dx) + np.pi
         pts.append((theta, p))
 
@@ -104,7 +104,7 @@ def extract_sudoku(gray, src_pts):
 
     # Unwarp the sudoku region
     src_pts = np.asarray(pts, dtype='float32')
-    dst_pts = np.asarray([[900, 900], [0, 900], [0, 0], [900, 0]], dtype='float32')
+    dst_pts = np.asarray([[0, 0], [900, 0], [900, 900], [0, 900]], dtype='float32')
     homography = cv2.getPerspectiveTransform(src_pts, dst_pts)
     sudoku_image = cv2.warpPerspective(gray, homography, (900, 900))
 
