@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      課題: マーチング・キューブ法とその拡張 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/cpp/assignment-march-cubes/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">課題: マーチング・キューブ法とその拡張</h1>
+  <table class="images">
+<tr>
+  <td style="text-align: center; width: 50%;"><p><strong>ボリューム断面</strong></p>
+</td>
+  <td style="text-align: center; width: 50%;"><p><strong>復元メッシュ</strong></p>
+</td>
+</tr>
+<tr>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/march_cubes/shell_section_140.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/march_cubes/shell_section_140.jpg" alt="" style="width: 100%;" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/march_cubes/shell_mesh.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/march_cubes/shell_mesh.jpg" alt="" style="width: 100%;" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+</tr>
+</table>
+
+<h2 id="課題1-マーチングキューブ法の実装">課題1: マーチング・キューブ法の実装</h2>
+
+<p>これまでに解説した内容を元にテンプレートプログラム(トップページからダウンロードする)の内容を改変して、マーチング・キューブ法を実装しよう。変更するべき内容は以下の通り。</p>
+
+<ul>
+  <li><code class="highlighter-rouge">volume.h</code>内にあるボリュームデータを読み取る関数<code class="highlighter-rouge">Volume::load</code>を完成させる。</li>
+  <li><code class="highlighter-rouge">mcubes.cpp</code>内にある大津の二値化により等値面を張るための閾値を決定する<code class="highlighter-rouge">getThresholdOtsu</code>関数を完成させる。</li>
+  <li><code class="highlighter-rouge">mcubes.cpp</code>内にある<code class="highlighter-rouge">marchCubes</code>関数にあるfor文の内部に三角形取得するソースコードを追加する。</li>
+</ul>
+
+<p>なお、これらの箇所には、最初の時点では <code class="highlighter-rouge">NOT_IMPL_ERROR()</code> と書かれており、この状態で実行すると、実装されていない箇所がエラーとともに表示されるようになっている。</p>
+
+<h2 id="課題2-マーチングキューブ法の発展を実装">課題2: マーチング・キューブ法の発展を実装</h2>
+
+<p>通常のマーチング・キューブ法が完成したら、<a href="/programming-for-beginners/cpp/march-cubes/">マーチング・キューブ法</a>にある説明を参考に、Marching TetrahedraならびにDual Contouringの実装に挑戦してみよう。</p>
+
+<p>今回の例のようにボリューム・データが入力となっている場合には、あまりこれらの拡張手法の恩恵は受けられないが、次回以降の点群データからの表面メッシュ復元においては、これらの発展的な手法が力を発揮する。</p>
+
+<h3 id="marching-tetrahedraの実装方針">Marching Tetrahedraの実装方針</h3>
+
+<p>Marching Tetrahedraの実装はマーチング・キューブ法のそれと、大きくは変わらない。課題1で用いたマーチング・キューブ法のプログラムを参考に、最も単純には$2^4 = 16$の全てのパターンについて、三角形が生成される場所のリストを作成すれば良い。立方体を6つの四面体(=三角錐)に分割する部分についても、立方体の8つの頂点をどう結ぶと6つの四面体になるのかを表すテーブル(=配列)を用意しておくと楽だろう。</p>
+
+<h3 id="dual-contouringの実装方針">Dual Contouringの実装方針</h3>
+
+<p>Dual Contouringを実行するためには、キューブの立方体が持つ12のエッジについて、そのエッジがどの4つのキューブに共有されているのかを知る必要がある。今、陰関数を評価するバウンディング・ボックスの最も外側に位置するエッジ以外のエッジの本数はバウンディング・ボックスをキューブへと分割する分割数を$n$として$3 n (n-2)^2$本ある(各軸と平行なエッジがそれぞれ$n(n-2)^2$本ずつある)が、これらに対して上手く番号を降ることで、番号の計算だけから共有される4つのキューブを割り出すことができる。</p>
+
+<p>例えば、x方向に平行なエッジに <code class="highlighter-rouge">edges(0, i, j, k)</code> (0はx軸ということ, i, j, kは各軸方向のインデックス)でアクセスできるように準備したとすると、このエッジを共有している4つのキューブは <code class="highlighter-rouge">cubes(i, j, k)</code>, <code class="highlighter-rouge">cubes(i, j + 1, k)</code>, <code class="highlighter-rouge">cubes(i, j, k+1)</code>, <code class="highlighter-rouge">cubes(i, j + 1, k + 1)</code> のように表わすようにデータを持つようにしよう。</p>
+
+<p>その上で、各エッジにはエッジ上で表面メッシュが交わる位置とその位置での法線を記録しておく (ボリュームデータを使う場合には、あまり本質的ではないが線形補間で計算しておく)。この情報を元に各キューブの中に発生させる頂点の位置を計算し、あとはキューブとエッジの隣接関係の情報を元に四角形を発生させる。この際、四角形は三角形2つとして表現するとよいだろう。</p>
+
+<p>元々のマーチング・キューブ法の実装の代わりに、エッジとキューブを管理する必要があり、やや実装は煩雑にはなるものの、上記の方針に従えばむしろMarching Tetrahedraよりも簡単だろう。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

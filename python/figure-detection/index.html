@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      画像中の図形検出 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/python/figure-detection/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">画像中の図形検出</h1>
+  <p>今回はOpenCVを用いて画像中から図形を検出する。図形の検出は、画像からのエッジの情報を取り出す処理と、エッジ情報を元に境界線を認識する処理、境界線から図形の形状を分類する処理の三つに分けられる。</p>
+
+<h2 id="エッジの検出">エッジの検出</h2>
+
+<p>画像処理におけるエッジ抽出で広く用いられているのはSobelフィルタとCanny法だろう。</p>
+
+<h3 id="sobelフィルタ">Sobelフィルタ</h3>
+
+<p>Sobelフィルタは画像のある方向に対する勾配をとるときに、その方向と直交する方向に平滑化をかけることで、ノイズの影響を抑えつつエッジを検出する方法である。画像処理の教科書だけでなくWeb上にも多くの解説があるので、各自調べて見てほしい。</p>
+
+<h3 id="canny法">Canny法</h3>
+
+<p>Canny法はSobelフィルタと比べると少し処理が複雑で、いくつかの処理の組み合わせからなる。</p>
+
+<p>まず画像に対してガウシアンフィルタをかけてノイズの影響を抑える。その後、画像の縦方向と横方向について画像の勾配を計算する。この処理には多くの場合、Sobelフィルタが用いられる。Sobelフィルタでは、一定の幅を持つエッジが検出されるが、Canny法は勾配の方向に沿って、勾配の値が最大となる場所だけをエッジ上の画素の候補とする。</p>
+
+<p>その後、候補となる画素の中で勾配が一定以上となる場所を閾値処理により取り出すことで、最終的なエッジが得られる。なお、最後の閾値処理が一般的な閾値処理ではなくヒステリシス閾値処理と呼ばれる二つの閾値を用いた適応的な閾値処理である。これについても各自、どのようなものか調べてみてほしい(この二つの閾値がOpenCVの関数の引数になっている)。</p>
+
+<p>以下がOpenCVでSobelフィルタとCanny法によりエッジ画像を得るプログラムと、その結果である。なお、以下のコードでは結果を見やすくするため、Sobelフィルタの結果を強調した後、二値化の処理をいれている。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 画像をグレースケールにする
+</span><span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+<span class="c1"># Sobelフィルタ
+</span><span class="n">dx</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CV_8U</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">dy</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CV_8U</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">sobel</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">dy</span><span class="p">)</span>
+<span class="n">sobel</span> <span class="o">=</span> <span class="p">(</span><span class="n">sobel</span> <span class="o">*</span> <span class="mf">128.0</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'uint8'</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">sobel</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">sobel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">THRESH_BINARY</span> <span class="o">+</span> <span class="n">cv2</span><span class="p">.</span><span class="n">THRESH_OTSU</span><span class="p">)</span>
+<span class="c1"># Canny法
+</span><span class="n">canny</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">Canny</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+</code></pre></div></div>
+
+<table class="images">
+<tr>
+  <td><p><strong>入力画像</strong></p>
+</td>
+  <td><p><strong>Sobelフィルタ</strong></p>
+</td>
+  <td><p><strong>Canny法</strong></p>
+</td>
+</tr>
+<tr>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/figure_detection/figures.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/figure_detection/figures.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/figure_detection/sobel.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/figure_detection/sobel.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/figure_detection/canny.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/figure_detection/canny.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+</tr>
+</table>
+
+<h3 id="エッジの統合">エッジの統合</h3>
+
+<p>結果を見てもらうと分かる通り、上記の入力画像は図形の輪郭線が幅を持っており、そのせいでエッジが二重線になっていることが分かる。もちろん、これはこれで間違いとは言えないのだが、今回のケースではエッジが内側の線と外側の線の間で曖昧に検出されており、この後の輪郭線検出に影響を及ぼす可能性がある。この問題は自然画像を入力とする場合には、より顕著となる。</p>
+
+<p>そこで、輪郭線を抽出する前に、モルフォロジー演算によりエッジの統合を行っておく。モルフォロジー演算は一般的には二値画像を入力として、白色の領域を広げたり狭めたりする操作である(モルフォロジー演算の数学的な意味とは解釈が異なるので注意)。今回は白色領域を広げる処理であるdilationと白色領域を狭める処理であるerosionを連続して施すことでエッジの統合を行う。</p>
+
+<p>モルフォロジー演算は構造要素と呼ばれる小さな画像のようなものを入力の二値画像にしたがって繰り返す操作に対応する。したがって、OpenCV(やMATLABなどの他のライブラリ)では、モルフォロジー演算の関数は二値画像と構造要素を引数にとる。OpenCVを用いる場合には、dilationとerosionはそれぞれ以下のようなコードで実現される。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">res_dilate</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">dilate</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">binary</span><span class="p">.</span><span class="n">dtype</span><span class="p">))</span>
+<span class="n">res_erode</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">erode</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">binary</span><span class="p">.</span><span class="n">dtype</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>エッジを統合する場合、エッジが白色の領域に検出されているとすると、先にdilation、次にerosionの順序で処理を施す。dilationにより二重のエッジのそれぞれが太くなり、重なることで、太い1本のエッジとなる。その後、erosionをかけることで、そのエッジが細くなり、1本の細いエッジとなる。</p>
+
+<table class="images">
+<tr>
+  <td><p><strong>dilation後</strong></p>
+</td>
+  <td><p><strong>dilation + erosion後</strong></p>
+</td>
+</tr>
+<tr>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/figure_detection/dilate.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/figure_detection/dilate.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/figure_detection/unified_edges.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/figure_detection/unified_edges.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+</tr>
+</table>
+
+<p>上記の結果の通り、dilationとerosionを組み合わせることで二本の細いエッジが一本のエッジに統合されていることが分かる。</p>
+
+<p>なおdilationのあとにerosionをする操作をclosingとも呼び、以下のコードでも同じことができる。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">res_close</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">morphologyEx</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">MORPH_CLOSE</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">binary</span><span class="p">.</span><span class="n">dtype</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h2 id="輪郭線の検出">輪郭線の検出</h2>
+
+<p>ここまでに検出したエッジの情報を使って輪郭線を抽出する。輪郭線の抽出にはOpenCVの<code class="highlighter-rouge">findContours</code>という関数を用いる。この関数には1985年にSuzukiさんとAbeさんという日本人が提案したアルゴリズムが実装されている(*1)。</p>
+
+<p>(*1) S. Suzuki and K. Abe, “Topological structural analysis of digitized binary images by border following”, Computer Vision, Graphics and Image Processing”, 1985.</p>
+
+<p>このアルゴリズムは二値画像(1がエッジで0が背景の色とする)をラスタスキャン (最初の列を左から右に見ていき、右端に到達したら、左から右に見ていく、以後繰り返し) していき、1が見つかったら、その画素から始まる輪郭線を追跡していく。</p>
+
+<p>輪郭線の追跡はある画素の周りを時計回りに見ていき、初めて1となる画素にスキャン位置を移動する、という操作を繰り返すことで行われる。端点に到達するか、元の位置の画素に戻ってきたら、再びラスタスキャン順に値が1の画素で、まだどの輪郭にも含まれていない画素を探し、以後、同様の処理を繰り返していく。</p>
+
+<p>OpenCVの<code class="highlighter-rouge">findContours</code>は3つの引数を取り、第1引数が入力の二値画像、第2引数が検出される輪郭線の階層関係、第3引数が抽出する輪郭線をどのように近似表現するかを表す。代表的な使い方は、</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">_</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">findContours</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CHAIN_APPROX_SIMPLE</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>になる。<code class="highlighter-rouge">cv2.RETR_EXTERNAL</code> は二重丸のような階層的な輪郭線が現れたときに最も外側の閉曲線のみを抽出する。また<code class="highlighter-rouge">cv2.CHAIN_APPROX_SIMPLE</code>は抽出される輪郭線が水平方向、垂直方向、45度傾き, 135度の傾きに直線的につながるときに、それらを端点だけで近似する。</p>
+
+<p>この他の使い方については公式の<a href="https://docs.opencv.org/2.4/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html#findcontours" target="_blank">ドキュメント</a>を参考にしてほしい。</p>
+
+<h2 id="輪郭線の描画">輪郭線の描画</h2>
+
+<p>上記の方法で検出された輪郭線は<code class="highlighter-rouge">findContours</code>と対になる<code class="highlighter-rouge">drawContours</code>という関数で描画できる。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cv2</span><span class="p">.</span><span class="n">drawContours</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">LINE_AA</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>こちらも詳しい使い方は公式の<a href="https://docs.opencv.org/2.4/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html#drawcontours" target="_blank">ドキュメント</a>を参考にしてほしい。</p>
+
+<p>実際に上記の方法で検出した輪郭線を描画してみたものが以下である。見ての通り、各図形の外側と画像自体の輪郭に輪郭線が検出されていることがわかる。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/figure_detection/draw_contours.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/figure_detection/draw_contours.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<h2 id="輪郭線の分類">輪郭線の分類</h2>
+
+<p>各輪郭線がどのような図形か(円か？多角形か？そうなら何角形か？)を判別するには、輪郭線を多角形として近似して、その時の角の数を調べればいい。</p>
+
+<p>上記の通り、<code class="highlighter-rouge">findContours</code>で検出された輪郭線(<code class="highlighter-rouge">cv2.CHAIN_APPROX_SIMPLE</code>を使った場合)は特定の向きの直線のみを端点で近似している。そのため、現在検出されている多角形は、必ずしも角の点だけで表されているわけではない (<code class="highlighter-rouge">contours[i]</code>の長さを見てみると分かる)。</p>
+
+<p>そこで、検出されている輪郭線を更に粗く角の点だけで近似することを考える。これにはOpenCVの<code class="highlighter-rouge">cv2.approxPolyDP</code>という関数が使える。この関数には<a href="https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm" target="_blank">Ramer-Douglas-Peucker法</a>というアルゴリズムが使われている。</p>
+
+<p>このアルゴリズムは、ある図形を適当な離散点(開曲線なら端点)を選んでその間を直線で結んだときに、最も離れている点を順次追加してポリライン(直線を結んで曲線を近似したもの)を更新していく。最も離れた点までの距離が一定以下になったら処理を終える。閉曲線の場合には、すべての候補となる点の中で最も離れた2点を見つけ、その二点を直線で結んで、二点の上部と下部を別々のポリラインで近似する。</p>
+
+<p>それでは<code class="highlighter-rouge">cv2.findContours</code>で検出した各輪郭線について<code class="highlighter-rouge">cv2.approxPolyDP</code>を用いて近似してみる。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
+    <span class="c1"># 輪郭線の長さを計算
+</span>    <span class="n">arclen</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">arcLength</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="c1"># 輪郭線の近似
+</span>    <span class="n">approx</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">approxPolyDP</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">arclen</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="c1"># 何角形かを見てみる
+</span>    <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">approx</span><span class="p">))</span>
+    <span class="c1"># 輪郭線の描画
+</span>    <span class="n">cv2</span><span class="p">.</span><span class="n">drawContours</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">[</span><span class="n">approx</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">LINE_AA</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>上記のコードでは<code class="highlighter-rouge">cv2.arcLength</code>を使って曲線の長さを計算し、その長さの100分の1の精度を持つように輪郭線を近似している。この精度はあまり細かすぎると角が増え、粗過ぎても角が減ってしまうので、多少の調整が必要ではある。<code class="highlighter-rouge">print</code>で出力された内容を見てみると6や4といった角の数と思われる数字が得られていることが分かる。</p>
+
+<p>角の数が正しく得られていることが分かったら、その角の数に基づいて、画像中にラベルを入れてみよう。OpenCVでテキストを画像中に入れるには<code class="highlighter-rouge">cv2.putText</code>を使う。ラベルを入れるコードは例えば次のようになるだろう。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n_gon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">approx</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s">'unknown'</span>
+<span class="k">if</span> <span class="n">n_gon</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s">'circle'</span>
+<span class="k">elif</span> <span class="n">n_gon</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s">'hexagon'</span>
+<span class="k">elif</span> <span class="n">n_gon</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s">'pentagon'</span>
+<span class="k">elif</span> <span class="n">n_gon</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s">'rectangle'</span>
+<span class="k">elif</span> <span class="n">n_gon</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s">'triangle'</span>
+    
+<span class="n">font</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">FONT_HERSHEY_SIMPLEX</span>
+<span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">approx</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)).</span><span class="nb">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'int32'</span><span class="p">)</span>
+<span class="n">px</span><span class="p">,</span> <span class="n">py</span> <span class="o">=</span> <span class="n">position</span>
+<span class="n">cv2</span><span class="p">.</span><span class="n">putText</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="p">(</span><span class="n">px</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">py</span> <span class="o">+</span> <span class="mi">10</span><span class="p">),</span> <span class="n">font</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">LINE_AA</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>正しくプログラムがかけていれば、以下のような画像が得られるはずである。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/figure_detection/detection.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/figure_detection/detection.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<h2 id="まとめコード">まとめコード</h2>
+
+<p><a href="https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/sudoku/detect_figure.ipynb" target="_blank">https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/sudoku/detect_figure.ipynb</a></p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

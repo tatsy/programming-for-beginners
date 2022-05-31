@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      メッシュ復元アルゴリズムの概要 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/cpp/overview-surface-recon/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">メッシュ復元アルゴリズムの概要</h1>
+  <p>今回は、点群のデータを入力として、表面メッシュを復元する手法について紹介する。この内容は以下の2つの論文を元にした内容となっている。</p>
+
+<ul>
+  <li>Carr et al. 2001, “Reconstruction and Representation of 3D Objects with Radial Basis Functions”</li>
+  <li>Morse et al. 2001, “Interpolating Implicit Surfaces From Scattered Surface Data Using Compactly Supported Radial Basis Functions”</li>
+</ul>
+
+<p>これらの論文はいずれも、三次元空間上に定義された陰関数 $f: \mathbb{R}^3 \rightarrow \mathbb{R}$を放射基底関数 (RBF, radial basis function) により補間することで表現する。陰関数が表現できたら、あとはマーチング・キューブ法などを用いて、陰関数のデータを表面メッシュに変換する。</p>
+
+<h2 id="rbfによる陰関数場の構成">RBFによる陰関数場の構成</h2>
+
+<p>RBFはある空間上の1点からの「距離」だけに依存する関数で、中心点 $\mathbf{c} \in \mathbb{R}^n$と関数の値を評価する点$\mathbf{x} \in \mathbb{R}^n$の間の距離$r = | \mathbf{x} - \mathbf{c} |$を用いて定義される。</p>
+
+<p>RBFは距離だけに依存する関数一般を指すので、多様な定義の仕方が可能であり、応用に応じていろいろな定義が用いられる。例えば、</p>
+
+<p><strong>ガウス関数</strong> <br />
+\(\phi(r) = \exp(-\beta r^2)\)</p>
+
+<p><strong>薄板スプライン関数 (thin-plate spline)</strong> <br />
+\(\phi(r) = r^2 \log(|r|)\)</p>
+
+<p>などがその代表例として知られる。メッシュ復元のためには、入力の点群それ自体を中心点としてRBF関数を定義し、その重み付き和により陰関数$f$を近似する。すなわち、</p>
+
+\[f(\mathbf{x}) = \sum_{i=0}^{N-1} w_i \phi(\| \mathbf{x}_i - \mathbf{x}\|)\]
+
+<p>のような形で、陰関数を表現し、$f(\mathbf{x}) = 0$となる等値面を復元される曲面とする。</p>
+
+<p>上記の陰関数の定義にはパラメータとして$w_i$が含まれるので、これを入力点群のデータから求めることが必要となる。各入力頂点には、その点で陰関数が取るべき値がいくつになるのかを表す参照値$d_i$を与えておく。</p>
+
+<p>この時、入力の点群は欲しい表面メッシュ上にあると考えられるので、$f(\mathbf{x}_i)$の値は全て0になるべきで、したがって$d_i = 0$であると考えられる。ところが、このような場合には、全ての$i$について$w_i = 0$となるような単純な解により、必要な条件を満たされてしまう。</p>
+
+<p>そこで、入力の点群と法線の情報を用いて、点を法線方向に沿って正と負の方向にそれぞれ動かしたオフセット点の陰関数の値を$d_i = \{ 1, -1 \}$として入力点群に加える。この拡張された点群の情報を用いてRBF関数による近似を行う。</p>
+
+<p>実際に、上記の陰関数$f$がオフセット点を含む入力頂点上で参照値と等しい値を取るとすると、全ての頂点に対する等式をひとまとめにすることで、連立一次方程式を得ることができる。</p>
+
+<p>例えば、点群$\mathcal{X} = \{ \mathbf{x}_{j} \}_{j=1}^{N}$と、それに対応する符号付き距離関数の値$\{ {d}_{j} \}_{j=1}^{N}$が与えられているとすると、各点$\mathbf{x}_i$に対する重み係数$w_i$を要素とするようなベクトルを$\mathbf{w} \in \mathbb{R}^N$, 同様に$d_i$を要素とするようなベクトルを$\mathbf{d} \in \mathbb{R}^N$, また行列の$ij$成分が$\phi(|\mathbf{x}_i - \mathbf{x}_j|)$となるような行列を$\mathbf{A}$とすることで、解くべき連立一次方程式は、</p>
+
+\[\mathbf{A} \mathbf{w} = \mathbf{d}\]
+
+<p>となる。以降で詳しく説明する通り、この連立一次方程式に現れる係数行列$\mathbf{A}$は一般的には密行列である。一方で、入力されてくる点群は多い場合で数百万から数千万にもなりうるため、実用的には数値的に得ことが難しい場合が多い。そのため、RBFとして有限の狭い定義域を持つコンパクトサポートRBFを用いて、$\mathbf{A}$の成分の多くが0、すなわち疎行列になるように調整して、計算量と表現力のトレードオフを取ることが一般的である。</p>
+
+<h2 id="k-d木による最近傍点の探索">k-d木による最近傍点の探索</h2>
+
+<p>点群からメッシュを復元では、入力頂点を法線方向にオフセットすることで、その点での参照値が$\{ -1, 1 \}$となるような点を追加すると述べたが、例えば、以下の論文の図3(a)などのように、曲面が近い距離で向かい合っているような場合には、頂点を一定距離でオフセットした際に、それが曲面が囲む領域の内側に入り込んでしまう可能性がある。</p>
+
+<ul>
+  <li>Carr et al. 2001, “Reconstruction and Representation of 3D Objects with Radial Basis Functions”</li>
+</ul>
+
+<p>このような場合に、整合しない陰関数の参照値を与えてしまうことを防ぐため、頂点を法線方向にオフセットしたあと、入力の点群の中から、最もオフセット後の点の位置に近い頂点を探索してきて、その頂点の位置と法線の方向から実際の参照値$d_i$を計算する。</p>
+
+<p>ここで重要となるのは、数万点程度の入力点群の中から、どのように最近傍となる頂点を効率的に探し出すか、ということである。このような効率的な近傍点の探索には、木構造をはじめとするデータ構造がよく用いられる。今回は、このようなデータ構造の中から前回のICPの項でも用いたk-d木を採用する。</p>
+
+<p>陰関数が求まれば、あとはマーチング・キューブ法などにより、曲面を三角形メッシュなどとして取り出すことが可能となる。以降では、これらのステップをより詳しく見ていく。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

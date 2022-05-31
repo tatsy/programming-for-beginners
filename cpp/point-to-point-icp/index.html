@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      Point to Point ICP &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/cpp/point-to-point-icp/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">Point to Point ICP</h1>
+  <h2 id="問題の定式化">問題の定式化</h2>
+
+<p>今二つの点群$\mathcal{X} = \{ \mathbf{x}_i \}_{i=1}^{N}$と$\mathcal{Y} = \{ \mathbf{y}_j \}_{j=1}^{M}$が与えられており、点群$\mathcal{X}$を点群$\mathcal{Y}$に向かって位置揃えすることを考える。</p>
+
+<p>点群同士の距離の定義はハウスドルフ距離やChamfer距離などいくつもの距離が知られているが、ここでは一番単純に$\mathcal{X}$の各点から$\mathcal{Y}$上で一番近い点までの距離が各々で小さくなる状況を目指す。</p>
+
+<p>まず、点群$\mathcal{X}$の点$\mathbf{x}_i$を$\mathcal{Y}$上で一番近い点に射影する演算子$P_\mathcal{Y}$を考える。これは2点間のユークリッド距離をノルム$\| \cdot \|$を用いて表すこととして、以下のように定義される。</p>
+
+\[P_{\mathcal{Y}}(\mathbf{x}) = \arg\min_{\mathbf{y} \in \mathcal{Y}} \| \mathbf{x} - \mathbf{y} \|\]
+
+<p>以後は簡単のために、射影後の点を$\mathbf{p}_i = P_{\mathcal{Y}}(\mathbf{x}_i)$のように表すこととする。ICPの各ステップでは点群$\mathcal{X}$の各点$\mathbf{x}_i$を、この最近傍点$\mathbf{p}_i$に近づけるように剛体変換する。</p>
+
+<p>今、$\mathcal{X}$を$\mathcal{Y}$に位置揃えするための剛体変換を回転行列$\mathbb{R}$と並進の量を表すベクトル$\mathbf{t}$によって表現することとすると、今求めるべき変換は以下の最小化問題を得ことで与えられる。</p>
+
+\[\begin{equation}
+\min_{\mathbf{R}, \mathbf{t}} \sum_{i = 1}^{N} \| \mathbf{R}\mathbf{x}_i + \mathbf{t} - \mathbf{p}_i \|^2
+\label{eq:least-squares}
+\end{equation}\]
+
+<p>この式は、$\mathbf{x}_i$を剛体変換した点と最近傍点$\mathbf{p}_i$の間の距離がユークリッド距離を基準として小さくなることを表している。なお、この時の剛体変換は点群全体に適用されるものであり、$\mathbf{R}$ならびに$\mathbf{t}$には添え字が付かないことに注意すること。</p>
+
+<p>この最小化問題を得ためには、安直には求めたい変数である$\mathbf{R}$ならびに$\mathbf{t}$で誤差関数を微分して、その値が0となるようなものを求めれば良い。この考え方は$\mathbf{t}$を求めるのには有効であるのだが、$\mathbf{R}$は回転行列であり、一般的な行列ではないことから、単純に最適解を求めることは難しい。</p>
+
+<p>回転行列は一般に行列式が1 (マイナスの場合には鏡映反転が入るため)であるような直交行列なので、この性質を考慮して最適化問題を解く必要がある。</p>
+
+<h2 id="並進成分の求解">並進成分の求解</h2>
+
+<p>前述の通り式\eqref{eq:least-squares}は、$\mathbf{t}$については、誤差関数の微分を取ることで解を得ることができる。そこで、まずはその解について分析を試みる。式\eqref{eq:least-squares}の誤差関数部分を$\mathbf{t}$で偏微分し、それが0であると仮定すると、以下の方程式が得られる。</p>
+
+\[\sum_{i=1}^{N} (\mathbf{t} + \mathbf{R} \mathbf{x}_i - \mathbf{p}_i) = 0\]
+
+<p>これを$\mathbf{t}$ついて整理すると、</p>
+
+\[\begin{equation}
+\mathbf{t} = \frac{1}{N} \sum_{i=1}^N (\mathbf{p}_i - \mathbf{R} \mathbf{x}_i) = \bar{\mathbf{p}} - \mathbf{R} \bar{\mathbf{x}}
+\label{eq:optimal-trans}
+\end{equation}\]
+
+<p>となることが分かる。なお$\bar{\mathbf{x}}$ならびに$\bar{\mathbf{p}}$は、それぞれ$\mathbf{x}_i$ならびに$\mathbf{p}_i$の平均を表すものとする。</p>
+
+<p>以上から、一度$\mathbf{R}$が求まれば、それを用いて並進成分$\mathbf{t}$が求まり、また上記の式が$\mathbf{R}$だけの関数になっていることから、この式を元の誤差関数に代入することだ$\mathbf{R}$だけに関する最適化問題が得られることが分かる。</p>
+
+<h2 id="特異値分解を用いた回転行列の求解">特異値分解を用いた回転行列の求解</h2>
+
+<p>上記の議論から式\eqref{eq:optimal-trans}を式\eqref{eq:least-squares}に代入して、回転行列$\mathbf{R}$だけに関する最小化問題を定義する。</p>
+
+\[\min_{\mathbf{R}} \sum_{i=1}^{N} \| \mathbf{R}(\mathbf{x}_i - \bar{\mathbf{x}}) - (\mathbf{p}_i - \bar{\mathbf{p}}) \|^2\]
+
+<p>これを簡単のため$\hat{\mathbf{x}}_i = \mathbf{x}_i - \bar{\mathbf{x}}$, $\hat{\mathbf{p}}_i = \mathbf{p}_i - \bar{\mathbf{p}}$と書き直す。</p>
+
+\[\min_{\mathbf{R}} \sum_{i=1}^{N} \| \mathbf{R} \hat{\mathbf{x}}_i - \hat{\mathbf{p}}_i \|^2\]
+
+<p>今、$\mathbf{R}\hat{\mathbf{x}} - \hat{\mathbf{p}}$の部分は3次元のベクトルであるので、それを縦ベクトルとして、それを横方向に$N$個分並べたような行列を考えてみる。</p>
+
+<p>上記の誤差関数はベクトルの各要素の二乗を足し上げたものであるので、各ベクトルを並べた行列を考えた場合も、行列の各要素の二乗を足し上げれば同じ値が得られる。このような行列の各要素の二乗を足し上げて、ベクトルのユークリッドノルムと同様に平方根をとったものをフロベニウス・ノルム(Frobenius norm)と呼び、以下のように定義される。</p>
+
+\[\| \mathbf{M} \|_{F} = \left( \sum_{i, j} M_{ij}^2 \right)^{\frac{1}{2}}\]
+
+<p>このフロベニウス・ノルムを用いると、上記の誤差関数は以下のように書き直すことができる。</p>
+
+\[\begin{equation}
+\min_{\mathbf{R}} \| \mathbf{R} \mathbf{X} - \mathbf{P} \|_{F}^2
+\label{eq:least-squares-frobenius}
+\end{equation}\]
+
+<p>ここで$\mathbf{X}$ならびに$\mathbf{P}$は3行$N$列の行列で、$\mathbf{x}_i$ならびに$\mathbf{p}_i$を縦ベクトルとして、それらを横方向に$N$個結合したものを表す。</p>
+
+\[\begin{aligned}
+\mathbf{X} &amp;= \begin{pmatrix}
+\hat{\mathbf{x}}_1 &amp; \hat{\mathbf{x}}_2 &amp; \cdots &amp; \hat{\mathbf{x}}_N
+\end{pmatrix} \in \mathbb{R}^{3 \times N} \\
+\mathbf{P} &amp;= \begin{pmatrix}
+\hat{\mathbf{p}}_1 &amp; \hat{\mathbf{p}}_2 &amp; \cdots &amp; \hat{\mathbf{p}}_N
+\end{pmatrix} \in \mathbb{R}^{3 \times N}
+\end{aligned}\]
+
+<p>フロベニウス・ノルムには、以下のような関係式が成り立つことが知られている。</p>
+
+\[\| \mathbf{M} \|_{F}^2 = \mathrm{tr} (\mathbf{M}^{T} \mathbf{M})\]
+
+<p>これを用いると式\eqref{eq:least-squares-frobenius}は以下のように式変形できる。</p>
+
+\[\begin{aligned}
+\| \mathbf{R} \mathbf{X} - \mathbf{P} \|_{F}^2
+&amp;= \mathrm{tr}(\mathbf{X}^{T} \mathbf{X}) - 2 \mathrm{tr}(\mathbf{X}^T \mathbf{R}^T \mathbf{P}) + \mathrm{tr} (\mathbf{P}^{T} \mathbf{P})
+\end{aligned}\]
+
+<p>上記の式では、$\mathbf{R}$が直交行列であり$\mathbf{R}^{T} \mathbf{R}$が単位行列になることに注意すること。この式では3つある項のうち中央の項だけが最適化変数である$\mathbf{R}$を含んでいるので、この項の符号が負であることに注意すると、以下の最大化として書き直せる。</p>
+
+\[\max_{\mathbf{R}} \mathrm{tr} (\mathbf{X}^{T} \mathbf{R}^{T} \mathbf{P})\]
+
+<p>次に、トレース内の行列の順序変換の公式を用いて、行列の順序を入れ替える(任意の入れ替えが可能と言うわけではないので注意)。</p>
+
+\[\mathrm{tr}(\mathbf{X}^{T} \mathbf{R}^{T} \mathbf{P})
+= \mathrm{tr}(\mathbf{P} \mathbf{X}^{T} \mathbf{R}^{T})
+= \mathrm{tr}(\mathbf{R} \mathbf{X} \mathbf{P}^{T})\]
+
+<p>ここで、やや天下り式ではあるが$\mathbf{X P}^{T}$を特異値分解して$\mathbf{U} \boldsymbol\Sigma \mathbf{V}^{T}$と書き直し、さらにトレースの行列順序変更の公式を適用する。</p>
+
+\[\mathrm{tr}(\mathbf{R}\mathbf{U}\boldsymbol\Sigma\mathbf{V}^{T})
+= \mathrm{tr}(\mathbf{V}^{T}\mathbf{R}\mathbf{U} \boldsymbol\Sigma)\]
+
+<p>$\mathbf{V}$, $\mathbf{R}$, $\mathbf{U}$がそれぞれ直交行列であることから、これらの積である$\mathbf{Z} = \mathbf{V}^{T} \mathbf{R} \mathbf{U}$も直交行列であることに注目する。</p>
+
+<p>また$\boldsymbol\Sigma$は一般に非負である特異値を対角成分に持つ対角行列であるので、各対角要素の平方根を取って得られる行列を$\boldsymbol\Sigma^{\frac{1}{2}}$と書くことで以下のように式変形できる。</p>
+
+\[\mathrm{tr}(\mathbf{Z}\boldsymbol\Sigma)
+= \mathrm{tr}(\boldsymbol\Sigma^{\frac{1}{2}T} \mathbf{Z} \boldsymbol\Sigma^{\frac{1}{2}})\]
+
+<p>Arunらの論文<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>によれば、直交行列$\mathbf{B}$と一般の行列$\mathbf{A}$に対して、$\mathrm{tr} (\mathbf{A}^{T} \mathbf{B} \mathbf{A}) \leq \mathrm{tr} (\mathbf{A}^{T} \mathbf{A})$であるので、これを用いれば</p>
+
+\[\mathrm{tr}(\mathbf{Z} \boldsymbol\Sigma) \leq \mathrm{tr} (\boldsymbol\Sigma)\]
+
+<p>であり、等式は$\mathbf{Z}$が単位行列である時に成り立つことが分かる。以上から、回転行列$\mathbf{R}$を求めると、</p>
+
+\[\mathbf{V}^{T} \mathbf{R} \mathbf{U} = \mathbf{I} \quad \Leftrightarrow \quad \mathbf{R} = \mathbf{V} \mathbf{U}^{T}\]
+
+<p>が、式\eqref{eq:least-squares}の最適化問題の解となる。</p>
+
+<p>ただし、一般には二つの直交行列$\mathbf{U}$と$\mathbf{V}$の行列式の符号は異なる可能性がある(すなわち1, -1のどちらも取りうる)ので、鏡映反転が現れることを防ぐために、以下のように$\mathbf{R}$を定義し直す。</p>
+
+\[\mathbf{R} = \mathbf{V} \mathbf{H} \mathbf{U}^{T}, \quad \mathbf{H} = \mathrm{diag} ([1, 1, \det \mathbf{VU}^{T}])\]
+
+<p>このようにして回転行列が得られたら、式\eqref{eq:optimal-trans}にこれを代入して、並進成分の最適解も求める。</p>
+
+<h2 id="終了条件">終了条件</h2>
+
+<p>ICPでは上記の剛体変換を求める操作を、その変化量が十分に小さくなるまで繰り返す。変化量が小さくなると回転行列$\mathbf{R}$は単位行列に、並進成分$\mathbf{t}$はゼロベクトルに近くので、移動の大きさ$d(\mathbf{R}, \mathbf{t})$を以下のように定義する。</p>
+
+\[d(\mathbf{R}, \mathbf{t}) = \| \mathbf{R} - \mathbf{I} \|_{F} + \| \mathbf{t} \|\]
+
+<p>予め誤差許容値を決めておき、上記の移動量が誤差許容値未満になったら処理を打ち切るようにする。</p>
+
+<h2 id="参考文献">参考文献</h2>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>Arun et al., “Least-Squares Fitting of Two 3-D Point Sets,” PAMI, 1987. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

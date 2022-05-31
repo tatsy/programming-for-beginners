@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      Rigid-ICP法の概要 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/cpp/overview-rigid-icp/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">Rigid-ICP法の概要</h1>
+  <p>点群あるいは、メッシュ等で表された形状同士の位置を揃える、という問題は非常に一般的な問題で、形状処理やコンピュータ・ビジョンの分野で広く研究されている。なお、以下では剛体変換による位置揃え、すなわちRigid-ICPのことを単にICPと呼ぶこととする。</p>
+
+<p>点群同士の位置を揃えるという問題は、古くは1987年にArunらによって研究<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>などが代表的だが、ICPという言葉が初めて登場したのは1992年のBeslらの研究であるとされている<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup>。Beslらの手法では、剛体変換に含まれる回転を四元数を用いて表し、それに並進を表す3次元ベクトルを加えた合計7次元のベクトルを未知数として、最適な剛体変形を求めるという問題を解いている。</p>
+
+<p>いずれの場合も、二つの点群が与えられた場合に、それらの位置を揃えるのに最適な剛体変換を何らかの方法で求める、ということが主眼であり、ICP法は特にその処理を繰り返すことで、位置揃えの精度を高めている。</p>
+
+<p>今、位置揃えの目的位置を表す点群を$\mathcal{U} = \{ \mathbf{u}_j \}_{j=1}^M$、移動を伴って位置揃えされる点群を$\mathcal{X} = \{ \mathbf{x}_i \}_{i=1}^N$とする。この場合、ICP法のステップは上記の最適な剛体変換を求めるステップを以下の要領で繰り返される。</p>
+
+<ol>
+  <li>各$\mathbf{x}_i$について$\mathcal{U}$の中で最も位置が近い点を取り出し、それを$\mathbf{p}_i$とする。</li>
+  <li>$\mathbf{x}_i$を$\mathbf{p}_i$へと移動するのに必要な剛体変換を何らかの方法で求める (特異値分解, 非線形最適化など)。</li>
+  <li>求めた剛体変換で$\mathbf{x}_i$の位置を更新し、移動量が十分に小さくなるまで1-2の処理を繰り返す。</li>
+</ol>
+
+<p>これらをプログラムとして実装するため、以降ではまず<em>k-d木</em>を用いた最近傍点の探索について見ていく。また、上記の処理でポイントとなるのは<strong>どのように点同士の近さを定義するか</strong>と<strong>どのように剛体変形を求めるか</strong>の2点であるので、今回は、距離の近さを単純なユークリッド距離とした<em>Point-to-Point ICP</em>と、点群に法線方向が与えられている場合に、その法線方向に沿った距離を用いる<em>Point-to-Plane ICP</em>の2種類について見ていくことにする。</p>
+
+<p>Point-to-Point ICPでは、上記のArunらの論文で紹介されている特異値分解を用いた剛体変換の求め方を利用する。一方でPoint-to-Plane ICPではその距離の定義の違いから特異値分解を利用できないため、ICPの繰り返し計算の各ステップで与えられる剛体変換の回転成分が微小であると仮定し、一般的な線形変換で近似するLinearized Rotationを用いる。</p>
+
+<p>また、今回解説するPoint to Point ICPならびにPoint to Plane ICPの説明にあたっては以下のGitHubならびに、日本語の解説記事を参考にしたので、より詳しい説明が知りたい場合には目を通してみると良い。</p>
+
+<ul>
+  <li>Alec Jacobson, “Geometry Processing - Registration”<br />
+<a href="https://github.com/alecjacobson/geometry-processing-registration" target="_blank">https://github.com/alecjacobson/geometry-processing-registration</a></li>
+  <li>玉木 徹,『姿勢推定と回転行列』<br />
+<a href="https://home.hiroshima-u.ac.jp/tamaki/study/20090924SIS200923.pdf" target="_blank">https://home.hiroshima-u.ac.jp/tamaki/study/20090924SIS200923.pdf</a></li>
+</ul>
+
+<h2 id="参考文献">参考文献</h2>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>Arun et al., “Least-Squares Fitting of Two 3-D Point Sets,” PAMI, 1987. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:2" role="doc-endnote">
+      <p>Besl and McKey, “A Method for Registration of 3-D Shapes,” PAMI, 1992. <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

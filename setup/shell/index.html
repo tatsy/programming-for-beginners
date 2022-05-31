@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      シェルの設定 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/setup/shell/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">シェルの設定</h1>
+  <p>シェルの設定は任意であるが、今後シェルを使う機会が増えていくであろうことを考えると、最低限の設定をして使いやすくしておくことが望ましい (設定しないままだと使いづらく、使うのをすぐやめてしまうことが予想されるため)。</p>
+
+<h2 id="windows">Windows</h2>
+
+<p>Windowsのシェルは2021年現在、過渡期にあって、いくつかのシェル環境が混在している。この中では、オープンソース版のPowerShellかWindows Subsystem 2 (WSL2)のどちらかを使うのが良いと思われる。</p>
+
+<ul>
+  <li>コマンドプロンプト (<code class="highlighter-rouge">cmd.exe</code>)
+    <ul>
+      <li>Windowsに昔からあるシェル。最初の選択肢にはならないと思うが、Windowsのシステム設定変更などでたまに使う時がある。</li>
+    </ul>
+  </li>
+  <li>PowerShell (<code class="highlighter-rouge">pwsh.exe</code>)
+    <ul>
+      <li>コマンドプロンプトの改善のために導入されたシェル。デフォルトでも入っているが<a href="https://docs.microsoft.com/ja-jp/powershell/" target="_blank">オープンソース版</a>もあり、こちらの方が機能が多い。</li>
+    </ul>
+  </li>
+  <li>Windows Subsystem for Linux (WSL)
+    <ul>
+      <li>Windows上にUbuntuなどのLinux仮想環境を作って、その上で動かすシェル。Linuxのシェルと同じように使えるが、WindowsとLinux仮想環境でファイルシステムが分かれているので、その分ディスクを圧迫するのが気にはなる。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>以下ではPowerShellの設定方法について述べるが、WSLを使う場合は、その下に示すMac/Linux用の設定に従うと良い。</p>
+
+<h3 id="powershellのインストール">PowerShellのインストール</h3>
+
+<p>GitHubのリポジトリからWindows用のインストーラ(拡張子が<code class="highlighter-rouge">.msi</code>になっているもの)で、特にこだわりがなければ最新のものをダウンロード、インストールする。</p>
+
+<p><a href="https://github.com/PowerShell/PowerShell/releases" target="_blank">https://github.com/PowerShell/PowerShell/releases</a></p>
+
+<p>インストールの途中で、右クリックのメニューに「PowerShellで開く」という項目を追加するかどうかを尋ねられるので、ここのチェックは入れておくことを推奨する。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/powershell_setup.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/powershell_setup.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<h3 id="chocolateyのインストール">Chocolateyのインストール</h3>
+
+<p>PowerShellでは<a href="https://chocolatey.org/" target="_blank">Chocolatey</a>というパッケージマネージャが使用可能で、これを使うと、ややブラックボックスにはなるものの、ライブラリやプログラムのインストールが自動化できる。今回はPowerShellの設定のためだけにChocolateyを使うが、個人的にはプログラムのライブラリなどは、個別に手動でインストールした方が良い気がする。</p>
+
+<p>Chocolateyのインストールについては、以下のページの手順に従う。ところどころ、管理者としてPowerShellを起動していないと失敗することがあるので注意すること。</p>
+
+<p><a href="https://chocolatey.org/install" target="_blank">https://chocolatey.org/install</a></p>
+
+<h3 id="oh-my-poshのインストール">oh-my-poshのインストール</h3>
+
+<p>オープンソースのPowerShellには<a href="https://github.com/JanDeDobbeleer/oh-my-posh">oh-my-posh</a>というプラグインがあり、これを使うことでシェルが格段に使いやすくなる。</p>
+
+<ul>
+  <li><a href="https://github.com/JanDeDobbeleer/oh-my-posh">https://github.com/JanDeDobbeleer/oh-my-posh</a></li>
+</ul>
+
+<p>インストールにあたっては、まずPowerShellのスクリプト実行設定を確認する。</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-ExecutionPolicy</span><span class="w">
+</span></code></pre></div></div>
+
+<p>この結果は、特に変更していなければ<code class="highlighter-rouge">RemoteSigned</code>となっているはずなので、以下のようにタイプして、設定を<code class="highlighter-rouge">Bypass</code>に設定し直す。なおChocolateyをインストールした場合には、この設定はすでに済んでいると思われる。</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ExecutionPolicy</span><span class="w"> </span><span class="nx">Bypass</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">Process</span><span class="w">
+</span></code></pre></div></div>
+
+<p>設定後、<code class="highlighter-rouge">oh-my-posh</code>と必要なGitのモジュールをインストールする。</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Install-Module</span><span class="w"> </span><span class="nx">posh-git</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">CurrentUser</span><span class="w">
+</span><span class="n">Install-Module</span><span class="w"> </span><span class="nx">oh-my-posh</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">CurrentUser</span><span class="w">
+</span></code></pre></div></div>
+
+<p>これで必要なモジュールのインストールは完了なので、次回立ち上げ時以降、自動的にoh-my-poshが働くように設定ファイルを編集する。</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">notepad</span><span class="w"> </span><span class="nv">$profile</span><span class="w">
+</span></code></pre></div></div>
+
+<p>もし設定ファイルが存在しなければ、作成するかどうかを尋ねられるので、作成する。するとNotepad(メモ帳)でファイルが開くので以下の内容を追記して保存する。</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Import-Module</span><span class="w"> </span><span class="nx">posh-git</span><span class="w">
+</span><span class="n">Import-Module</span><span class="w"> </span><span class="nx">oh-my-posh</span><span class="w">
+</span><span class="n">Set-Theme</span><span class="w"> </span><span class="nx">Paradox</span><span class="w">
+</span></code></pre></div></div>
+
+<p>なお<code class="highlighter-rouge">Set-Theme</code>の部分は<a href="https://github.com/JanDeDobbeleer/oh-my-posh#themes" target="_blank">oh-my-posh</a>のGitリポジトリにあるものを見て、好きなものを使用すると良い。</p>
+
+<h3 id="nerdフォントのインストール">Nerdフォントのインストール</h3>
+
+<p><a href="https://www.nerdfonts.com/" target="_blank">Nerdフォント</a>と呼ばれるemojiがサポートされたフォントを使うと、シェルの見た目がきれいになり使う意欲が湧く(個人差あり)。ただし、PowerShellをそのまま使う場合にはフォントの設定がうまくいかない可能性があるので、ここではフォントをインストールするにとどめて、設定については、以下のWindows Terminalというシェルで行う。</p>
+
+<p><a href="https://www.nerdfonts.com/" target="_blank">https://www.nerdfonts.com/</a></p>
+
+<p>なお、日本語のフォルダ名なども合わせてフォントを置き換えたい場合には<strong>Cica</strong>と呼ばれるフォントを使うのが良い。</p>
+
+<p><a href="https://github.com/miiton/Cica" target="_blank">https://github.com/miiton/Cica</a></p>
+
+<p>こちらもGitHubの<a href="https://github.com/miiton/Cica/releases" target="_blank">リリースページ</a>からフォントがダウンロードできる。</p>
+
+<h3 id="windows-terminal">Windows Terminal</h3>
+
+<p>Windows Terminalは今までのPowerShellなどで手が届いていなかった細かなオプションの設定やタブの利用などが可能となったモダンなシェル環境である。Windows Terminal自体はシェルではなく、コマンドプロンプトやPowerShellなどのシェルを間接的に呼び出して実行する。</p>
+
+<p>Windows Terminalは表示に使うフォントを設定ファイルで管理できるので、適当なNerdフォントを設定する。設定についてはWindows Terminalを立ち上げて、画面上部、タブの右隣にある「+」ボタンをクリックし、そこから「設定」を選ぶ。</p>
+
+<p>するとエディタで設定ファイルが開くので、設定ファイル内の<code class="highlighter-rouge">Windows.Terminal.PowershellCore</code>という場所を探して、以下のように設定する。</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"guid"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">...</span><span class="p">},</span><span class="w">
+  </span><span class="nl">"hidden"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PowerShell"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Windows.Terminal.PowershellCore"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"colorScheme"</span><span class="p">:</span><span class="w"> </span><span class="s2">"One Half Dark (好きなカラーテーマを設定)"</span><span class="p">,</span><span class="w"> 
+  </span><span class="nl">"fontFace"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delugia Nerd Font (好きなNerdフォントを設定)"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fontSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> 
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>すると、以下の画像のように画面が設定されて、Anacondaの開発環境名 (以下の画像では<code class="highlighter-rouge">base</code>)やGitリポジトリのブランチ名 (以下の画像では<code class="highlighter-rouge">master</code>)などが表示されるようになる。</p>
+
+<hr />
+
+<h2 id="maclinux">Mac/Linux</h2>
+
+<p>MacやLinuxにはデフォルトで「ターミナル」というソフトウェアが用意されているが、おすすめはMacなら<a href="https://iterm2.com/" target="_blank">iTerm</a>、Linuxなら<a href="https://www.byobu.org/">Byobu</a>というソフトウェアを使うと、タブの数を増やしたり、画面を分割したりできる。</p>
+
+<p>これらのターミナル環境の中では、MacとLinuxともに<code class="highlighter-rouge">bash</code>というシェルを使用するように設定されている(ターミナルはCUI操作を行うソフト、シェルはコマンドを受け取ってOS上で命令を実行するソフトウェアのこと)。例えばMacでターミナルを立ち上げると、<code class="highlighter-rouge">bash</code>のソフトウェアが走って、ターミナル上に入力を受け付ける画面を表示する。</p>
+
+<p>筆者はあまり<code class="highlighter-rouge">bash</code>は使ったことがなく、より拡張性などが優れている(と思われる)<code class="highlighter-rouge">zsh</code>をよく使っている。というわけで<code class="highlighter-rouge">zsh</code>を使う方法を紹介する。最低限の設定であれば非常に簡単で、まずは以下の手順で<code class="highlighter-rouge">zsh</code>と<code class="highlighter-rouge">oh-my-zsh</code>をインストールすると良い。</p>
+
+<h3 id="zshのインストール">Zshのインストール</h3>
+
+<p>Macなら<a href="https://brew.sh/index_ja" target="_blank">Homebrew</a>, Linuxなら<code class="highlighter-rouge">apt-get</code>(Debian系)とか<code class="highlighter-rouge">yum</code> (CentOS系)で<code class="highlighter-rouge">zsh</code>を入れる。ちなみに、最近は<code class="highlighter-rouge">Fish</code>というシェルも人気らしく、興味があれば下の補足の項を見て欲しい。</p>
+
+<h3 id="oh-my-zshのインストール">Oh-my-zshのインストール</h3>
+
+<p><code class="highlighter-rouge">zsh</code>には多数のプラグインが用意されていて、細かな設定が可能ではあるのだが、最初から細かい設定をするのは少々骨が折れる。まだ設定に慣れないうちは、最も設定が簡単で、使い勝手もそれなりに良い<a href="https://ohmyz.sh/" target="_blank">oh-my-zsh</a>を使うのが良いと思う。</p>
+
+<p>インストール方法は非常に簡単で、上記のサイトをおとづれて、<code class="highlighter-rouge">zsh</code>を立ちあげた状態でインストール用のスクリプトを実行する。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="si">)</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>もしかするとCurl (Web上のファイルをCLI経由でインストールするソフトウェア)が見つからないと言われるかもしれないので、その場合は<code class="highlighter-rouge">zsh</code>と同様にHomebrew等でインストールする。</p>
+
+<h3 id="補足-zplug">補足: zplug</h3>
+
+<p>ちなみに著者は<a href="https://github.com/zplug/zplug" target="_blank">zplug</a>という<code class="highlighter-rouge">zsh</code>のプラグインマネージャを使っているので、興味がある人は調べてみると良い。</p>
+
+<p>参考までの<code class="highlighter-rouge">zplug</code>の設定ファイルを掲載しておく。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># zsh/zplug settings</span>
+<span class="nb">source</span> <span class="s2">"</span><span class="k">${</span><span class="nv">HOME</span><span class="k">}</span><span class="s2">/.zplug/init.zsh"</span>
+
+zplug <span class="s2">"sorin-ionescu/prezto"</span>
+
+zplug <span class="s2">"modules/prompt"</span>, from:prezto
+zplug <span class="s2">"modules/git"</span>, from:prezto
+zplug <span class="s2">"modules/autosuggestions"</span>, from:prezto
+zplug <span class="s2">"modules/completion"</span>, from:prezto
+zplug <span class="s2">"modules/command-not-found"</span>, from:prezto
+zplug <span class="s2">"modules/directory"</span>, from:prezto
+zplug <span class="s2">"modules/environment"</span>, from:prezto
+zplug <span class="s2">"modules/fasd"</span>, from:prezto
+zplug <span class="s2">"modules/history"</span>, from:prezto
+
+zplug <span class="s2">"mafredri/zsh-async"</span>
+zplug <span class="s2">"wting/autojump"</span>
+zplug <span class="s2">"rimraf/k"</span>
+zplug <span class="s2">"b4b4r07/enhancd"</span>, use:init.sh
+zplug <span class="s2">"junegunn/fzf-bin"</span>, as:command, from:gh-r, rename-to:<span class="s2">"fzf"</span>, frozen:1
+zplug <span class="s2">"b4b4r07/zsh-gomi"</span>, as:command, use:bin/gomi, on:junegunn/fzf-bin
+zplug <span class="s2">"mollifier/cd-gitroot"</span>
+
+zplug <span class="s2">"romkatv/powerlevel10k"</span>, as:theme, depth:1
+
+zplug <span class="s2">"zsh-users/zsh-syntax-highlighting"</span>, defer:2
+zplug <span class="s2">"modules/history-substring-search"</span>, from:prezto, defer:2
+
+<span class="c"># Install plugins if there are plugins that have not been installed</span>
+<span class="k">if</span> <span class="o">!</span> zplug check <span class="nt">--verbose</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">printf</span> <span class="s2">"Install? [y/N]: "</span>
+    <span class="k">if </span><span class="nb">read</span> <span class="nt">-q</span><span class="p">;</span> <span class="k">then
+        </span><span class="nb">echo</span><span class="p">;</span> zplug <span class="nb">install
+    </span><span class="k">fi
+fi</span>
+
+<span class="c"># Then, source plugins and add commands to $PATH</span>
+zplug load <span class="nt">--verbose</span>
+
+<span class="c"># Aliases</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">uname</span><span class="si">)</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"Darwin"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">alias ls</span><span class="o">=</span><span class="s1">'ls -G'</span>
+    <span class="nb">alias </span><span class="nv">la</span><span class="o">=</span><span class="s1">'ls -la -G'</span>
+    <span class="nb">alias </span><span class="nv">ll</span><span class="o">=</span><span class="s1">'ls -la -G'</span>
+<span class="k">else
+    </span><span class="nb">alias ls</span><span class="o">=</span><span class="s1">'ls --color=auto'</span>
+    <span class="nb">alias </span><span class="nv">la</span><span class="o">=</span><span class="s1">'ls -la --color=auto'</span>
+    <span class="nb">alias </span><span class="nv">ll</span><span class="o">=</span><span class="s1">'ls -la --color=auto'</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<h3 id="補足-fish">補足: fish</h3>
+
+<p>最近、注目を集めている新しめのシェルにfishというものがある (2021年1月現在)。</p>
+
+<p><a href="https://fishshell.com/" target="_blank">https://fishshell.com/</a></p>
+
+<p>fishはインストールした時点である程度の補完機能がついていて、そのままでもそれなりに使えるというのが特徴で、zsh + oh-my-zshの代わりにこちらを使ってみるのも良いかもしれない。</p>
+
+<p>fishのインストールは簡単でMacであればHomebrew, Ubuntu系であればPPAを追加することでインストール可能(Ubuntu 19.04以降はPPA不要)</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Mac</span>
+brew <span class="nb">install </span>fish
+
+<span class="c"># Ubuntu 19.04より前</span>
+<span class="nb">sudo </span>apt-add-repository ppa:fish-shell/release-3
+<span class="nb">sudo </span>apt update <span class="nt">-y</span>
+<span class="nb">sudo </span>apt <span class="nb">install </span>fish <span class="nt">-y</span>
+
+<span class="c"># Ubuntu 19.04以降</span>
+<span class="nb">sudo </span>apt <span class="nb">install </span>fish <span class="nt">-y</span>
+</code></pre></div></div>
+
+<p>また、fishにもzshと同様に<a href="https://github.com/oh-my-fish/oh-my-fish" target="_blank">oh-my-fish</a>というツールが用意されており、こちらを追加でインストールすることで、テーマなどの設定が簡単になる。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># fish shellを起動した状態で</span>
+curl <span class="nt">-L</span> https://get.oh-my.fish | fish
+</code></pre></div></div>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      k-d木による最近傍探索 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/cpp/kdtree/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">k-d木による最近傍探索</h1>
+  <h2 id="k-d木の構築">k-d木の構築</h2>
+
+<p>k-d木は任意の次元$k$を持つ空間 ($k$-dimensionalでk-d)を分割する木構造である。k-d木は一つのノードが2つの子を持つような二分木の一種であり、一つ一つのノードは$k$次元空間内の超立方体内部に含まれる点 (あるいは別のデータ)の情報を管理する。k-d木の中では親子関係のない各ノードが支配する領域が重複することはない (親ノードは必ず子ノードの領域を支配している)。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="https://upload.wikimedia.org/wikipedia/commons/b/b6/3dtree.png" data-lightbox="images-1" data-title="">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b6/3dtree.png" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    <p>(<a href="https://ja.wikipedia.org/wiki/Kd%E6%9C%A8">kd木 - Wikipedia</a>より引用)</p>
+
+  </span>
+  
+</div>
+
+<p>入力されたデータが点群である場合には、k-d木はトップダウンに作成される。ここで言う「トップダウン」というのは、最初に全ての点群を含むようなルートノードを作成し、そのルートノードを段階的に分割していくことで木を構築する操作を指す。通常、このルートノードはAABB (axis-aligned bounding box)と呼ばれる直方体によって定義される。AABBは直方体の各辺の方向がX, Y, Z軸のいずれかと平行(axis-aligned)になっているものを指す。</p>
+
+<p>ノードを分割する処理はX, Y, Z軸方向のなかで、そのノードが含む「頂点位置の分散」が最大となる方向に垂直な平面で分割していく。分散の計算については、説明不要と思うが以下の通りである。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// maximum variance direction</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">muX</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">muY</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">muZ</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">muX</span> <span class="o">+=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">/</span> <span class="n">count</span><span class="p">;</span>
+    <span class="n">muY</span> <span class="o">+=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">/</span> <span class="n">count</span><span class="p">;</span>
+    <span class="n">muZ</span> <span class="o">+=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">z</span> <span class="o">/</span> <span class="n">count</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">double</span> <span class="n">varX</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">varY</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">varZ</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">varX</span> <span class="o">+=</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">muX</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">muX</span><span class="p">)</span> <span class="o">/</span> <span class="n">count</span><span class="p">;</span>
+    <span class="n">varY</span> <span class="o">+=</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">muY</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">muY</span><span class="p">)</span> <span class="o">/</span> <span class="n">count</span><span class="p">;</span>
+    <span class="n">varZ</span> <span class="o">+=</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">z</span> <span class="o">-</span> <span class="n">muZ</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">z</span> <span class="o">-</span> <span class="n">muZ</span><span class="p">)</span> <span class="o">/</span> <span class="n">count</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>分割位置については、頂点を分散最大方向の変位によりソートして、その要素が半分ずつに分かれるように決定する。ある軸に沿って頂点位置をソートする操作はC++03の時代には比較演算を定義したクラスを定義する必要があったが、C++11で導入されたラムダ式を用いることで、より簡単にプログラムが描けるようになった。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sort</span>
+<span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">points</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">left</span><span class="p">,</span> <span class="n">points</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">right</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">q</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="n">maxAxis</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">q</span><span class="p">[</span><span class="n">maxAxis</span><span class="p">];</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>この時、分割面は<strong>少なくとも1つの頂点を通るように選んでおき、各ノードには分割面上の情報も記録しておく</strong>。こうすることで、最近傍点を探索する時に、分割面までの距離を利用して、効率的に探索範囲を限定することができる。</p>
+
+<p>以降は、この分割をノードが支配する頂点の数が1つになるまで繰り返すことでk-d木が構築される。</p>
+
+<h2 id="k-d木を用いた最近傍探索">k-d木を用いた最近傍探索</h2>
+
+<p>k-d木を用いると、クエリとなる頂点と最も近い頂点を効率的に探索することができる。これは、仮にクエリ頂点と今の探索しているノードとの分割面までの距離が、今見つかっている点の中で最も近いへの距離よりも遠ければ、反対側の兄弟ノードを探索する必要がなくなるためである。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/kdtree/kdtree_nearest_search.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/kdtree/kdtree_nearest_search.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>例えば、上の点ではqueryと示した探索対象の点からの距離が今のところ最小の点がknown closest pointで示した緑色の点であるとする。すると、太い黒線で示した分割面は、この緑の点よりも遠くにあるため、分割面の反対側にある点は一切探索する必要がない。結果として、最近傍点の探索にかかる計算コストは入力頂点の数を$N$として、わずか$\mathcal{O}(\log N)$となる。</p>
+
+<p>また、この方法を拡張すると、クエリ点からみて一定の半径内に入っている点だけを取り出したり、クエリ点から近い順に決まった数の点を取り出したりすることもできる。</p>
+
+<h2 id="テンプレートプログラム内での実装について">テンプレート・プログラム内での実装について</h2>
+
+<p>k-d木の実装はなれていないとやや難しい部分もあるため、今回は最近傍点の探索と、一定の半径内に含まれる点の探索を行う関数を備えた実装をそのまま提供している。</p>
+
+<p>このk-d木の実装はテンプレート・クラス (テンプレート・プログラムと言葉がややこしいが、ここでのテンプレートはC++における用語)となっていて、<code class="highlighter-rouge">KDTree&lt;Vec3&gt;</code>のように入力の点を表す変数の型を与えて用いる。</p>
+
+<p>テンプレート・クラス (およびテンプレート関数)は、異なる型に対して、共通の機能を実装することができ、さらにテンプレート引数に与えられた型が利用条件を満たさないときにはコンパイルエラーとすることができる。</p>
+
+<p>今回の実装においては、k-d木の入力点群を表す型が、<code class="highlighter-rouge">T::x, T::y, T::z</code> のように三次元座標の各要素を返し、さらに2つの点をとって、その間の距離を返す関数<code class="highlighter-rouge">length(const T&amp;, const T&amp;)</code>が定義されていることを仮定している。</p>
+
+<p>テンプレート・プログラムで与えている<code class="highlighter-rouge">Vec3</code>型はどちらの条件も満たすため、そのまま<code class="highlighter-rouge">KDTree&lt;Vec3&gt;</code>のようにして使うことが可能である。また、頂点の番号などの追加情報をもたせたいときには、<code class="highlighter-rouge">Vec3</code>型を継承して、新しい型を定義するのが良いだろう。</p>
+
+<p>クラスの継承は、初心者には難しい部分もあるので、テンプレート・プログラム内に<code class="highlighter-rouge">Vec3</code>型を継承して頂点番号を加えた<code class="highlighter-rouge">Point</code>型を定義しておいた。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Custom struct for KD tree</span>
+<span class="k">struct</span> <span class="nc">Point</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Vec3</span> <span class="p">{</span>
+    <span class="n">Point</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="n">Point</span><span class="p">(</span><span class="k">const</span> <span class="n">Vec3</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="n">Vec3</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">i</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>ちなみに、テンプレート関数ならびにテンプレート・クラスはとても便利な機能ではあるが、一般的にコンパイルエラーのメッセージが分かりづらくなり、また必ずヘッダファイルに定義を書かないといけないためにコンパイルにかかる時間が増える傾向にある。</p>
+
+<p>意見が分かれるところではあると思うが、テンプレートを使うのは、テンプレートを使わなければ実現できないような実装をする場面 (可変長テンプレートなどを使う時)や、ベクトル型などの基本的な型を定義する場合に限定しておきたい (ちなみに後者の場合はマクロを使うことでテンプレートを使わない実装も可能、こちらはコンパイルは速いが、デバッグはより難しくなる)。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

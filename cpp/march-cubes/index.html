@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      マーチング・キューブ法 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/cpp/march-cubes/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">マーチング・キューブ法</h1>
+  <p><a href="https://dl.acm.org/doi/10.1145/37402.37422" target="_blank">マーチング・キューブ法</a>は1987年にLorensenとClineによって提案されたアルゴリズムで、2020年現在、コンピュータ・グラフィクスのトップ・ジャーナルであるACM Transactions on Graphicsにおいて、最も引用されている論文である。</p>
+
+<p>今日、マーチング・キューブ法とその発展形はCTやMRIなどで得られる三次元ボリュームデータを表面メッシュデータに置き換える方法として広く利用されている。</p>
+
+<p>マーチング・キューブ法のアイディアは単純で、1つのキューブが持つ8つの頂点が表面メッシュの内側にあるのか、外側になるのかのすべてのパターンについて、どのようにメッシュが切られるべきなのかを表す辞書を用意する。</p>
+
+<p>これらのパターンは単純には2の8乗、すなわち256通りのパターンが考えられるが、回転や鏡面対称のものをまとめると、以下の図に示すような15種類のデータとなる。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/march_cubes/march_cubes.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/march_cubes/march_cubes.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    <p>(<a href="https://ja.wikipedia.org/wiki/%E3%83%9E%E3%83%BC%E3%83%81%E3%83%B3%E3%82%B0%E3%82%AD%E3%83%A5%E3%83%BC%E3%83%96%E6%B3%95">『マーチングキューブ法 - Wikipedia』</a>より引用)</p>
+
+  </span>
+  
+</div>
+
+<p>これらの辞書の用意と、回転や考慮したメッシュへの変換は煩雑ではあるが、幸運なことに、ウェブ上に基本的な実装を含むソースコードが多数公開されている。</p>
+
+<p>今回は<a href="http://paulbourke.net/geometry/polygonise/" target="_blank">http://paulbourke.net/geometry/polygonise/</a>で公開されているコードを元に、マーチング・キューブ法を実装していく。なお、このコードは<em>キューブの8頂点に対するインデックスの付け方に特徴</em>があり、ビットでこれを管理しようとすると少し工夫が必要なので気をつけること (テンプレートプログラムの<code class="highlighter-rouge">indexTable</code>とウェブページ内の図を見比べてほしい)。</p>
+
+<h2 id="処理の流れ">処理の流れ</h2>
+
+<p>上記のウェブページに公開されているコードでは<code class="highlighter-rouge">GRIDCELL</code>が冒頭の図で言うところのキューブひとつに対応する。この構造体に対して、8つのコーナーの位置と、そのコーナーが持つ<em>ボリュームの値を<code class="highlighter-rouge">double</code>で格納する</em>。</p>
+
+<p>その結果を<code class="highlighter-rouge">Polygonize</code>関数に閾値 (こちらも<code class="highlighter-rouge">double</code>型)で渡す。すると、第3引数にある三角形 (<code class="highlighter-rouge">TRIANGLE</code>型) の配列に対して、三角形とその頂点位置を代入してくれる。何個の三角形を生成したかは<code class="highlighter-rouge">Polygonize</code> 関数の戻り値に格納される。</p>
+
+<p>あとは<code class="highlighter-rouge">TRIANGLE</code>型の配列は三角形の個数分処理して、出力の頂点リストと面を構成する頂点番号リスト(テンプレートコードではそれぞれ<code class="highlighter-rouge">vertices</code>と<code class="highlighter-rouge">indices</code>)に格納すれば良い。これらの手順を元にテンプレートのプログラムを埋めて、マーチング・キューブ法のプログラムを完成させよう (テンプレートプログラムは<a href="/programming-for-beginners/cpp/assignment-march-cubes/">課題のページ</a>から入手できる)。</p>
+
+<h2 id="polygonize関数の中身">Polygonize関数の中身</h2>
+
+<p>上記の手順に従えば、マーチング・キューブ法の実装自体は可能だが、<code class="highlighter-rouge">Polygonize</code> 関数の中身についても見ておこう。以下の議論は自分で後述するマーチング・テトラヘドラ法を実装するときに役に立つ。</p>
+
+<h3 id="edgetable">edgeTable</h3>
+
+<p>関数の冒頭にある <code class="highlighter-rouge">edgeTable</code> はキューブが持つ12本のエッジのうち、どのエッジ上に頂点が発生するのかを表している。</p>
+
+<p><code class="highlighter-rouge">edgeTable</code> の定義から分かる通り、この配列の長さは$2^8 = 256$であり、キューブの8つの頂点のどれが内側で、どれが外側なのかを表すビットマスクから、各エッジ上に新たな頂点が発生するのかどうかを取得できる。例えば、(0始まりで) 2番目の要素である16進数の <code class="highlighter-rouge">0x203</code> (最初の<code class="highlighter-rouge">0x</code>は16進数ということ)であれば、10進数で$2 \cdot 16^2 + 0 \cdot 16^1 + 3 \cdot 16^0 = 515$を表していて、これは2進数なら <code class="highlighter-rouge">0b001000000011</code> (最初の<code class="highlighter-rouge">0b</code> は2進数ということ)だから、1が立っているビットに相当する0, 1, 9番目のエッジ上に頂点が発生することを意味している。</p>
+
+<p>2番目の要素は2が2進数表示で <code class="highlighter-rouge">0b00000010</code>となることから、1番目の頂点だけが外側であることを表している。この場合には三角形が1つだけ発生するから、上記の考察において、3本のエッジ上に頂点が発生する事実とも一致することが分かる。</p>
+
+<p>なお、前半の128個と後半の128個はキューブの頂点の内外が入れ替わったものを表しているので、新たな頂点が発生するエッジが変化することはなく、それ故<code class="highlighter-rouge">edgeTable</code>の後半は前半を逆順に並べ直したものになっている。</p>
+
+<h3 id="tritable">triTable</h3>
+
+<p><code class="highlighter-rouge">edgeTable</code>の後にある<code class="highlighter-rouge">triTable</code>はキューブの8頂点の内外を表すビットマスクから、何番のエッジ上に発生した頂点を結んで三角形とするのかを表している。</p>
+
+<p><code class="highlighter-rouge">triTable</code>は二次元配列で、第1軸の長さはビットマスクの大きさに合わせて$2^8 = 256$となっている。一方、第2軸の大きさはマーチング・キューブ法において、1つのキューブに最大5個の三角形が発生し、それぞれが3つずつ頂点を持つことから15あれば良く、加えて、配列の終点を表すために最後の要素に<code class="highlighter-rouge">-1</code>を入れることを考慮して長さが16となっている。この時に考慮される最大の三角形5つというのは、冒頭の図に示したものよりも詳細なパターンであり、必ずしも図と一致しないことに注意してほしい。</p>
+
+<h3 id="頂点の内外ビットマスクの計算">頂点の内外ビットマスクの計算</h3>
+
+<p>以後の処理は、キューブの8頂点の内外を考慮したビットマスクの計算と、ビットマスクに基づいた等値面上の頂点生成、ならびに三角形として頂点を結ぶ処理になる。それほど難しいコードではないので、各自で詳細を確認してほしい。</p>
+
+<h2 id="補足-マーチングキューブ法の拡張">補足: マーチング・キューブ法の拡張</h2>
+
+<p>マーチング・キューブ法にはいくつかの問題点が知られており、それらを解決する方法も多く提案されている。なお、CTなどのボリューム・データを扱う場合は、そもそも情報が十分に細かく、各ボクセルでマーチング・キューブを実行できるので、以下の議論を利用する場面はそれほど多くはない。</p>
+
+<p><strong>1つ目の問題</strong>は、特にキューブの取り方がメッシュの細かさに対して荒い場合に起こる問題で、隣あうキューブの間で三角形面が連続せずに穴が空いてしまう。この問題の詳細については以下の論文の図3を参考にしてほしい。</p>
+
+<p>Nielsen and Hamann 1991, “The Asymptotic Decider: Resolving the Ambiguity in Marching Cubes” <br />
+<a href="http://web.cse.ohio-state.edu/~shen.94/788/Site/Reading_files/p83-nielson.pdf" target="_blank">http://web.cse.ohio-state.edu/~shen.94/788/Site/Reading_files/p83-nielson.pdf</a></p>
+
+<p>上記の論文では、このような曖昧さを解決するために、曖昧となりうるパターンには複数の候補を考えておき、適宜隣のキューブが発生させた三角形ときちんと繋がるような三角形を発生させるという方法を取っている。</p>
+
+<p>また、これとは違う考え方で、曖昧さの問題を解決した手法に<strong>Marching Tetrahedra</strong>がある。この方法は、立方体を6つの四面体に分割して、各四面体に対して面貼りのパターンを割り当てるというものである。</p>
+
+<p>Treece et al. 1998, “Regularized marching tetrahedra: improved iso-surface extraction” <br />
+<a href="http://svr-www.eng.cam.ac.uk/reports/svr-ftp/treece_tr333.pdf" target="_blank">http://svr-www.eng.cam.ac.uk/reports/svr-ftp/treece_tr333.pdf</a></p>
+
+<p>四面体は頂点がそもそも4つしかないため、対称性などを考慮しなくても、パターンはたったの16種類しかなく、実装の苦労が少ないのがもう一つの特徴である。以下に16例のうちの8例を示した。残りの8例はこれらの面の向きが反転したものとなる。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/march_cubes/march_tets.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/march_cubes/march_tets.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>実際に同じデータについてマーチング・キューブ法とMarching Tetrahedraを実行した結果が以下の図である。見て分かる通り、Marching Tetrahedraではマーチング・キューブ法に見られる穴を適切に処理できている。</p>
+
+<table class="images">
+<tr>
+  <td style="text-align: center; width: 50%;"><p><strong>Marching Cubes</strong></p>
+</td>
+  <td style="text-align: center; width: 50%;"><p><strong>Marching Tetrahedra</strong></p>
+</td>
+</tr>
+<tr>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/march_cubes/mcube_zoom.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/march_cubes/mcube_zoom.jpg" alt="" style="width: 100%;" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/march_cubes/mtets_zoom.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/march_cubes/mtets_zoom.jpg" alt="" style="width: 100%;" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+</tr>
+</table>
+
+<hr />
+
+<p><strong>2つ目の問題</strong>は、マーチング・キューブ法で細かなメッシュを再構成しようとしたときには、キューブを細かく切る以外にあまり良い方法がなく、荒いキューブでは鋭いエッジのような特徴を保持できないということである。この問題を解決するために、<strong>Extended Marching Cubes</strong>という方法が以下の論文で提案されている。</p>
+
+<p>Kobbelt et al. 2001, “Feature Sensitive Surface Extraction from Volume Data” <br />
+<a href="https://www.graphics.rwth-aachen.de/media/papers/feature1.pdf" target="_blank">https://www.graphics.rwth-aachen.de/media/papers/feature1.pdf</a></p>
+
+<p>この方法ではマーチング・キューブ法同様に、同じサイズのキューブを使う。まずマーチング・キューブ法でメッシュを生成し、各頂点の法線を計算する。もし各キューブ内で発生させた頂点の法線の向きが一定以上開いていたら、feature sampleと呼ばれる余剰の点を発生させて、その点とキューブ内の頂点を結んで錐形状を作る。最後に、feature sampleを含む三角形のエッジを順に見ていき、もしエッジをフリップさせたときにfeature sampleをエッジが結ぶようになるなら、フリップ結果を保存する(論文の図9を参照)。こうすることで、キューブの数を小さく保ちながらも、鋭いエッジの情報を復元することが可能となる。</p>
+
+<p>上記の問題を解決する別の方法に、以下の論文で提案された<strong>Dual Contouring</strong>もある。</p>
+
+<p>Loasso et al. 2002, “Dual Contouring of Hermite Data” <br />
+<a href="https://www.cse.wustl.edu/~taoju/research/dualContour.pdf" target="_blank">https://www.cse.wustl.edu/~taoju/research/dualContour.pdf</a></p>
+
+<p>この方法はExtended Marching Cubesのようにキューブの内部に点を発生させるのだが、通常のマーチング・キューブ法とは異なり、キューブのエッジ上には点を発生させない。その代わりに、両端点の符号が異なるエッジがある場合には、そのエッジを含む4つのキューブに発生させた点を結んだ四角形を生成する。この部分が”dual”という言葉が入っている所以である。</p>
+
+<p>Dual Contouringは通常のマーチング・キューブでキューブの中に埋もれてしまう特徴を、キューブ内に1つずつ発生させる頂点の位置を調整することで保持することを試みる。Dual Contouringにおいては、各キューブのエッジ上のどの位置を面が通るかという情報があり、そのエッジ上の点における法線が求まっていると考える (このようなデータをHermiteデータという)。</p>
+
+<p>キューブの内部で符号が切れ変わっているときに発生させる点の位置は、このエッジ上の頂点位置と法線の情報を使いQEM (quadric error metric)を減少させるように選ばれる。論文中の定義(式(1))から分かる通り、QEMが小さくなれば、各エッジ上の頂点における法線が、復元されるメッシュにおいても保たれるようになる。</p>
+
+<p>Dual ContouringはHermiteデータに対してしか用いることができないが、マーチング・キューブのように三角形が発生するパターンを定義しておく必要がなく、実装の苦労が少なくて済む。</p>
+
+<p>最後に紹介する方法は<strong>Dual Marching Cubes</strong>と呼ばれる方法で、以下の論文で提案されている。</p>
+
+<p>Nielsen et al. 2004, “Dual Marching Cubes: Primal Contouring of Dual Grids” <br />
+<a href="https://people.eecs.berkeley.edu/~jrs/meshpapers/SchaeferWarren.pdf" target="_blank">https://people.eecs.berkeley.edu/~jrs/meshpapers/SchaeferWarren.pdf</a></p>
+
+<p>この方法は、これまでの方法のように同じサイズのキューブを使うのではなく、八分木上に定義される”dual grid”上でマーチング・キューブ法を実行する。八分木は上記のdual contouringでも用いられていたQEMが十分に小さくなるまで分割される。各八分木のノード内に発生させられた点をつないでいくと、dual gridが作られるので、各dual gridに対して通常のマーチング・キューブ法で三角形を発生させる。</p>
+
+<p>こうすることで、より細かな特徴を持つ場所に、より細かな三角形が発生するようになり、データ量を大幅に削減することができる。ただし、dual gridを発生させる際に八分木上のノード同士の隣接関係を調べる必要があるため、実装は少し複雑になる。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

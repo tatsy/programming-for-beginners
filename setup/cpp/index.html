@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      C++開発環境の設定 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/setup/cpp/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">C++開発環境の設定</h1>
+  <h2 id="c開発環境の選び方">C++開発環境の選び方</h2>
+
+<p>C言語、あるいはC++はPythonと異なり、コンパイルが必要な言語なので、最も原始的にはエディタ(Vim, Emacsなど)でソースコードを編集したら、ターミナルに移ってコンパイルをかける必要がある。</p>
+
+<p>自分で開発環境を設定していない限りはVimやEmacsにはC++のコンパイルエラーやソースコードのフォーマットを行う機能はないので、コンパイルしては間違いを直して、再度コンパイルするという作業の流れになりがちである。</p>
+
+<p>一方で、Windowsで言うところのVisual Studio (Visual Studio Codeではなく)を使えば、ソースコードを分析して、コンパイルが通るのか通らないのかを予め分析してくれたり、インクルードしようとするヘッダを補完してくれたりと、効率よくプログラム開発を行うための機能が多く備わっている。</p>
+
+<p>このようなコーディングをサポートする機能を多く備えた開発環境のことを統合開発環境 (Integrated Development Environment, IDE)などと呼びますが、一般的には立ち上がりが遅く、また簡単なプログラムを書くだけでも、管理されるファイルの数が多くなるなどのデメリットもある。</p>
+
+<p>最近はこのようなIDEと原始的なターミナル上の開発の中間的な存在としてVisual Studio CodeやAtomなど、最低限の機能は最初からついていて、拡張しようと思えば、比較的簡単にいろいろできる、というものも多くある。</p>
+
+<p>どのような開発環境を選ぶかは好みの問題もあるが、個人的には最初のうち、とくにヘッダファイルや関数、クラスの名前を覚えていないうちは統合開発環境に頼ってしまうのが良いと思っている。プログラムを書くのはあくまで何かを作りたいからであり、開発環境の設定にコストをかける(そして多くの場合かけがちになる、自戒を込めて…)のは本末転倒だと思うからだ。</p>
+
+<p>その意味で、WindowsならVisual Studioを、MacやLinuxであれば、JetBrain社が開発しているCLionを使うのが良いと思う。Visual Studioは誰でも、CLionも学生ならば無償で使えるので、ぜひ試してみてほしい。</p>
+
+<p><strong>Visual Studio Community</strong><br />
+<a href="https://visualstudio.microsoft.com/ja/vs/community/" target="_blank">https://visualstudio.microsoft.com/ja/vs/community/</a></p>
+
+<p><strong>CLion</strong><br />
+<a href="https://www.jetbrains.com/ja-jp/clion/" target="_blank">https://www.jetbrains.com/ja-jp/clion/</a></p>
+
+<h3 id="注意">注意</h3>
+
+<p>Visual Studioでは初期状態でC++のコンパイラがインストールされないので、インストール時に「C++によるデスクトップ開発」という項目にチェックを入れてください。</p>
+
+<h2 id="cmakeの利用">CMakeの利用</h2>
+
+<h3 id="cmakeとは">CMakeとは？</h3>
+
+<p>本資料では、開発環境による設定の差異を減らすためにCMakeというプロジェクト設定ツールを使って、ソースコードを管理している。CMakeはWindows, MacといったOSだけでなく、Visual StudioやCLionといった開発環境の違いも吸収する形で、統一的なソースコード管理が可能になる。</p>
+
+<p>プロジェクトの設定は <code class="highlighter-rouge">CMakeLists.txt</code> というテキストファイルを各フォルダに階層的に配置する形で行われる。CMakeの書き方は、それはそれで一つのプログラミング言語のようなものであり、一朝一夕に説明することは困難なので、詳細は割愛するが、一例として <code class="highlighter-rouge">main.cpp</code>, <code class="highlighter-rouge">module.h</code>, <code class="highlighter-rouge">module.cpp</code> という3つのファイルから構成される実行可能プログラム(名前を<code class="highlighter-rouge">myprogram</code>とする)を作る場合には、CMakeLists.txt内に以下の内容を記述する。</p>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">add_executable</span><span class="p">(</span>myprogram main.cpp module.h module.cpp<span class="p">)</span>
+</code></pre></div></div>
+
+<p>CMakeではVisual Studioと同様に1つの「プロジェクト」(VSの言葉ではソリューション)の中で、複数の実行可能ファイルやライブラリ (VSの言葉ではプロジェクト)を管理するため、上記に加え、プロジェクト名とCMakeのバージョンに関する記述を冒頭で記述する必要がある。</p>
+
+<div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cmake_minimum_required</span><span class="p">(</span>VERSION 2.8.0<span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span>MyProject<span class="p">)</span>
+</code></pre></div></div>
+
+<p>なお、この設定は冒頭に1どだけ行えばよく、複数の実行可能ファイルやライブラリを追加する場合には、<code class="highlighter-rouge">add_executable</code> や <code class="highlighter-rouge">add_library</code> の呼び出しだけを追加していけば良い。</p>
+
+<p>本資料では、すでにプロジェクトの設定と、ソースコードの編集に足るCMakeの記述をしてあるので、以下では、Windows, Macのそれぞれでの利用法について述べる。</p>
+
+<h3 id="cmakeのインストール">CMakeのインストール</h3>
+
+<p>CMakeはCUI環境とGUI環境の両方が用意されていて、なれないうちはGUI環境を使うのが良いかもしれない (特に自分でCMakeLists.txtを書く場合)。ただし、単に配布されているプログラムをビルドする目的で使うだけならターミナルを利用するほうが簡単なようにも思う。</p>
+
+<p>GUI環境をインストールすれば、CUI環境も同時にインストールが可能なので、今回はCMakeを開発するKitWareのウェブページからGUI版をインストールする。<strong>なお、MacやLinuxでCLionを開発環境に使う場合は、CLionと一緒にインストールが可能なので、以下のステップは省略して良い。</strong></p>
+
+<p><a href="https://cmake.org/download/" target="_blank">https://cmake.org/download/</a></p>
+
+<p>上記のページには<em>Source distributions</em>と<em>Binary distributions</em>があるが、よほど特殊な事情がない限りは<em>Binary distributions</em>で良いので、その中から自分の環境にあったものを選ぶ。特にWindowsならば<code class="highlighter-rouge">*.msi</code>、Macならば<code class="highlighter-rouge">*.dmg</code>が拡張子になっているものを選ぶと良い。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/cmake_downloads.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/cmake_downloads.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>Windowsの場合には、インストールの途中でCMakeの実行可能プログラムに環境変数のパスを通すかどうかを聞かれるので、パスを通すように設定しておく。</p>
+
+<h2 id="開発環境の設定-windows">開発環境の設定 (Windows)</h2>
+
+<h3 id="eigenのインストール">Eigenのインストール</h3>
+
+<p>本資料のプログラムでは外部ライブラリとして、線形代数の代表的なライブラリである<strong>Eigen</strong>を用いる。</p>
+
+<p><strong>Eigen</strong><br />
+<a href="https://eigen.tuxfamily.org/index.php">https://eigen.tuxfamily.org/index.php</a></p>
+
+<p>Eigenはヘッダファイルのみから成るライブラリで、特にコンパイルなどをする必要がないのが特徴である。上記のウェブページから適当なバージョンのものをダウンロードしたら、フォルダを展開して、これまた適当な場所に配置する。</p>
+
+<p>以後、C++の開発をメインに行おうと考えている場合には、Windowsではライブラリの場所がややわかりづらく成るので、例えば <code class="highlighter-rouge">C:/Libraries</code> のように自分で決めた場所にまとめてライブラリを置いておくなどすると、管理が円滑になる。</p>
+
+<h3 id="cmakeによるプロジェクト生成-visual-studio">CMakeによるプロジェクト生成 (Visual Studio)</h3>
+
+<p>Windows上でも、C++のコンパイラはいくつかの種類が選択可能なのだが、ここではVisual Studioを使う場合を前提として説明を進めていく。</p>
+
+<p>まずは、CMake GUIを開き、以下の画面右上にある「Browse Source …」を押下し、ダウンロードしてきたソースコードのルートディレクトリを選択する。その後、上記のボタンの下にある「Browse Binary …」を押下し、ルートディレクトリ内に <code class="highlighter-rouge">build</code> というディレクトリを作った上で、それを選択する。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/cmake_gui_default.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/cmake_gui_default.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>ディレクトリの指定が済んだら、今度は画面下になる「Configure」ボタンを押下する。すると、画面下のウィンドウに少し文字列が表示されたあとで、エラーとなって停止するはずだ。このエラーは<strong>Eigen</strong>というライブラリが見つからない、というエラーなので、Eigenをインストールした場所を <code class="highlighter-rouge">EIGEN3_DIR</code>に指定する (以下の画面では <code class="highlighter-rouge">C:/Libraries/Eigen33</code> にインストールされているものとした)。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/cmake_gui_eigen_error.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/cmake_gui_eigen_error.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>指定後、再度「Configure」ボタンを押すと、今度はエラーが出ずに、画面中央の赤くなっていた部分が白くなるはずである。これが確認できたら次は同じく画面下にある「Generate」ボタンを押す。するとVisual Studioのソリューションファイル (<code class="highlighter-rouge">*.sln</code>が拡張子)が生成されるので、ボタンの右にある「Open Project」ボタンを押すと、以下のように設定済みのVisual Studioソリューションが開く。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/visual_studio_launch.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/visual_studio_launch.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>画面が開いたら「ビルド」メニューの「ソリューションのビルド」を選び、プログラムが正しくコンパイルされることを確認する。以後は、画面左の「ソリューション・エクスプローラ」から自分が編集したいファイルを選んで、逐次編集とコンパイル、プログラムの実行をしていけば良い。</p>
+
+<h2 id="開発環境の設定-mac">開発環境の設定 (Mac)</h2>
+
+<h3 id="eigenのインストール-1">Eigenのインストール</h3>
+
+<p>Macの場合にはHomebrewを使うことで簡単にEigenのインストールができる。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>eigen3
+</code></pre></div></div>
+
+<p>すると <code class="highlighter-rouge">/usr/local/include/eigen3</code> にEigenのヘッダファイルがインストールされる。このパスは以下で使用するので覚えておくと良い。</p>
+
+<h3 id="cmakeによるプロジェクトの生成-clion">CMakeによるプロジェクトの生成 (CLion)</h3>
+
+<p>CLionを開くと、以下のような画面が開くので「New CMake Project from Sources」を選び、ダウンロードしたテンプレートファイルのルートディレクトリを指定する。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/clion_startup.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/clion_startup.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>すると、以下のような画面が開き、自動的にCMakeによるプロジェクトの生成が始まる。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/clion_default_window.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/clion_default_window.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>が、おそらく途中でいくつかのエラーが出ると思われるので、その設定を行う。CLionのメニューから「Preferences」を選び、「Build, Execution, Development」→「CMake」を選び、以下の用に設定を行う。具体的には「Build Type」を「Release」に変更しており、「CMake Options」に<code class="highlighter-rouge">-D WITH_OPENMP=OFF</code> を指定している。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/clion_preference.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/clion_preference.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>Macでも適切なコンパイラを選べばOpenMP(並列計算のためのライブラリ)を使用することは可能だが、最初からインストールされているApple Clangでは現状OpenMPがサポートされていないので、OpenMPの機能を切ってコンパイルする。</p>
+
+<p>上記の設定後「OK」ボタンを押下すると「Preferences」の画面が閉じて、再びCMakeが走り始める。無事、CMakeが走り終えたら、「Build」メニューにある「Build Project」を押して、正しくコンパイルが通ることを確認する。</p>
+
+<h3 id="cmakeによるプロジェクトの生成-ターミナル">CMakeによるプロジェクトの生成 (ターミナル)</h3>
+
+<p>ターミナルを使う方法は、その扱いに慣れていれば、上記のGUIやIDEを使う方法よりシンプルなので、特にライブラリのビルドだけができればよく、ソースコードの書き換えなどが必要ない場合に重宝する。</p>
+
+<p>最も基本的には、ソースコードのダウンロード後、ルート・ディレクトリでターミナル環境を開き、以下のコマンドを打ち込めば良い。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Windowsの場合
+mkdir build &amp;&amp; cd build
+cmake .. -D EIGEN3_DIR="C:/Libraries/Eigen33/" -G "Visual Studio 16 2019"
+cmake --build . --config Release --parallel 4
+
+# Mac, Linuxの場合
+mkdir build &amp;&amp; cd build
+cmake .. -D EIGEN3_DIR=/usr/local/include/eigen3/
+make -j4
+</code></pre></div></div>
+
+<p>これらのコマンドはいずれの場合も、上から、プロジェクトを生成するディレクトリの作成・移動、コンパイラを指定してプロジェクトを生成 (Mac, Linuxの場合は省略可能)、並列計算でソースコードをコンパイル (4つのスレッドを使う)、という処理を表している。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

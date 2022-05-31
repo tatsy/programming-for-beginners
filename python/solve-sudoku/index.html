@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      数独を解く &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/python/solve-sudoku/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">数独を解く</h1>
+  <p>ご存知の通り、数独というのは9x9のマスの中に1-9の数字を一定のルールのもとで入れていくパズルである。このルールとはすなわち、</p>
+
+<ul>
+  <li>同じ行に同じ数字が存在しない</li>
+  <li>同じ列に同じ数字が存在しない</li>
+  <li>3x3の9領域に同じ数字が存在しない</li>
+</ul>
+
+<p>の3つである。数独の解き方にはいろいろなやり方があるが、9x9の問題であれば、バックトラック法と呼ばれる最も簡単なアルゴリズムでも十分高速に解くことができる(一般的なパズル本の最難問が1秒以下で解ける)。</p>
+
+<h2 id="問題の配列化">問題の配列化</h2>
+
+<p>今回は数独の問題が以下の形式のテキストとして与えられることとする。Pythonは複数行のテキストを以下のように定義することができる。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+-35-9--48
+--9--8--3
+-4-6-5--1
+----74---
+-2-----6-
+---15----
+8--9-2-7-
+9--5--2--
+61--4-53-
+'''</span>
+</code></pre></div></div>
+
+<p>これを扱いやすくするためにNumPyの配列に直してみる。</p>
+
+<p>まずはテキストを行ごとの配列に変換する。行は `\n’ という文字で区切られているので、これで文字列を分割する。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="n">problem</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>ただし、このやり方だと空行が入る可能性があるので、以下のリスト内包表記を用いて取り除く。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">problem</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s">''</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>すると<code class="highlighter-rouge">problem</code>の長さは9となるはずだ。各行を文字ごとに分割するには、同じようにリスト内包表記を用いると簡単だ。以下は二重ループを用いたリスト内包表記の例だ。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">problem</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>すると今度は<code class="highlighter-rouge">problem</code>が9x9の二次元配列になる。あとは各文字を数字に置き換える。まだ埋まっていないセルを表す’-‘を0に置き換えたいので、以下のようにハッシュ(Pythonの用語では<code class="highlighter-rouge">dict</code>)を使うと良い。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">numbers</span> <span class="o">=</span> <span class="p">{</span><span class="s">'-'</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="n">numbers</span><span class="p">.</span><span class="n">update</span><span class="p">({</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">):</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)})</span>
+<span class="k">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>この出力は以下のようになる。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="s">'-'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'1'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'2'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">'3'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">'4'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">'5'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">'6'</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s">'7'</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s">'8'</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">'9'</span><span class="p">:</span> <span class="mi">9</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>あとはこれを使って文字を数字に置き換える。再び二重ループのリスト内包表記で、</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="p">[</span><span class="n">numbers</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">problem</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>とすると、先ほどまでの文字が数字に置き換わるはずだ。なお、ここまで繰り返しリスト内包表記も用いたが、これらをまとめて1行で書くこともできる。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="p">[</span><span class="n">numbers</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">problem</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s">''</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="使用済みの数字を調べる">使用済みの数字を調べる</h2>
+
+<p>問題が数字の配列として表せたところで、使用済みの数字を調べる方法を見ていく。今 <code class="highlighter-rouge">(i, j)</code> にある数字に何が使えるのかを調べたいとする。</p>
+
+<p>当然ながら<code class="highlighter-rouge">i</code>行目にある数字は <code class="highlighter-rouge">problem[i, :]</code> という配列で、<code class="highlighter-rouge">j</code>列目にある数字は<code class="highlighter-rouge">problem[:, j]</code>という配列で表せる。また3x3のブロックについては、ブロックの右上の座標が<code class="highlighter-rouge">(3 * (i // 3), 3 * (j // 3))</code>と表せることに注目する (Python 3.xでは<code class="highlighter-rouge">//</code>は整数の割り算を表す)。これを用いれば、以下のようにしてブロック内の数字が得られる。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">k</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">//</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">l</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">j</span> <span class="o">//</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">blk_nums</span> <span class="o">=</span> <span class="n">problem</span><span class="p">[</span><span class="n">k</span><span class="p">:</span><span class="n">k</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span><span class="n">l</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>これらの配列の中では0が重複して現れるので、1つの数字が1回ずつしか現れないように<code class="highlighter-rouge">set</code>を用いる。<code class="highlighter-rouge">set</code>は引数に一次元配列しか取らないので、NumPyのtolist関数を使って、上記のNumPyの配列をPythonの1次元配列に置き換えておく。なお<code class="highlighter-rouge">blk_nums</code>は二次元配列であることに注意すること。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">used_nums</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">row_nums</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="n">col_nums</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="n">blk_nums</span><span class="p">.</span><span class="n">flatten</span><span class="p">().</span><span class="n">tolist</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>まだ使える数字は1-9の数字の中で、この<code class="highlighter-rouge">set</code>にあらわれていない数字なので、集合演算の関数 <code class="highlighter-rouge">difference</code> を使って0-9の数字の集合と、使用済みの数字の集合の差分を取る。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nums</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]).</span><span class="n">difference</span><span class="p">(</span><span class="n">used_nums</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>例として、最初に示した問題の<code class="highlighter-rouge">(0, 0)</code>成分に対して上記のコードを実行すると <code class="highlighter-rouge">{1, 2, 7}</code> という集合が得られるはずである。</p>
+
+<h2 id="バックトラック法">バックトラック法</h2>
+
+<p>バックトラック法について考える前に、数独をコンピュータに解かせる最も単純な方法を考えてみよう。上記の使用済みの数字を調べる方法を少し変更すれば、各行、各列、各ブロックで数字が正しく1度だけ使われているかどうかを調べることができそうだ。とすれば、全ての空きマスに適当に数字を入れて、その結果が正しいかどうかを順に試せば良さそうだ。</p>
+
+<p>ただ、当然ながらこれでは計算に時間がかかりすぎる。各マスに入れられる数字の候補は9通りでマスが81マスあるので、最悪の場合には$9^{81}$個の候補について調べる必要がある。</p>
+
+<p>一方で、実際にはいくつかのマスにはすでに数字が入っており、上記のように何も考えずに全てのパターンを試すのは非常に効率が悪いことが分かるだろう。そこで、可能な候補についてだけ、しらみ潰しに調べることを考える。これを実現するのがバックトラック法だ。</p>
+
+<p>これでも効率がとても良いとは言えないが、実際には最初の方の数字がある程度決まると、後の方の数字は急速に候補が少なくなるため、実用的にはそれなりに高速に動作する。少なくとも9x9の問題であれば、十分に速い(16x16の問題になるとそうはいかない！)</p>
+
+<h3 id="深さ優先探索">深さ優先探索</h3>
+
+<p>バックトラック法は深さ優先探索の一種で、数独の例で言えば、候補となる数字を仮に入れる操作をできる限り繰り返し、もし最後のマスまで数字が入れば成功、途中で数字が入れられなくなったら失敗として違う候補を試す。</p>
+
+<p>深さ優先探索の実装方法は再帰関数を使う方法とFILO (first in last out, 最初に入れたものが最後に取り出されるということ) データ構造 (一般にはスタックと呼ぶ) を用いる方法の2つがある。今回はより単純な再帰関数を使う方法で実装をすすめる。</p>
+
+<p>再帰関数を使う場合、ある関数の中では、</p>
+
+<ol>
+  <li>左上から0が入っているマスを探す
+    <ul>
+      <li>もし0が入っているマスがなければ成功</li>
+    </ul>
+  </li>
+  <li>0が入っているマスを見つけたら、
+    <ul>
+      <li>上記の方法で、候補の数字を調べる</li>
+      <li>候補の数字を仮に入れて、関数を再帰呼び出しする</li>
+      <li>試行が失敗したら、仮に入れた数字を0に戻し、次の候補を入れて、再度再帰呼び出し (以後繰り返し)</li>
+    </ul>
+  </li>
+</ol>
+
+<p>という処理を行う。</p>
+
+<p>以下にスケルトン・プログラムを用意したので、これを参考にプログラムを作って見てほしい。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sudoku_solve</span><span class="p">(</span><span class="n">problem</span><span class="p">):</span>
+    <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">problem</span><span class="p">.</span><span class="n">shape</span>
+    <span class="n">all_nums</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">problem</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># 候補の数字を調べる (以下のnumsに代入する)
+</span>                <span class="n">nums</span> <span class="o">=</span> <span class="bp">None</span>
+
+                <span class="c1"># 候補の数字を仮入れして再帰呼び出し
+</span>                <span class="n">success</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+                    <span class="c1"># 数字を代入
+</span>                    <span class="n">problem</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
+                    <span class="k">if</span> <span class="n">sudoku_solve</span><span class="p">(</span><span class="n">problem</span><span class="p">):</span>
+                        <span class="n">success</span> <span class="o">=</span> <span class="bp">True</span>
+                        <span class="k">break</span>
+
+                    <span class="c1"># 失敗したら元に戻す
+</span>                    <span class="n">problem</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">False</span>
+        
+    <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<h3 id="処理の効率化">処理の効率化</h3>
+
+<p>上記の方法でも、最初に示した数独の問題であれば数十ミリ秒で解くことができる。だが、次の問題はどうだろう？</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># https://www.j-cast.com/premium/2018/10/19341452.html?p=all
+</span><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+---------
+3--2-9--7
+94--1--82
+-5-6-2-3-
+--63-74--
+---------
+---------
+-82-3-59-
+1--9-4--6
+'''</span>
+</code></pre></div></div>
+
+<p>この問題だと、おそらく1秒以上は時間がかかるはずだ。実は、上記のコードは次の0のマスを探すまでの処理の効率が非常に悪い。0のマスは左上から右下に向かって探しているのだから、今新しく<code class="highlighter-rouge">(i, j)</code>というマスに数字を入れたら <code class="highlighter-rouge">(i, j+1)</code> 以降の数字だけを調べれば良いのである。</p>
+
+<p>答えは示さないので、上記のプログラムを更新したマスより後のものからだけ0を探すように更新しよう。すると、高難易度の問題でも1秒以内には解けるようになる(コンピュータの速さにもよる)。</p>
+
+<p>その他にも、候補の数が少ないものから埋めていくなどの効率化が考えられる。余裕があれば試してみよう。確認用に難易度の異なる4問を示しておく。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># レベル1
+</span><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+-35-9--48
+--9--8--3
+-4-6-5--1
+----74---
+-2-----6-
+---15----
+8--9-2-7-
+9--5--2--
+61--4-53-
+'''</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># レベル2
+# https://si-coding.net/sudoku10.html
+</span><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+------1-4
+4---78---
+-3------2
+5--4-7-3-
+2------5-
+9---264--
+-27------
+--56----7
+-6--13---
+'''</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># レベル3
+# https://www.j-cast.com/premium/2018/10/19341452.html?p=all
+</span><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+---------
+3--2-9--7
+94--1--82
+-5-6-2-3-
+--63-74--
+---------
+---------
+-82-3-59-
+1--9-4--6
+'''</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 世界一難しい？
+# https://www.conceptispuzzles.com/ja/index.aspx?uri=info/article/424
+</span><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+8--------
+--36-----
+-7--9-2--
+-5---7---
+----457--
+---1---3-
+--1----68
+--85---1-
+-9----4--
+'''</span>
+</code></pre></div></div>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

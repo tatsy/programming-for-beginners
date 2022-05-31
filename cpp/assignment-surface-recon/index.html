@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      課題: 点群データからのメッシュ復元 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/cpp/assignment-surface-recon/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">課題: 点群データからのメッシュ復元</h1>
+  <table class="images">
+<tr>
+  <td style="text-align: center; width: 50%;"><p><strong>入力点群</strong></p>
+</td>
+  <td style="text-align: center; width: 50%;"><p><strong>復元メッシュ</strong></p>
+</td>
+</tr>
+<tr>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/surf_recon/buddha_point.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/surf_recon/buddha_point.jpg" alt="" style="width: 100%;" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/surf_recon/buddha_recon.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/surf_recon/buddha_recon.jpg" alt="" style="width: 100%;" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+</tr>
+</table>
+
+<h2 id="課題1-点群データからのメッシュ復元">課題1: 点群データからのメッシュ復元</h2>
+
+<p>これまでに解説した内容を元にテンプレート・プログラム(トップページからダウンロードする)の内容を改変して、点群データからメッシュを復元してみよう。</p>
+
+<p>変更するべき内容はいずれも<code class="highlighter-rouge">surface_recon.cpp</code>のファイル内にあり、それぞれは以下の通りである。</p>
+
+<p>なお、前回同様、これらの箇所には最初の時点では<code class="highlighter-rouge">NOT_IMPL_ERROR()</code>と書かれており、この状態で実行すると、実装されていない箇所がエラーとともに表示されるようになっている。</p>
+
+<h3 id="入力点群の位置の正規化--オフセット点の生成">入力点群の位置の正規化 + オフセット点の生成</h3>
+
+<p>今回用いるcompact supportのRBFでは、実際のサポートの大きさをどの程度にするかによって、復元されるメッシュが大きく変化する。そのため、任意の大きさの入力点群に対して、適切なサポートのサイズを決定する必要がある。</p>
+
+<p>通常は、点群を格納する木構造などを作成して、点と点の間の平均距離の定数倍などをサポート半径に用いるのだが、今回の実装では簡単のために、点群の位置を$[-1, 1]^3$の領域に入るように正規化しておき、そのスケールに対して定数でサポート半径を与える。</p>
+
+<p>点群を含むバウンディング・ボックスの計算については、プログラム中に含んであるので、この情報を元に点群の位置を正規化すること。この位置の正規化は法線方向へ点をオフセットするときにも役に立つ。</p>
+
+<p>位置の正規化が終了したら、実際にオフセット点を生成する。ここでもバウンディング・ボックスの大きさに対して一定の割合でオフセット幅を決定する。ただし、実際のオフセット幅を$l$としたなら、オフセットされた点$\mathbf{x}$と、それに対する最近傍点$\mathbf{c}$ならびにその法線$\mathbf{n}$を用いて、陰関数の参照値を$d_i = \mathbf{n} \cdot (\mathbf{x} - \mathbf{c}) / l$のように計算すること。</p>
+
+<p>k-d木から最近傍点を取ってくる際には、法線の情報が取り出せるように、頂点の位置と入力点群の配列内での番号を持った<code class="highlighter-rouge">Point</code>型を定義してあるので、適宜、これをプログラムの中で、用いると良い。</p>
+
+<p>なお、テンプレートプログラムの中では<code class="highlighter-rouge">xyz</code>が頂点位置、<code class="highlighter-rouge">vals</code>が陰関数の参照値を格納する配列 (<code class="highlighter-rouge">std::vector</code>型)としてある。</p>
+
+<h3 id="rbf補間のための線形問題を解く">RBF補間のための線形問題を解く</h3>
+
+<p>Wendland関数を用いて、$\phi$の値をオフセット点を含む、頂点の集合に対して評価して、線形問題のための疎行列を作成する。</p>
+
+<p>この際、最も大きなデータでは入力点群の数が50000点程度になるため、全てのペアに対してRBFを評価してしまうと、計算時間が大きくなりすぎてしまう。</p>
+
+<p>実際にはWendland関数はcompact supportなので、ほとんどのペアに対しては0を取るはずである。そこで、k-d木を用いてRBFのサポート半径内に入っている頂点だけを取ってきて、疎行列の要素を計算するようにする。</p>
+
+<p>こうすることで、サポート半径の大きさにはよるものの、大幅に疎行列の構築にかかる計算時間を短縮することができる。</p>
+
+<p>線形問題に対するソルバーとして、テンプレートプログラム内ではBiCGSTAB法を用いている。今回の実装は入力点群が多く、行列も大規模になるため、計算時間を反復回数によってコントロールできるように、反復法を用いている。</p>
+
+<p>とはいうものの、ある程度速い計算機で、RBFのサポート半径を絞ってあれば、LDLT法などの直接法であっても十分に速く動作する。実際に試してみてほしい。</p>
+
+<h3 id="マーチングキューブ法による曲面の抽出">マーチング・キューブ法による曲面の抽出</h3>
+
+<p>本来であれば、マーチング・キューブ法を行う各グリッドのコーナー点に対して、適宜、陰関数の値を評価するのが(メモリ消費量の観点から)理想的ではあるが、今回の実装では、前回作成したマーチング・キューブ法のプログラムを使い回すために、一度ボリュームデータに陰関数の値を格納しよう。</p>
+
+<p>各コーナー点における陰関数の値を評価する際、安直にはオフセット点を含む全ての入力点群を中心としたRBFの値を評価する必要がある。</p>
+
+<p>繰り返しになるが、今回はcompact supportのWendland関数をRBFとして用いているので、各コーナー点に対してk-d木を用いてサポート半径内に収まる近傍点を取り出し、その点に対してだけRBFの値を評価すれば良い。</p>
+
+<p>ここまで、k-d木を用いて、近傍点だけに適切に評価を行うよう実装できると、最大の50000点を含むデータ (=オフセット点を入れると150000点になる)に対しても、5分はかからずに曲面を抽出できるだろう。</p>
+
+<h2 id="課題2-rbf関数の変更とその効果について調査">課題2: RBF関数の変更とその効果について調査</h2>
+
+<p>今回の実装ではコンパクトサポートのC1級連続Wendland関数を用いた。これをより高次のWendland関数の他、ガウス関数や薄膜スプライン関数などに変更すると、メッシュの復元結果はどのように変化するかを調べよう。ただし、ガウス関数や薄膜スプライン関数はglobal supportなので、k-d木を用いた実装を変更する必要がある。</p>
+
+<p>また、今回の実装ではRBFに、さらに1次の多項式項をつけて曲面を補間したが、これを2次の多項式へと拡張し、$x^2, y^2, z^2, xy, yz, zx$の項を追加すると、メッシュの復元結果はどう変化するかを調べよう。この際、1次の多項式を用いるものと2次の多項式を用いるものがコマンドライン引数によって切り替えられるようにプログラムを工夫すると良い。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

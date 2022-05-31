@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      RBFによる関数の補間 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/cpp/radial-basis-function/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">RBFによる関数の補間</h1>
+  <p>RBF (= radial basis function)とは、一般には、とある点との距離だけによって値が決まる関数のことを指し、代表的なものとしてはガウス関数などがある。</p>
+
+<p>例えば、RBFの中心サンプル点を$\mathbf{c}$としたとすれば、点$\mathbf{x}$におけるRBF $\phi$の値は、$r = | \mathbf{c} - \mathbf{x} |$の関数として表される。</p>
+
+<h2 id="rbfによる関数の近似">RBFによる関数の近似</h2>
+
+<p>一方で、何らかの関数をRBFの集まりによって補間しようとする場合には、これだけでは問題が起こる可能性がある。例えば、$N$個の点$\mathbf{x}_i$ ($i = 0, 1, \ldots, N-1$)に対して、補間したい関数の値$y_i$が分かっているとしよう。</p>
+
+<p>この場合、補間された関数$f(\mathbf{x})$は未知の重み係数$w_i$を用いて次のように表せる。</p>
+
+\[f(\mathbf{x}) = \sum_{i=0}^{N-1} w_i \phi(\| \mathbf{x} - \mathbf{x}_i \|)\]
+
+<p>したがって、入力点群 ${ \mathbf{x}_i }$と、それらに対する関数の参照値 ${ d_i }$が与えられているなら、各$i$について、$f(\mathbf{x}_i) = d_i$が成り立てば良いことになる。</p>
+
+<p>この等式を全ての$i$について考えると、行列形式として、以下のように書き直すことができる。</p>
+
+\[\mathbf{A} \mathbf{w} = \mathbf{d}\]
+
+<p>ただし、</p>
+
+\[A_{ij} = \phi(\| x_i - x_j\|)\]
+
+<p>であり、$\mathbf{d}$は関数の参照値$d_i$を並べたベクトルである。従って、この補間が上手く計算できるためには$\mathbf{A}$が正則行列である必要があることが分かる。しかしながら、実際にはRBF関数を用いて計算された任意の行列が正則行列となるとは限らない。</p>
+
+<p>ちなみに、RBFの性質を議論する上では上記の行列$\mathbf{A}$が正定値行列であるかどうかを議論することが多いが、例えばシグモイドカーネルと呼ばれる$\tanh(a \mathbf{x}_i^\top \mathbf{x}_j + b))$は正定値ではない。</p>
+
+<p>このような場合に、上手く解を見つける方法として、RBFに多項式項を追加した以下の式が良く用いられる。</p>
+
+\[\psi(\mathbf{x}) = p(\mathbf{x}) + \phi(\| x_i - x \|)\]
+
+<p>ここで$p(\mathbf{x})$は$\mathbf{x}$の要素に対する多項式で、三次元ベクトル$\mathbf{x} = (x, y, z)$の場合で言えば、</p>
+
+\[p(\mathbf{x}) = \lambda_x x + \lambda_y y + \lambda_z z + \lambda\]
+
+<p>などがそれに対応する。</p>
+
+<p>この場合、補間後の関数を構成するパラメータが$\lambda_x, \lambda_y, \lambda_z, \lambda$だけ増加するので、その自由度の増加分を打ち消すために、以下のような条件を課す。</p>
+
+\[\sum_{i=0}^{N-1} \lambda_x x_i = \sum_{i=0}^{N-1} \lambda_y y_i = \sum_{i=0}^{N-1} \lambda_z z_i = \sum_{i=0}^{N-1} \lambda = 0.\]
+
+<p>これはより高次の多項式を用いる場合でも同様で、とある多項式が単項式$p_l(\mathbf{x})$の線形和として</p>
+
+\[p(\mathbf{x}) = \sum_{l=0}^{M} a_l p_l(\mathbf{x})\]
+
+<p>のように表されるなら、その自由度の増分を打ち消すために、</p>
+
+\[\sum_{i=0}^{N-1} a_l p_l(\mathbf{x}) = 0\]
+
+<p>という条件を課す。</p>
+
+<blockquote>
+  <p>参考: Schaback 2007, “A Practical Guide to Radial Basis Functions” <br />
+<a href="https://num.math.uni-goettingen.de/schaback/teaching/sc.pdf" target="_blank">https://num.math.uni-goettingen.de/schaback/teaching/sc.pdf</a></p>
+</blockquote>
+
+<h2 id="rbf関数による陰関数曲面の近似">RBF関数による陰関数曲面の近似</h2>
+
+<p>三次元空間上で定義された関数$f(\mathbf{x})$が0を取る場所で曲面が定義される時、この関数$f$を陰関数と呼び、このようにして得られる曲面を<strong>陰関数曲面</strong>と呼ぶ。ちなみに$z = f(x, y)$のような形で変数を整理して書く形を<strong>陽関数</strong>呼ぶ。</p>
+
+<p>点群から曲面を復元する場合には、入力頂点とその頂点に対する法線の情報から、曲面を表す陰関数$f$を求める。初期の研究では、この$f$をRBF補間により定めるものが多く発表され、上記の議論に基づいたものとしてはCarrらの以下の論文が挙げられる。</p>
+
+<ul>
+  <li>Carr et al. 2001, “Reconstruction and Representation of 3D Objects with Radial Basis Functions”</li>
+</ul>
+
+<p>この手法はRBFとして関数の台(support, 関数が0ではない値をとる定義域の部分集合のこと)が無限に広がるRBF (global support RBF)としてPolyharmonic RBFという関数が用いられている。</p>
+
+<p>この関数は次数が奇数か偶数かによって定義が異なるが、それぞれは以下のように定義される。</p>
+
+\[\phi(r) = \begin{cases}
+|r|^k &amp; k \text{ is even} \\
+|r|^{k-1} \log |k| &amp; k \text{ is odd}
+\end{cases}\]
+
+<p>このようなglobal supportの関数は点の補間能力に優れているとされ、点の密度がまばらで、穴などが見られる場合に有効に働くことが知られている。</p>
+
+<p>一方で、有限の大きさの台を取るRBFをcompact support RBFと呼ぶ。メッシュの復元においては、以下のWendland関数がよく用いられる。</p>
+
+\[\phi(r) = (1 - r)_{+}^4 (4r + 1)\]
+
+<p>ただし $(1 - r)_+$は$\text{max}(0, 1 - r)$と等価である。</p>
+
+<p>上記のWendland関数は半径が1の球を台とする$C^2$級連続の関数であるが、より高次の連続性を持つWendland関数もあり、例えば$C^4$級連続のWendland関数は次のように表される (連続性は$r$そのものについてではなく$r = \sqrt{x^2 + y^2 + z^2}$の$x, y, z$についてであることに注意する) 。</p>
+
+\[\phi(r) = (1 - r)_{+}^6 (35 r^2 + 18r + 3)\]
+
+<p>より詳しくは、以下の論文を参考にすると良い。</p>
+
+<ul>
+  <li>Morse et al. 2001, “Interpolating Implicit Surfaces From Scattered Surface Data Using Compactly Supported Radial Basis Functions”</li>
+</ul>
+
+<p>Wendland関数のようなcompact supportの関数は上記の線形問題に現れる係数行列$\mathbf{A}$が、より疎な行列となるため、計算の効率に優れる。今回は計算時間をできるだけ下げる目的でcompact supportのRBFを用いる。</p>
+
+<p>ここまでの議論を踏まえ、上記の多項式項を含めた線形問題を定義すると、以下のようになる。</p>
+
+\[\begin{pmatrix}
+\mathbf{A} &amp; \mathbf{P} \\
+\mathbf{P}^\top &amp; \mathbf{0}
+\end{pmatrix}
+
+\begin{pmatrix}
+\mathbf{w} \\
+\boldsymbol\lambda
+\end{pmatrix}
+
+=
+
+\begin{pmatrix}
+\mathbf{d} \\
+\mathbf{0}
+\end{pmatrix}\]
+
+<p>ここで$\mathbf{P} \in \mathbf{R}^{N \times 4}$は各列が入力点群のx, y, z座標ならびに1となるような行列である。</p>
+
+\[\mathbf{P} = \begin{pmatrix}
+x_0 &amp; y_0 &amp; z_0 &amp; 1 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+x_{N-1} &amp; y_{N-1} &amp; z_{N-1} &amp; 1
+\end{pmatrix}\]
+
+<p>上記の線形問題では係数行列が対称行列となっているので、共役勾配法やLDLT法(いずれも、半正定値行列に対して利用可能)を使うことで、効率的に解を求めることができるだろう。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

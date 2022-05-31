@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      Gitの設定 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/setup/git/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">Gitの設定</h1>
+  <h2 id="なぜgitを使うのか">なぜGitを使うのか？</h2>
+
+<p>勉強か研究かに関わらず、Gitなどのバージョン管理システムを使うことを強く勧める。今の時代、<em>プログラムを日付ごとにコピーするのは完全に時代遅れだ</em>。</p>
+
+<p>しかし、Gitは大変便利である反面、初心者には敷居が高いということは理解できる。ともかく、最初は<code class="highlighter-rouge">commit</code>と<code class="highlighter-rouge">push</code>だけを覚えよう。コミットコメントなどは丁寧に書くに越したことはないが、<em>兎にも角にも「記録を取っておく」ということが一番重要である</em>。</p>
+
+<p>Gitで変更履歴を残しておけば、プログラムが動かなくなった時に、履歴を遡って、どこからエラーが発生したかを調べられるだけでなく、エラーの起こった日がわかったら、その時から今までの変更履歴を一覧で見ることもできる。</p>
+
+<p>さらに使いこなせば、自動でテストをしたりすることもできる。実際、このページはGitHub Actionsという仕組みを利用していて、コミットがリモートサーバーにプッシュされると自動的にサーバー上のWebページを更新する仕組みになっている。</p>
+
+<p>話がそれたがGitやGitHubは絶対使おう。情報系でありながらバージョン管理をしないのは今の時代恥ずかしい。<strong><em>もう一度言う、絶対に使おう。というか使わないことは許されない。絶対に絶対に絶対に使おう。</em></strong></p>
+
+<h2 id="githubアカウントの作成">GitHubアカウントの作成</h2>
+
+<p>Git自体は自前のサーバー等にインストールしても使えるが、今は<a href="https://github.com/" target="_blank">GitHub</a>や<a href="https://bitbucket.org/" target="_blank">Bitbucket</a>などのSaaS (Software as a Service)が充実しているので、わざわざ自分でサーバーを立てる必要はない。ありがたく、このどちらかを使おう。以下はGitHubを使う前提で話を進める。</p>
+
+<p>アカウントを作るのはとても簡単で、以下のステップに従えば10分程度でアカウントが作れる。</p>
+
+<ul>
+  <li><a href="https://github.com/" target="_blank">GitHub</a> にアクセスしてアカウントを作る</li>
+  <li>学生の場合にはアカデミック・ライセンスでアカウントが作れる (オプションだが設定しておく方が良い)</li>
+  <li>Windowsの人は<a href="https://gitforwindows.org/" target="_blank">Git for Windows</a> をインストール</li>
+</ul>
+
+<p>GitHubはオープンソース開発を支援する目的で運営されているウェブサービスなので、初期は自分以外がアクセスできない「プライベート・リポジトリ」は有料アカウントでないと作れなかったが、現在は無料アカウントであっても無数にプライベート・リポジトリが作成可能である。</p>
+
+<h2 id="gitクライアント">Gitクライアント</h2>
+
+<p>ローカル環境でGitを操作する際に、何で操作をするかという点についてだが、Windowsの場合にはGit for WindowsについてくるGit Bashで、Macの場合にはターミナルを使って操作をするのが最も原始的なやり方だろう。ただし、最初はコマンドを覚えるのも大変だと思うのでGUI環境(Gitクライアント)からGitを使うものを使用するのも良いと思う。以下に一例を上げておく。</p>
+
+<ul>
+  <li>TortoiseGit (Windows)
+    <ul>
+      <li>右クリックのメニューからコマンドを選べる。コマンドで操作するのに近いので、これで慣れておくとコマンドへの以降がスムーズだと思われる。</li>
+      <li>URL: <a href="https://tortoisegit.org/" target="_blank">https://tortoisegit.org/</a></li>
+    </ul>
+  </li>
+  <li>GitHub Desktop (Window, Mac)
+    <ul>
+      <li>GitHubが公式で提供しているGitクライアント。驚くことにタブレットでも使える。GitHubを使う前提なら、これが使いやすいかも。</li>
+      <li>URL: <a href="https://desktop.github.com/" target="_blank">https://desktop.github.com/</a></li>
+    </ul>
+  </li>
+  <li>SourceTree (Windows, Mac)
+    <ul>
+      <li>こちらはBitbucketを運営するAtlassianが提供しているGitクライアント。</li>
+      <li>URL: <a href="https://www.sourcetreeapp.com/" target="_blank">https://www.sourcetreeapp.com/</a></li>
+    </ul>
+  </li>
+  <li>GitKraken (Windows, Mac, Linux)
+    <ul>
+      <li>こちらはLinuxでも使用可能なオープンソースのGitクライアント。機能はGitHub DesktopやSourceTreeとほとんど変わらない。見た目が奇抜。</li>
+      <li>URL: <a href="https://www.gitkraken.com/" target="_blank">https://www.gitkraken.com/</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="gitの基本のき">Gitの基本の「き」</h2>
+
+<p>使い方についてはWeb上の記事が豊富にあるので、それらを参考にするのがいい。ここでは非常に簡単にGitリポジトリの作成から、コミットまでの流れを見ていく。</p>
+
+<h3 id="gitリポジトリの作成">Gitリポジトリの作成</h3>
+
+<p>Gitリポジトリを用意する方法は、他の人が公開しているプログラムを「クローン」してくる方法と、自分で一からリポジトリを作る方法の2通りがある。ここでは、少し標準的なやり方からは外れるかもしれないが、覚えやすいやり方としてGitHub上でリポジトリを作ってクローンする方法を説明する。</p>
+
+<p>まずGitHubにアクセスして、適当なリポジトリを作成しよう。ここでは、リポジトリの名前を<code class="highlighter-rouge">my-first-repo</code>とした。ここで「Add a README.md file」にチェックを入れておくと、リポジトリがファイルを含めて初期化される (本来このチェックはオプションだが、以下のやり方に従う場合はチェックが必要)。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/create_git_repo.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/create_git_repo.jpg" alt="" style="width: 50%;" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>リポジトリが作成できたら、ローカルでターミナルを使い、リポジトリをクローンする。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git clone https://github.com/[Your Account]/my-first-repo.git
+</code></pre></div></div>
+
+<p>これでリポジトリの作成は完了である。</p>
+
+<h3 id="gitリポジトリの設定">Gitリポジトリの設定</h3>
+
+<p>このあと、実際にリポジトリ上で作業を行っていくが、まず最初にリポジトリ上でユーザの設定を行おう。まずは<code class="highlighter-rouge">cd</code>コマンドでリポジトリのフォルダに入る。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd </span>my-first-repo
+</code></pre></div></div>
+
+<p>リポジトリにコミット(更新の記録)を行うためには、ユーザの名前とメールアドレスを設定する必要がある。例えば以下のような形だ。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git config <span class="nt">--local</span> user.name <span class="s2">"Tatsuya Yatagawa"</span>
+<span class="nv">$ </span>git config <span class="nt">--local</span> user.email <span class="s2">"tatsy.mail@gmail.com"</span>
+</code></pre></div></div>
+
+<p>上記のコマンドではオプションに<code class="highlighter-rouge">--local</code>を渡しているが、これを指定すると、このフォルダに含まれるリポジトリにだけ設定が反映される。自分のPC全体に設定を反映したい場合には上記の<code class="highlighter-rouge">--local</code>を<code class="highlighter-rouge">--global</code>に変更すれば良い。なお、ここに指定するメールアドレスは何でも問題ないが、このアドレスをGitHubに登録したときに使用したメールアドレスにしておくと、自分のコミットの数などがGitHubに記録されてやる気が出る。</p>
+
+<p>この他、リポジトリの設定項目には</p>
+
+<ul>
+  <li>コミットコメントを書くときのエディタを何にするか？</li>
+  <li>ソースコードの改行コードを自動で変換するか？</li>
+  <li><code class="highlighter-rouge">git status</code>を<code class="highlighter-rouge">git st</code>にするなど、エイリアスの設定</li>
+  <li>コミットの差分を色付きで表示するか？</li>
+</ul>
+
+<p>などが設定できる。設定項目は非常に多いが、よく探してみると便利な機能が見つかるかもしれない (<a href="https://git-scm.com/docs/git-config" target="_blank">参考</a>)。</p>
+
+<p>また、複数の環境でこのような設定を共有したい場合には<code class="highlighter-rouge">~/.gitconfig</code>ファイルをコピーすれば良い。ちなみに著者の<code class="highlighter-rouge">.gitconfig</code>は以下のように設定している。</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[user]</span>
+	<span class="py">name</span> <span class="p">=</span> <span class="s">Tatsuya Yatagawa</span>
+	<span class="py">email</span> <span class="p">=</span> <span class="s">tatsy.mail@gmail.com</span>
+<span class="nn">[core]</span>
+	<span class="py">autocrlf</span> <span class="p">=</span> <span class="s">input</span>
+	<span class="py">editor</span> <span class="p">=</span> <span class="s">nvim</span>
+<span class="nn">[color]</span>
+	<span class="py">ui</span> <span class="p">=</span> <span class="s">true</span>
+<span class="nn">[push]</span>
+	<span class="py">default</span> <span class="p">=</span> <span class="s">nothing</span>
+<span class="nn">[pull]</span>
+	<span class="py">ff</span> <span class="p">=</span> <span class="s">only</span>
+<span class="nn">[alias]</span>
+	<span class="py">st</span> <span class="p">=</span> <span class="s">status</span>
+	<span class="py">stu</span> <span class="p">=</span> <span class="s">status -u</span>
+</code></pre></div></div>
+
+<h3 id="ファイルの作成">ファイルの作成</h3>
+
+<p>それではファイルを作成して、それを編集してみよう。ここもターミナルを使って行う。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">touch </span>file.txt
+</code></pre></div></div>
+
+<p>するとファイルが作成されるので、適当に中身を編集する。とりあえずは<code class="highlighter-rouge">echo</code>コマンドを使って中身を入れてもいい。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"Hello, world!"</span> <span class="o">&gt;&gt;</span> file.txt
+<span class="nv">$ </span><span class="nb">cat </span>file.txt  <span class="c"># 中身が表示される</span>
+</code></pre></div></div>
+<p>ここで、Gitリポジトリの状態を確認する。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git status
+</code></pre></div></div>
+
+<p>なお、フォルダにファイルが入っている場合には、フォルダ名だけしか表示されないので、その場合にはオプションとして<code class="highlighter-rouge">-u</code>をつけて<code class="highlighter-rouge">git status -u</code>とする。このコマンドで、上記のファイルが追加されていることが分かるが、この状態では更新がGitにより記録されない状態(unstaged)なので、ファイルをGitの記録対象に追加する。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git add file.txt
+<span class="nv">$ </span>git status  <span class="c"># ファイルが記録対象に追加されて色が変わる(おそらく赤から緑)</span>
+</code></pre></div></div>
+
+<p>ただ、ファイルが多い場合には、いちいちファイルを1つずつ追加していくのは非常に面倒だと思われる。Gitの運用にあたっては、追加しない対象を<code class="highlighter-rouge">.gitignore</code>ファイルで指定しておき、それ以外のファイルを<code class="highlighter-rouge">git add -A</code>というコマンドで一括追加するのが良いと思われる。</p>
+
+<p>また、すでに記録対象になっているファイルの変更履歴を更新するには<code class="highlighter-rouge">--update</code>あるいは<code class="highlighter-rouge">-u</code>オプションをつけて、</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git add <span class="nt">-u</span>
+</code></pre></div></div>
+
+<p>とすると、すでにstageされているファイルの履歴が更新される。</p>
+
+<h3 id="変更のコミット">変更のコミット</h3>
+
+<p>上記の<code class="highlighter-rouge">add</code>コマンドは履歴の「追加」あるいは「更新」の<strong>予定</strong>を表すものであり、実際にはコミットをするまで記録は変更されない。コミットでは、この変更が何であるかを表すコミットコメントをつけて記録を取ることができる。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git commit
+</code></pre></div></div>
+
+<p>とタイプすると、エディタが開いてコミットコメントの編集画面になる。適当なコメントを入れて保存し、エディタを閉じるとコミットが実行される。なお、短いコメントをつける時など、エディタを開くまでもないときには</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git commit <span class="nt">-m</span> <span class="s2">"First commit."</span>
+</code></pre></div></div>
+
+<p>のようにしてターミナルから直接コメントを指定することもできる。加えて、コミットコメントを修正したいときには<code class="highlighter-rouge">--amend</code>オプションを追加して、</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git commit <span class="nt">--amend</span> <span class="nt">-m</span> <span class="s2">"Last one was mistake!"</span>
+</code></pre></div></div>
+
+<p>のようにすれば良い。</p>
+
+<h3 id="変更のプッシュ">変更のプッシュ</h3>
+
+<p>Gitは専門的な言葉で言うとVCS (version controll system)と呼ばれるシステムの一種であるが、VCSは何もGitに限るものではなく、一世代前のプログラマだとSVNあるいはSubversionと呼ばれるシステムを使うのが一般的だった。</p>
+
+<p>このSVNは集権管理型といって、全ての変更は即サーバーに記録する必要があり、上記のGitで見られたようなローカルでのコミットは存在しなかった。だが、当然、ローカルで処理して問題ないコードをサーバーで他のメンバーに共有する方が良いわけでGitのような分散管理型のVCSが作られた。</p>
+
+<p>Gitのプッシュはローカルの変更をサーバーに反映する処理であり、コミットの後に行う。ただし、1回のコミットごとに行う必要はなく、コミットを複数回して、コードを整理した後でプッシュを行うのが一般的な使い方であるように思う。ともあれ、個人開発の範囲であればコミット後に即プッシュでもそれほど問題はない。</p>
+
+<p>では、早速変更をGitHubにプッシュしてみる。通常はプッシュ先のURL設定を</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git remote add origin https://github.com/[Your Account]/my-first-repo.git
+</code></pre></div></div>
+
+<p>のように行う必要があるのだが、今回はGitHubでリポジトリを作ってクローンしてきたので、これは必要ない(でも覚えておこう！)。URLが設定されているかどうかを確認するには</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git remote get-url origin
+</code></pre></div></div>
+
+<p>とすれば良い。URLの設定を確認できたら実際にプッシュする。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git push origin master
+</code></pre></div></div>
+
+<p>じつは<code class="highlighter-rouge">origin</code>や<code class="highlighter-rouge">master</code>の部分は省略することもできるのだが、個人的には都度これを明示することを最初のうちはお勧めする(挙動がわかりづらい時があるため)。なお、最近のGitHubはデフォルトのブランチ名が<code class="highlighter-rouge">master</code>から<code class="highlighter-rouge">main</code>に変更になっているので、自分がどのブランチで作業しているかを</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git branch
+</code></pre></div></div>
+
+<p>で最初に確認しておくと良い。</p>
+
+<h3 id="リモートの更新内容のプル">リモートの更新内容のプル</h3>
+
+<p>プル(pull)は、リモートで更新された内容をローカルに反映する処理を指す。例えば自分のノートPCと研究室のデスクトップの両方で作業していて、ノートPCからプッシュした内容をデスクトップにも反映する場合にはプルが必要になる。</p>
+
+<p>やり方は簡単で</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git pull origin master
+</code></pre></div></div>
+
+<p>とすればよい。特に更新に問題なければ自動的にソースコードが更新される。ただ、ノートPCとデスクトップの両方でソースコードを更新してしまった場合などは競合(conflict)が起こってプルがうまくいかない時がある。</p>
+
+<p>競合が起こったときにはには<code class="highlighter-rouge">git status</code>で確認すると、どのファイルで競合が起こっているかを教えてくれるので、競合している箇所を修正した後でコミットし直すと、リモート環境の内容がローカルに反映された状態となる。</p>
+
+<p>ちなみにプルという操作は、フェッチ(fetch)とマージ(merge)という操作から成っていて、これらを別々に行うこともできる。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git fetch origin master
+<span class="nv">$ </span>git merge FETCH_HEAD
+</code></pre></div></div>
+
+<p>先にフェッチだけを行うと、例えば<code class="highlighter-rouge">git diff</code>で変更箇所を確認できたり、特定のファイルだけを選んでマージしたりすることもできる。</p>
+
+<h3 id="最後に">最後に</h3>
+
+<p>以上、簡単にGitの使い方を説明したが、初心者が使い始めるにはそれなりに覚えることがあるのは間違いない。だが、使い始めなければ慣れもしないので、何を分からないなら、それこそ今すぐ使い始めた方が良い。</p>
+
+<p>またGitを使うときの緒言として「コミットは細かく、プッシュは慎重に」というものがある。コミットを細かく行って、変更を記録しておく方がバグが起こったときに問題を特定しやすいことから、最初はやりすぎなくらいでコミットをして問題ない。プッシュに関しては、個人開発の範囲なら細かくても全く問題はない。だが、もしチームで開発する機会があるなら、細かくコミットした内容を1つのコミットにまとめる(rebase)してからプッシュするなどのケアが必要になることも覚えておくと良い。</p>
+
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

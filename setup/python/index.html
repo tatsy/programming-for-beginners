@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      Python開発環境の設定 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/setup/python/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">Python開発環境の設定</h1>
+  <h2 id="minicondaのインストール">Minicondaのインストール</h2>
+
+<p><a href="https://docs.conda.io/en/latest/miniconda.html" target="_blank">Miniconda</a> にアクセスして、手順に従いインストールする。Windowsならばインストーラがあるので、それほど難しくはないだろう。MacやLinuxの場合にはシェルスクリプトを使うことになるが、これでも難しくはない。最初はシェルを使うことに慣れないだろうが、これからはずっと使うことになる。慣れよう。</p>
+
+<p><strong>注意</strong><br />
+WindowsでMinicondaをインストールする場合は、非推奨ではあるが、環境変数の<code class="highlighter-rouge">PATH</code>にMinicondaを設定するように以下の画面でチェックをいれること。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/miniconda_add_path.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/miniconda_add_path.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>インストールが完了したら作業用のPython仮想環境を作る。WindowsならPowerShell, Macならターミナルを使う。仮想環境を作るコマンドは<code class="highlighter-rouge">conda create</code>でそのあとに<code class="highlighter-rouge">-n name_of_env</code>というように名前を指定する。合わせて、そのあとに<code class="highlighter-rouge">python=3.6</code>などのように書くことでライブラリ(Pythonの場合にはパッケージということが多い)をバージョンを指定した上で一緒にインストールすることができる。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Anaconda環境の初期化 (最初に1回だけやればいい, 自分の使っているシェルに合わせる)</span>
+<span class="nv">$ </span>conda init <span class="o">[</span>powershell,zsh,bash]
+<span class="c"># 仮想環境の作成</span>
+<span class="nv">$ </span>conda create <span class="nt">-n</span> beginner <span class="nv">python</span><span class="o">=</span>3.6
+<span class="c"># 仮想環境の有効化</span>
+<span class="nv">$ </span>conda activate beginner
+<span class="c"># 仮想環境の無効化</span>
+<span class="nv">$ </span>conda deactivate
+</code></pre></div></div>
+
+<p>仮想環境を作り終わったら<code class="highlighter-rouge">conda activate name_of_env</code>で仮想環境をオンに、<code class="highlighter-rouge">conda deactivate</code>でオフにできる。</p>
+
+<p>ちなみにMinicondaと似たものにAnacondaがある。正直どちらを使ってもいいが、Anacondaは仮想環境を作る時に、勝手に色々なライブラリがインストールされる。それはそれで便利なのだが、ディスクをたくさん使用する(Anacondaは数GBを使う)し、必ずしもそれら全部が必要というわけでもないので、筆者はMinicondaを好んで使っている。</p>
+
+<h3 id="必要なライブラリをインストール">必要なライブラリをインストール</h3>
+
+<p>現在はNode.js (JavaScript)のNPMやRubyのGemなどインタプリタ言語を中心に多くのパッケージ管理ツールが存在している (コンパイラ言語にもJavaのMavenなどがある)。Pythonのパッケージ管理といえば、昔はvirtualenv + pipだったが、現在はAnacondaが一般的のように思う。</p>
+
+<p>Anaconda環境 (Minicondaを含む) の便利な点は以下のようにコマンド一発で必要なパッケージをインストールできる点にある。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 仮想環境を有効化した後で</span>
+conda <span class="nb">install </span>numpy scipy matplotlib scikit-learn scikit-image opencv
+conda <span class="nb">install</span> <span class="nt">-c</span> conda-forge jupyterlab
+</code></pre></div></div>
+
+<p>二つ目のコマンドにある<code class="highlighter-rouge">-c conda-forge</code>というのは<code class="highlighter-rouge">conda-forge</code>というチャンネルから必要なパッケージをインストールせよ、という意味だ。デフォルトのconda環境には存在しないものも<code class="highlighter-rouge">conda-forge</code>チャネルには存在していることが多い。もちろん他にも様々なチャネルが存在していて、以下で使うPyTorchなどは<code class="highlighter-rouge">pytorch</code>というチャネルからインストールできる。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda <span class="nb">install</span> <span class="nt">-c</span> pytorch pytorch torchvision
+</code></pre></div></div>
+
+<p>補足だが、ウェブ上にはAnacondaとpyenvを共存させるようなやり方を説明している記事がなぜか多い。が、これはあまり意味がないことだ。なぜならAnacondaは仮想環境ごとにPythonのバージョンを変えられるし、パッケージのインストールにpipを使ってもいい(pyenvを使っている人はcondaに欲しいパッケージがないことを気にしているようだ…)。</p>
+
+<h2 id="visual-studio-codeの設定">Visual Studio Codeの設定</h2>
+
+<p>Pythonのコード開発をするためのツールは多くあり、GUI環境を使うものだと、一番気が利いているのはJetBrain社が開発している<a href="https://www.jetbrains.com/ja-jp/pycharm/">PyCharm</a>のように思う。特にこだわりがなく、立ち上がりが少し遅くても気にしないなら、PyCharmを使うのが良いと思う。</p>
+
+<p>一方で、最近はVisual Studioコードの進歩が凄まじく、いろいろなオープンソースのライブラリとの親和性も高いので、著者は最近は好んでVisual Studio Code (以下, vscode)を使っている。</p>
+
+<p>vscodeを使う場合には、Pythonの仮想環境にリンター(linter)と呼ばれるコードのチェックや整形を自動化するツールを入れておくと便利である。著者のお勧めの組み合わせは以下の通り。</p>
+
+<ul>
+  <li>コード規則のチェック
+    <ul>
+      <li>ソースコードが読みやすく、Pythonの標準に従った書き方になっているかをチェックする</li>
+      <li><code class="highlighter-rouge">pylint</code>, <code class="highlighter-rouge">flake8などがある</code> (おすすめは<code class="highlighter-rouge">flake8</code>)</li>
+    </ul>
+  </li>
+  <li>コード静的解析
+    <ul>
+      <li>ソースコードを走らせずに、バグを生みそうな書き方をチェックする (これを静的解析という)</li>
+      <li><code class="highlighter-rouge">mypy</code>の一択</li>
+    </ul>
+  </li>
+  <li>コードの自動整形
+    <ul>
+      <li>ソースコードを規則に従うように自動的に整形してくれる</li>
+      <li><code class="highlighter-rouge">autopep8</code>, <code class="highlighter-rouge">yapf</code>, <code class="highlighter-rouge">black</code>などがある (おすすめは<code class="highlighter-rouge">yapf</code>)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>これらをインストールした上で、設定ファイルを開いて以下のように設定する。設定ファイルは「Ctrl + Shift + P」(MacはCtrlの代わりにCommand)を押して「Preferences: Open Setting (JSON)」という項目を検索する。</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="err">...</span><span class="w">
+    </span><span class="err">//</span><span class="w"> </span><span class="err">Python</span><span class="w">
+    </span><span class="nl">"python.condaPath"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/Users/tatsuya/miniconda3/bin/conda"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"python.linting.enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"python.linting.pylintEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"python.linting.flake8Enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"python.linting.mypyEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"python.formatting.provider"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yapf"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"[python]"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"editor.formatOnSave"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"editor.codeActionsOnSave"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"source.organizeImports"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="err">...</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>インタプリタのパスについては適宜、自分のものに置き換えること。このように設定すると、ファイルを保存するたびに、文法チェックと静的解析が走り、ソースコードが自動整形される。</p>
+
+<h2 id="jupyter-labの利用">Jupyter Labの利用</h2>
+
+<p>Jupyter LabはPythonをウェブブラウザ上でインタラクティブに実行できる環境であるIPython Notebook (Jupyter)を進化させて、より使いやすくしたものだ。あまり大規模なプログラムを書くのには向いていないが、ちょっとしたプログラムを試すのにはとても便利である。</p>
+
+<p>Jupyter Labは以下のコマンドをシェル (ターミナルやPowerShell) から打つことで実行できる。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jupyter lab
+</code></pre></div></div>
+
+<p>すると、ブラウザが開き、以下の画面が出る。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/jupyterlab.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/jupyterlab.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>Jupyter Labの使い方は以前のJupyterとほとんど同じである。細かな使い方についてはWeb上に多くの記事があることから、そちらに譲ることとする。なお、Jupyterはマウスを使わなくてもほぼ全ての動作ができるようになっているので、ショートカットを覚えると非常に効率的にプロトタイピングができる。</p>
+
+<h2 id="google-colaboratoryの設定">Google Colaboratoryの設定</h2>
+
+<h3 id="colabの起動">Colabの起動</h3>
+
+<p>自身のGoogleアカウントでログインし、ColabのWebページにアクセスする。</p>
+
+<p><a href="https://colab.research.google.com/" target="_blank">https://colab.research.google.com/</a></p>
+
+<p>すると、以下のような画面が表示されるので、右下にある「ノートブックを新規作成」を選ぶ。するとGoogleドライブに「Colab Notebooks」というフォルダが自動で生成されて、その中に新しいIPython Notebookのファイルが作られる。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/colab_intro.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/colab_intro.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<h3 id="ライブラリの設定">ライブラリの設定</h3>
+
+<p>Colabはコマンドの先頭に<code class="highlighter-rouge">!</code>をつけることで<strong>pip</strong>を使用することができる。そこで、各ノートブックの先頭に必要なライブラリをインストールするコマンドを書いておく。なおColabは最初からNumPyやscikit-learnなどの機械学習系のパッケージがインストールされているので、PyTorchだけをインストールすればおおよそ事足りる。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!</span>pip <span class="nb">install </span>torch torchvision
+</code></pre></div></div>
+
+<h3 id="gpuの使用">GPUの使用</h3>
+
+<p>なおColabは最初の状態ではGPUが使えない。試しにPyTorchでGPUが使えるかどうかを調べるコマンドを叩いてみる。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">cuda</span><span class="p">.</span><span class="n">is_available</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>すると<code class="highlighter-rouge">False</code>と表示されるはずだ。設定を変更するには、ページ上部のメニューから「ランタイム」→「ランタイムのタイプを変更」を選び、そこから「ハードウェアアクセラレータ」のタイプを「GPU」に変更する。再度、上記のコマンドを叩くと、今度は<code class="highlighter-rouge">True</code>が表示されるはずだ。</p>
+
+<div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/colab_use_gpu.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/setup/colab_use_gpu.jpg" alt="" style="" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div>
+
+<p>ちなみにColabは使えるリソース (メモリやディスク容量) に制限があるため、あまり多くのことをするには向いていない。ローカルにGPUを使える環境があるなら、その上で上記のJupyter Labを使う方が良いだろう。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

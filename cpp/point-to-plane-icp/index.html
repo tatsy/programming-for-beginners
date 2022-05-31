@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      Point to Plane ICP &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/cpp/point-to-plane-icp/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">Point to Plane ICP</h1>
+  <h2 id="問題の定式化">問題の定式化</h2>
+
+<p>Point to <strong>Plane</strong> ICPはPoint to Point ICPとは異なり、目的位置を表す点群に法線方向が与えられていることを前提とする。ここで言う<strong>Plane</strong>というのは目的位置の点を通り、法線に直交するような平面のことを指す。</p>
+
+<p>従って、Point to Plane ICPでは最適化問題が各頂点$\mathbf{x}_i$の最近傍点$\mathbf{p}_i$とその最近傍点の法線$\mathbf{n}_i$を用いて以下のように定義される。</p>
+
+\[\begin{equation}
+\min_{\mathbf{R}, \mathbf{t}} \sum_{i=1}^{N} \left( (\mathbf{R} \mathbf{x}_i + \mathbf{t} - \mathbf{p}_i) \cdot \mathbf{n}_i \right)^2
+\label{eq:least-squares}
+\end{equation}\]
+
+<p>この定式化は一見Point to Point ICPのそれに近く、同じように解けそうなのであるが、それは$\mathbf{t}$に対してだけで、$\mathbf{R}$に対しての最適化問題は $\mathbf{R}$が行列式が1の直交行列であるという制約から解析的な解をもたない。そのため、この最適化問題は数値的に解く必要がある。</p>
+
+<p>例えば回転行列を四元数を用いて表すと、四元数の要素4次元と並進を表すベクトル3次元の合計7次元のベクトルを未知数とするような非線形最適化問題が定義できるので、それを最急降下法などの一般的な解法によって解く方法もある。</p>
+
+<p>今回は、実装をより簡単にするため、回転行列の回転角度が十分に小さいとみなせると仮定し、その際に得られる一般的な行列表示に対して最適化問題を解く。上記の最適化は$\mathbf{R}$が直交行列であるが故に解析解が得られなかったので、このように制約を緩和すれば解析的に解を得ることができる。</p>
+
+<h2 id="回転行列の線形化">回転行列の線形化</h2>
+
+<p>回転行列$\mathbf{R}$は回転軸を$\mathbf{w}$、回転角度を$\theta$とする時、ロドリゲスの回転公式によって以下のように与えられる。</p>
+
+\[\mathbf{R}(\mathbf{w}, \theta) = \mathbf{I} + \sin\theta \, \mathbf{K}(\mathbf{w}) + (1 - \cos\theta) \, \mathbf{K}(\mathbf{w})^2\]
+
+<p>ここで行列$\mathbf{K}(\mathbf{w})$は$\mathbf{w}$と外積を取る操作に対応する作用素で以下のように表せる。</p>
+
+\[\mathbf{K}(\mathbf{w}) = \begin{pmatrix}
+0 &amp; -w_z &amp; w_y \\
+w_z &amp; 0  &amp;-w_x \\
+-w_y &amp; w_x &amp; 0
+\end{pmatrix}\]
+
+<p>この回転行列の定義において$\theta$が十分に小さいと仮定すると、$\cos\theta \approx 1$, $\sin\theta \approx \theta$となることから、</p>
+
+\[\mathbf{R}(\mathbf{w}, \theta)
+\approx \mathbf{I} + \theta \mathbf{K}(\mathbf{w})
+= \mathbf{I} + \mathbf{K}(\theta \mathbf{w})
+= \mathbf{I} + \begin{pmatrix}
+0 &amp; -\theta w_z &amp; \theta w_y \\
+\theta w_z &amp; 0  &amp;-\theta w_x \\
+-\theta w_y &amp; \theta w_x &amp; 0
+\end{pmatrix}\]
+
+<p>という関係式が得られる。ここで改めて$\mathbf{a} = \theta\mathbf{w}$と置き直すと、回転行列を表すのに必要な未知数は3次元ベクトル$\mathbf{a}$の各要素のみとなる。</p>
+
+<h2 id="最適化問題の変形">最適化問題の変形</h2>
+
+<p>線形化された回転行列$\mathbf{I} + \mathbf{K}(\mathbf{a})$を用いると、$\mathbf{K}$が外積を表す作用素だったことに注意して、剛体変換の式は以下のように書き直せる。</p>
+
+\[\begin{aligned}
+\mathbf{R}\mathbf{x} + \mathbf{t}
+&amp;= (\mathbf{I} + \mathbf{K}(\mathbf{a})) \mathbf{x} + \mathbf{t} \\
+&amp;= \mathbf{x} + \mathbf{a} \times \mathbf{x} + \mathbf{t}
+\end{aligned}\]
+
+<p>これをさらに法線方向の距離を表す式に代入すると、途中のスカラー三重積に注意して</p>
+
+\[\begin{aligned}
+\left( \mathbf{x} + \mathbf{a} \times \mathbf{x} + \mathbf{t} - \mathbf{p} \right) \cdot \mathbf{n}
+&amp;= (\mathbf{x} \cdot \mathbf{n}) + (\mathbf{a} \times \mathbf{x}) \cdot \mathbf{n} + (\mathbf{t} \cdot \mathbf{n}) - (\mathbf{p} \cdot \mathbf{n}) \\
+&amp;= \mathbf{a} \cdot (\mathbf{x} \times \mathbf{n}) + (\mathbf{t} \cdot \mathbf{n}) + (\mathbf{x} - \mathbf{p}) \cdot \mathbf{n}
+\end{aligned}\]
+
+<p>と書ける。ここで、$\mathbf{a}$と$\mathbf{t}$を縦方向に連結した6次元ベクトルを考えると、この式はさらに以下のように変形できる。</p>
+
+\[\begin{pmatrix}
+\mathbf{x} \times \mathbf{n} \\
+\mathbf{n}
+\end{pmatrix}
+\cdot
+\begin{pmatrix}
+\mathbf{a} \\
+\mathbf{t}
+\end{pmatrix}
+- (\mathbf{p} - \mathbf{x}) \cdot \mathbf{n}\]
+
+<p>以上から、$\mathbf{a}$と$\mathbf{t}$を連結したベクトルを$\mathbf{u} \in \mathbb{R}^6$とすることで、式\eqref{eq:least-squares}の最適化問題は、$\mathbf{s}$, $\mathbf{r}$を適当なベクトルとして、以下のように書き直せる。</p>
+
+\[\min_{\mathbf{u}} \| \mathbf{s} \cdot \mathbf{u} - \mathbf{r} \|^2\]
+
+<p>これを$\mathbf{u}$について微分したものが0であると仮定して項を整理すれば、一般的な線形の連立一次方程式の形</p>
+
+\[\mathbf{A} \mathbf{u} = \mathbf{b}\]
+
+<p>が得られ、この時、$\mathbf{A}$, $\mathbf{b}$はそれぞれ</p>
+
+\[\begin{aligned}
+\mathbf{A} &amp;= \sum_{i=1}^{N} \left[
+\begin{pmatrix} \mathbf{x} \times \mathbf{n} \\ \mathbf{n} \end{pmatrix}
+\begin{pmatrix} \mathbf{x} \times \mathbf{n} \\ \mathbf{n} \end{pmatrix}^{T}
+\right] \in \mathbb{R}^{6 \times 6} \\
+\mathbf{b} &amp;= \sum_{i=1}^{N} \left[
+\begin{pmatrix} \mathbf{x} \times \mathbf{n} \\ \mathbf{n} \end{pmatrix}
+(\mathbf{p}_i - \mathbf{x}_i) \cdot \mathbf{n}_i
+\right] \in \mathbb{R}^{6}
+\end{aligned}\]
+
+<p>と表せる。</p>
+
+<h2 id="剛体変換の復元">剛体変換の復元</h2>
+
+<p>上記の連立一次方程式を解くことで線形化された回転行列の要素を表すベクトル$\mathbf{a}$が得られる。このベクトルが$\theta\mathbf{w}$であったことを思い出すと、</p>
+
+\[\theta = \| \mathbf{a} \|, \quad \mathbf{w} = \frac{\mathbf{a}}{\theta}\]
+
+<p>である。あとは、これらの値をロドリゲスの回転公式に代入することで回転行列$\mathbf{R}$が得られる。</p>
+
+<p>並進の要素についても$\mathbf{u}$と同時に与えられていることから、これを以ってPoint to Plane ICPにおいても剛体変形を求めることができた。</p>
+
+<p>なお、上記の計算では<strong>回転行列の回転角度が十分に小さい</strong>と仮定したが、ICPのステップの繰り返しにより回転成分も積み上がっていくので、1ステップ分の回転角度が小さくとも、十分に一般的な剛体変形を考慮することが可能である。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

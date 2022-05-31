@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      Eigenを用いた線形問題の解法 &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/cpp/eigen-solve-linear-system/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">Eigenを用いた線形問題の解法</h1>
+  <h2 id="eigenのインクルードと簡単な設定">Eigenのインクルードと簡単な設定</h2>
+
+<p>Eigenで行列を扱う場合には、ヘッダのインクルード後、少しだけ型定義などをしておくほうが便利である。</p>
+
+<h3 id="ヘッダのインクルード">ヘッダのインクルード</h3>
+
+<p>まず、ヘッダを以下のようにインクルードする。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;Eigen/Core&gt;</span><span class="cp">
+</span></code></pre></div></div>
+
+<p>この<code class="highlighter-rouge">Core</code>というヘッダは、Eigenの行列の定義だけを抽出したものである。これに加えて、行列の分解や線形問題のソルバーなどを含めたい場合には、</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;Eigen/Dense&gt;</span><span class="cp">
+</span></code></pre></div></div>
+
+<p>とすれば良い。ただし、この<code class="highlighter-rouge">Dense</code>というヘッダは、その中で上記の行列分解や線形ソルバーのためのヘッダをインクルードするため、コンパイルに異様に時間がかかるようになる。</p>
+
+<p>これを防ぎたければ、必要な機能だけを選んで以下のようにするのが良い。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;Eigen/Core&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;Eigen/LU&gt;</span><span class="cp">
+</span></code></pre></div></div>
+
+<p>これは疎行列を扱う場合も、同様 (あるいはもっと問題は深刻)で、以下のように必要なヘッダだけをインクルードすることが、開発の効率を上げるためにも重要である。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Sparseヘッダはコンパイルが恐ろしく遅くなる！！！</span>
+<span class="cp">#include</span> <span class="cpf">&lt;Eigen/Sparse&gt;</span><span class="cp">
+</span>
+<span class="c1">// 代わりにこうする</span>
+<span class="cp">#include</span> <span class="cpf">&lt;Eigen/SparseCore&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;Eigen/SparseLU&gt;</span><span class="cp">
+</span></code></pre></div></div>
+
+<h3 id="eigenのための型定義">Eigenのための型定義</h3>
+
+<p>Eigenの行列型はテンプレートを使って、</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in namespace Eigen</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Scalar</span><span class="p">,</span> <span class="kt">int</span> <span class="n">RowsAtCompileTime</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ColsAtCompileTime</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">Matrix</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>のように定義されている (<a href="https://eigen.tuxfamily.org/dox/group__TutorialMatrixClass.html" target="_blank">参考ページ</a>)。</p>
+
+<p>ウェブ上のサンプルなどで良く使われている <code class="highlighter-rouge">MatrixXd</code>というのは基本の型が<code class="highlighter-rouge">double</code>で行数、列数ともにX, すなわち動的変化可能、という意味である。これは、上記の定義に当てはめれば以下のように定義される。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Dynamic</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Dynamic</span><span class="o">&gt;</span> <span class="n">MatrixXd</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>またサイズが可変のベクトルを表す<code class="highlighter-rouge">VectorXd</code>であれば、その定義は以下のようになる。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Dynamic</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="n">VectorXd</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>もちろん、これらをそのまま用いても良いのだが、これらを基本の型を変更できるように自前で用意しておくほうが何かと便利である。一例として以下のようにするのが良いだろう。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">ScalarType</span> <span class="o">=</span> <span class="kt">double</span><span class="p">;</span>  <span class="c1">// ここは必要に応じてfloatなどに変更する</span>
+
+<span class="c1">// テンプレート型として新しい型定義をする (typedefではこれはできないのでC++11のusingを使う)</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Scalar</span><span class="p">&gt;</span>
+<span class="k">using</span> <span class="n">EigenMatrix</span> <span class="o">=</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">Scalar</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Dynamic</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Dynamic</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Scalar</span><span class="p">&gt;</span>
+<span class="k">using</span> <span class="n">EigenVector</span> <span class="o">=</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">Scalar</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Dynamic</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="c1">// 実際に使う型の定義</span>
+<span class="k">using</span> <span class="n">MatrixXd</span> <span class="o">=</span> <span class="n">EigenMatrix</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">VectorXd</span> <span class="o">=</span> <span class="n">EigenMatrix</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="密行列の扱い">密行列の扱い</h2>
+
+<p>行列の基本的な使い方については、<a href="https://eigen.tuxfamily.org/dox/group__TutorialMatrixArithmetic.html" target="_blank">ドキュメント</a>を確認しておこう。</p>
+
+<p>ここでは、特に重要と思われる項目について簡単に解説する。</p>
+
+<h3 id="行列の初期化">行列の初期化</h3>
+
+<p>行列を初期化する方法はいくつかあり、Eigenでは以下のようにサイズを指定して、行列を用意した後、初期化用のルーチンを呼び出すことが多い (いきなり代入しても問題ない)。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 行列の確保</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="n">MatrixXd</span> <span class="nf">AA</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+
+<span class="c1">// 行列の初期化</span>
+<span class="n">AA</span><span class="p">.</span><span class="n">setZero</span><span class="p">();</span>           <span class="c1">// 全要素を0で埋める</span>
+<span class="n">AA</span><span class="p">.</span><span class="n">setOnes</span><span class="p">();</span>           <span class="c1">// 全要素を1で埋める</span>
+<span class="n">AA</span><span class="p">.</span><span class="n">setConstant</span><span class="p">(</span><span class="mf">3.14</span><span class="p">);</span>   <span class="c1">// 全要素を指定した値で埋める</span>
+<span class="n">AA</span><span class="p">.</span><span class="n">setIdentity</span><span class="p">();</span>       <span class="c1">// 対角要素を1、非対角要素を0で埋める (正方行列でなくても良い)</span>
+<span class="n">AA</span><span class="p">.</span><span class="n">setRandom</span><span class="p">();</span>         <span class="c1">// [-1, 1]の乱数 (範囲に注意！！！！！)で全要素を埋める</span>
+
+<span class="c1">// 確保と初期化を同時にやる</span>
+<span class="n">MatrixXd</span> <span class="n">zeroMat</span> <span class="o">=</span> <span class="n">MatrixXd</span><span class="o">::</span><span class="n">Zero</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+<span class="n">MatrixXd</span> <span class="n">onesMat</span> <span class="o">=</span> <span class="n">MatrixXd</span><span class="o">::</span><span class="n">Ones</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+<span class="n">MatrixXd</span> <span class="n">consMat</span> <span class="o">=</span> <span class="n">MatrixXd</span><span class="o">::</span><span class="n">Constant</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">);</span>
+<span class="n">MatrixXd</span> <span class="n">randMat</span> <span class="o">=</span> <span class="n">MatrixXd</span><span class="o">::</span><span class="n">Random</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span> 
+</code></pre></div></div>
+
+<p>また、サイズがそれほど大きくない行列であれば、以下のように直接値を指定して初期化することもできる。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MatrixXd</span> <span class="nf">AA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+<span class="n">AA</span> <span class="o">&lt;&lt;</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">;</span>
+
+<span class="c1">// 以下の内容と同じ</span>
+<span class="n">AA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="n">AA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+<span class="n">AA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">;</span>
+<span class="n">AA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>これ以外に列ベクトルから行列を作ったりと言ったことも可能であるが、より詳しくは必要に応じて以下のドキュメントを参考にするとよいだろう。</p>
+
+<ul>
+  <li><a href="https://eigen.tuxfamily.org/dox/group__TutorialAdvancedInitialization.html" target="_blank">Eigen: Advanced initialization</a></li>
+</ul>
+
+<h3 id="線形ソルバ">線形ソルバ</h3>
+
+<p>連立一次方程式は一般に行列とベクトルを用いた形に書き直すことができ、このような問題のことを<strong>線形問題</strong>と呼ぶ。</p>
+
+<p>線形問題の解法については、大きく分けて<strong>直接法</strong> (direct method)と<strong>反復法</strong>(iterative method)の2つがある。</p>
+
+<p>よく知られている方法で言えば、ガウスの消去法やLU分解のように、直接的な行列の操作のみによって、解を得る方法を直接法と呼び、ヤコビ法やガウス・ザイデル法のように行列演算によって徐々に解となる値に近いベクトルを得る方法を反復法と呼ぶ。</p>
+
+<p>これらの線形ソルバには非常に多くの種類があるが、Eigenには直接法、反復法で以下のものがすでに実装されている。</p>
+
+<p><strong>直接法</strong> (抜粋)</p>
+<ul>
+  <li>部分ピボット選択によるLU分解 (完全ピボット選択のものもある)</li>
+  <li>部分ピボット選択とHouseholder変換によるQR分解 (完全ピボット選択のものもある)</li>
+  <li>コレスキー分解 (LDLTと呼ばれる半正定値行列に対するソルバもある)</li>
+  <li>特異値分解を用いた非正方、不定値行列に対する解法</li>
+</ul>
+
+<p><strong>反復法</strong> (抜粋, これらは疎行列でも同じものが使える)</p>
+<ul>
+  <li>前処理付き共役勾配法</li>
+  <li>前処理付き安定化双共役勾配法</li>
+</ul>
+
+<p>これらの使い方については、以下の通り。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// --- 直接法 ---</span>
+<span class="n">VectorXd</span> <span class="n">xx</span><span class="p">;</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">AA</span><span class="p">.</span><span class="n">partialPivLu</span><span class="p">().</span><span class="n">solve</span><span class="p">(</span><span class="n">bb</span><span class="p">);</span>            <span class="c1">// 部分ピボット選択によるLU分解</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">AA</span><span class="p">.</span><span class="n">colPivHouseholderQr</span><span class="p">().</span><span class="n">solve</span><span class="p">(</span><span class="n">bb</span><span class="p">);</span>     <span class="c1">// 部分ピボット選択とHouseholder変換によるQR分解</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">AA</span><span class="p">.</span><span class="n">llt</span><span class="p">().</span><span class="n">solve</span><span class="p">(</span><span class="n">bb</span><span class="p">);</span>                     <span class="c1">// コレスキー分解</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">AA</span><span class="p">.</span><span class="n">bdcSvd</span><span class="p">().</span><span class="n">solve</span><span class="p">(</span><span class="n">bb</span><span class="p">);</span>                  <span class="c1">// 特異値分解</span>
+
+<span class="c1">// --- 反復法 ---</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">ConjugateGradient</span><span class="o">&lt;</span><span class="n">MatrixXd</span><span class="o">&gt;</span> <span class="n">cg</span><span class="p">;</span>
+<span class="n">cg</span><span class="p">.</span><span class="n">compute</span><span class="p">(</span><span class="n">AA</span><span class="p">);</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">cg</span><span class="p">.</span><span class="n">solve</span><span class="p">(</span><span class="n">bb</span><span class="p">);</span>
+
+<span class="n">Eigen</span><span class="o">::</span><span class="n">BiCGSTAB</span><span class="o">&lt;</span><span class="n">MatrixXd</span><span class="o">&gt;</span> <span class="n">bicg</span><span class="p">;</span>
+<span class="n">bicg</span><span class="p">.</span><span class="n">compute</span><span class="p">(</span><span class="n">AA</span><span class="p">);</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">bicg</span><span class="p">.</span><span class="n">solve</span><span class="p">(</span><span class="n">bb</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>なお、それぞれの手法は、行列がどの形のときに使えて、どの形のときにより効率的か、というのがある程度決まっている。</p>
+
+<p>応用的には$| A x - b |^2$のような最小二乗法の解を求めることが多いと思われるが、これを$x$について微分して得られる線形問題の係数行列は$A^T A$という形をしており、これは少なくとも半正定値行列ではあるので、上の中で言えば、コレスキー分解や共役勾配法を用いるのが良い (あくまで性質としては)。</p>
+
+<p>追加で、手法の特性などを考慮すると、半正定値行列に対しては、直接法ならLDLT法を、反復法ならBiCGSTAB法を使えば概ねうまくいく。</p>
+
+<p>それぞれの方法について、より詳しく知りたい場合は、以下のドキュメントを参照すると良い。</p>
+
+<ul>
+  <li><a href="https://eigen.tuxfamily.org/dox/group__TopicLinearAlgebraDecompositions.html" target="_blank">Eigen: Catalogue of dense decomposition</a></li>
+</ul>
+
+<h2 id="疎行列の扱い">疎行列の扱い</h2>
+
+<p>疎行列を取り扱うにあたっては、その初期化の方法を別途知る必要がある。</p>
+
+<h3 id="疎行列の作成">疎行列の作成</h3>
+
+<p>疎行列を計算機によって扱う場合には、一般にCRS (compressed row storage)やCCS (compressed column storage)といったデータ方式が良く用いられる。</p>
+
+<p>Eigenでは、どちらの方法も使うことができるが、デフォルトではCCSが用いられるので、ここではCCSを仮定して説明を進める。</p>
+
+<p>CCSでは各列のデータが圧縮されて格納される。各列のデータには、その列の非ゼロ要素の行番号とその時の値が格納されると行った具合だ。非常に単純化した擬似コードでは以下のようになる。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">DataInRow</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">colIndex</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">value</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">Array</span><span class="o">&lt;</span><span class="n">DataInRow</span><span class="o">&gt;</span> <span class="n">rowData</span><span class="p">(</span><span class="n">numRows</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>そのため、Eigenで疎行列を扱うときには、各非ゼロ要素に対して<strong>行番号</strong>, <strong>列番号</strong>, <strong>要素の値</strong>の三組が必要になる。この三組を表すために、Eigenには<code class="highlighter-rouge">Triplet</code>という型が用意されている。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in namespace Eigen</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Scalar</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">Index</span><span class="p">&gt;</span>
+<span class="k">class</span> <span class="nc">Triplet</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>この<code class="highlighter-rouge">Triplet</code>を使う場合も、要素と行、列番号を指定するための型を変更できるよう、以下のようにしておくのが良い。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">ScalarType</span> <span class="o">=</span> <span class="kt">double</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">IndexType</span> <span class="o">=</span> <span class="kt">int64_t</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">Triplet</span> <span class="o">=</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="p">,</span> <span class="n">IndexType</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>また、疎行列の型についても、以下のように型定義をしておく。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">ScalarType</span> <span class="o">=</span> <span class="kt">double</span><span class="p">;</span>  <span class="c1">// 以前に指定していたら書く必要はない</span>
+<span class="k">using</span> <span class="n">SparseMatrix</span> <span class="o">=</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">SparseMatrix</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>疎行列を作る際には、この<code class="highlighter-rouge">Triplet</code>を配列等に入れておき、<code class="highlighter-rouge">setFromTriplet</code>関数で要素を指定する。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Triplet</span><span class="o">&gt;</span> <span class="n">triplets</span><span class="p">;</span>
+
+<span class="c1">// std::vectorに要素を入れていく</span>
+<span class="n">triplets</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+<span class="p">....</span>
+
+<span class="c1">// 疎行列の作成</span>
+<span class="n">SparseMatrix</span> <span class="nf">AA</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+<span class="n">AA</span><span class="p">.</span><span class="n">setFromTriplets</span><span class="p">(</span><span class="n">triplets</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">triplets</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+</code></pre></div></div>
+
+<h3 id="疎行列に対する線形ソルバー">疎行列に対する線形ソルバー</h3>
+
+<p>密行列を扱う場合と同様、Eigenには複数の直接法と反復法によるソルバーが用意されている。</p>
+
+<p>ただし、密行列の場合と違い、疎行列の場合には、疎行列でいう反復法のソルバと同じような使い方を直接法に対しても行う必要がある。</p>
+
+<p>例えば、直接法のソルバーである<code class="highlighter-rouge">SparseLU</code>を用いる場合には、以下のようになる。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">VectorXd</span> <span class="n">xx</span><span class="p">;</span>
+
+<span class="n">Eigen</span><span class="o">::</span><span class="n">SparseLU</span><span class="o">&lt;</span><span class="n">SparseMatrix</span><span class="o">&gt;</span> <span class="n">solver</span><span class="p">;</span>
+<span class="n">solver</span><span class="p">.</span><span class="n">compute</span><span class="p">(</span><span class="n">AA</span><span class="p">);</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">solver</span><span class="p">.</span><span class="n">solve</span><span class="p">(</span><span class="n">bb</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>なお、Eigenのドキュメントでは<code class="highlighter-rouge">compute()</code>と等価なものとして<code class="highlighter-rouge">analyzePattern()</code>と<code class="highlighter-rouge">factorize()</code>を連続して呼び出しているが、<code class="highlighter-rouge">analyzePattern()</code>は<code class="highlighter-rouge">factorize()</code>のコストを減らすための行列要素の順序入れ替えで、<code class="highlighter-rouge">factorize()</code>は実際の行列分解を行うメソッドである。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>

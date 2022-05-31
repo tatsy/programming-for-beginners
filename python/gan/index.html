@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <meta name="description" content="初心者・中級者向けC++/Pythonプログラミング"/>
+  <meta name="robots" content="index,follow"/>
+
+  <title>
+    
+      敵対的生成ネットワーク &middot; Programming for Beginners
+    
+  </title>
+
+  
+  <link rel="canonical" href="https://tatsy.github.io/programming-for-beginners/python/gan/">
+  
+
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/poole.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/syntax.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://tatsy.github.io/programming-for-beginners/public/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tatsy.github.io/programming-for-beginners/public/apple-touch-icon.png">
+  <link rel="icon" sizes="512x512" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-512x512.png">
+  <link rel="icon" sizes="192x192" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-192x192.png">
+  <link rel="icon" sizes="32x32" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-32x32.png">
+  <link rel="icon" sizes="16x16" type="image/png" href="https://tatsy.github.io/programming-for-beginners/public/favicon-16x16.png">
+  <link rel="shortcut icon" href="https://tatsy.github.io/programming-for-beginners/public/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tatsy.github.io/programming-for-beginners/atom.xml">
+
+  <script type="text/javascript" src="/programming-for-beginners/public/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/programming-for-beginners/public/js/lightbox.min.js"></script><script>
+MathJax = {
+    tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true,
+        tags: "ams",
+        autoload: {
+            color: [],
+            colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+    },
+    chtml: {
+        scale: 1.1,
+        matchFontHeight: false,
+        displayAlign: "left",
+        displayIndent: "2em"
+    },
+    options: {
+        renderActions: {
+            /* add a new named action to render <script type="math/tex"> */
+            find_script_mathtex: [10, function (doc) {
+            for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = {node: text, delim: '', n: 0};
+                math.end = {node: text, delim: '', n: 0};
+                doc.math.push(math);
+            }
+            }, '']
+        }
+    },
+    loader: {
+        load: ['[tex]/noerrors']
+    }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-186105178-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+  
+</head>
+
+
+<body>
+
+  <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+    styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>初心者・中級者向けC++/Pythonプログラミング</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="https://tatsy.github.io/programming-for-beginners/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/tatsy/programming-for-beginners">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.0</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2022. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+  <!-- Wrap is the content to shift when toggling the sidebar. We wrap the content to avoid any CSS collisions with our real content. -->
+  <div class="wrap">
+    <div class="masthead">
+      <div class="container">
+        <h3 class="masthead-title">
+          <a href="/programming-for-beginners/" title="Home">Programming for Beginners</a>
+          <small>Programming for everyone!</small>
+        </h3>
+      </div>
+    </div>
+
+    <div class="container content">
+      <div class="post">
+  <h1 class="post-title">敵対的生成ネットワーク</h1>
+  <h2 id="ganが生まれるまで">GANが生まれるまで</h2>
+
+<p>前回までの内容は、画像をニューラルネットワークを始めとするプログラムに理解させる内容であった。このように画像に写っているものを認識・識別する機械学習モデルを識別モデルという。</p>
+
+<p>これと対になる考え方に生成モデルがある。生成モデルとは、何もないところ (多くの場合はランダムノイズ) から人間にとって意味のある画像を作り出す技術である。例えば、教師データを単純な多次元の確率分布としてモデル化できれば、その多次元空間からのサンプリングにより、意味のあるデータを作り出すことができそうだ。</p>
+
+<p>深層学習が現れる前は、この多次元分布のモデル化が単純な確率密度分布 (例えばガウス混合モデルなど) では難しく、画像のような情報量の多い対象を扱うことは難しかった。その状況を一変させたのが、2014年に当時モントリオール大学の博士課程の学生であったIan Goodfellow氏が提案した<a href="https://arxiv.org/abs/1406.2661" target="_blank">GAN (Generative Adversarial Network)</a>である。</p>
+
+<p>GANの考え方は、その後、様々に改良されて、現在は本物の写真とほとんど見分けがつかないような写真の生成さえ可能となっている。また、Dueling neural networkとして、2018年にMIT Technology Reviewの <a href="https://www.technologyreview.com/10-breakthrough-technologies/2018/" target="_blank">10 Breakthrough Technologies</a>に選ばれている。</p>
+
+<h2 id="ganの基本">GANの基本</h2>
+
+<p>ニューラルネットワークを使うかどうかはともかくとして、生成モデルの目的は、教師画像にあるような、それらしい画像を作る、というところにある。従って、プログラムにより作られた画像が十分教師画像に近ければ、そのデータ生成は成功していると言って良い。</p>
+
+<p>そこで、GANでは、画像を生成する役割をニューラルネットに担当させるのと同時に、画像が教師画像らしいのかどうかを判別することもニューラルネットに担当させる。これらのネットワークをそれぞれGeneratorとDiscriminatorと呼ぶ。</p>
+
+<p>学習の過程において、GeneratorはDiscrmininatorに偽物と見破られないような画像を作るように学習し、一方のDiscriminatorはGeneratorが生成した偽物を正しく見分けるように学習しようとする。そのため、この2つのネットワークがadversarial (敵対的)であるとして、このネットワークのペアをGANと呼んでいる。</p>
+
+<p>一般にGeneratorは多次元のランダムベクトルから、画像を生成し、Discriminatorは画像に対して0(偽物)か1(本物)のラベルを付ける問題を解く。</p>
+
+<h2 id="ganの構成">GANの構成</h2>
+
+<p>今日GANと呼ばれているものはRadfordらが2015年に提案した<a href="https://arxiv.org/abs/1511.06434" target="_blank">DCGAN (Deep convolutional GAN)</a> で、この論文にはネットワークの実装にあたり、以下のような構造が学習の安定化に必要だと述べられている。</p>
+
+<ol>
+  <li>Poolingのレイヤーを2x2の畳み込みなどの画像サイズを小さくするConvolutionレイヤーに置き換えよ。</li>
+  <li>バッチ正規化をGeneratorとDiscriminatorの両方に使え。</li>
+  <li>より深いネットワークにするなら全結合層をなくせ。</li>
+  <li>Generatorの活性化にはReLUを使え。最後の出力はtanhで行え。</li>
+  <li>DiscriminatorにはLeaky ReLUを使え。</li>
+</ol>
+
+<p>この中には2020年現在の最新研究では、あまり使われていない考え方もあるが、何はともあれ、これに従って、実際にネットワークを実装してみよう。</p>
+
+<h3 id="generatorの実装">Generatorの実装</h3>
+
+<p>上記のルールに従うと、Generatorは畳み込み、バッチ正規化、ReLUの3つを何度も行うネットワークになる。この3つの組をブロックと呼ぶことにすると、1つのブロックは以下のように定義できる。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">block</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="p">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">out_channels</span><span class="p">),</span>
+    <span class="n">nn</span><span class="p">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Generatorは画像を徐々に大きくしていくネットワークなので、畳み込み層の代わりに逆畳み込みが使われている点に注意してほしい。上記のブロックに画像を通すと、画像のチャネル数が <code class="highlighter-rouge">in_channels</code> から <code class="highlighter-rouge">out_channels</code> に変化して、さらに画像のサイズが各方向2倍に拡大される。</p>
+
+<p>ところで、Generatorの入力は多次元ベクトルだという話をした。多次元ベクトルにいきなり逆畳み込みを行うことはできないので、ベクトルを1x1の画像にデータ変換するのを忘れないようにしよう。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n_batch</span><span class="p">,</span> <span class="n">n_dim</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">size</span><span class="p">()</span>  <span class="c1"># 入力のベクトルはn_dim次元
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="n">n_batch</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># これでチャネル数がn_dimの1x1の画像とみなされる
+</span></code></pre></div></div>
+
+<p>最後に画像を出力するときには、ReLUで活性化する代わりにtanh (Hyperbolic tangent)を使う。シグモイド関数は値域が<code class="highlighter-rouge">[0, 1]</code> であるのに対して、tanhは値域が <code class="highlighter-rouge">[-1, 1]</code> と分布中心が0になっているため、各畳み込み層がバイアスベクトルを学習する必要がなくなり、学習の進行が安定する傾向がある。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">return</span> <span class="n">x</span>
+</code></pre></div></div>
+
+<h3 id="discriminatorの実装">Discriminatorの実装</h3>
+
+<p>Discriminatorの基本ブロックは、GeneratorのそれのReLUがLeaky ReLUに置き換わったものになる。Leaky ReLUは入力の値が負のときに一定の傾きを持った線形関数を当てはめる活性化関数である。Radfordらの論文には負の値に対して与える傾きは0.2が良いと書かれている。</p>
+
+<p>これらに従うと、Discriminatorの基本ブロックは以下のように定義できる。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">block</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="p">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">out_channels</span><span class="p">),</span>
+    <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>このブロックに画像を通すと、チャネル数が<code class="highlighter-rouge">in_channels</code>から<code class="highlighter-rouge">out_channels</code>に変化し、画像のサイズが各方向で2分の1になる。</p>
+
+<p>この操作を徐々に繰り返していくと、1x1の画像になるので、あとはベクトルとして出力するために、出力形状を変換する。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">squeeze</span><span class="p">()</span>  <span class="c1"># 大きさが1の次元を削る
+</span></code></pre></div></div>
+
+<p>なお、Discriminatorは本物か偽物かの識別問題を解くので、安直にはsigmoid関数で活性化して出力する。損失関数の計算では、これを交差エントロピーで評価するのだが、sigmoidと交差エントロピーを個別に評価するよりも、それらを合わせた関数を一度に評価するほうが数値的に安定することが知られている。</p>
+
+<p>PyTorchでは、交差エントロピーの関数が <code class="highlighter-rouge">torch.nn.BCELoss</code> で与えられているのに対して、sigmoidを組み合わせたものは <code class="highlighter-rouge">torch.nn.BCEWithLogitsLoss</code> で与えられる。今回は後者を使うので、Discriminatorの出力時点ではsigmoid関数で活性化する必要はない。</p>
+
+<h3 id="optimizerの定義">Optimizerの定義</h3>
+
+<p>DCGANの論文ではoptimizerにAdamと呼ばれる方法が用いられている。これは確率的最急降下法(SGD)を2つの点で拡張した方法である。</p>
+
+<p>SGDは、ミニバッチで与えられる小さなデータ集合に対して、ネットワークのパラメータを更新するための勾配を求める方法であった。この方法だと、たまたま良くないデータ集合がミニバッチで与えられたときに、急激にパラメータの更新方向が変化してしまい、学習が上手くいかなくなる事がある。</p>
+
+<p>これを防ぐために、各ミニバッチに対して求まった勾配をそのまま使うのではなく、これまでの履歴と今求まった勾配の情報を線形補間して、パラメータを更新する。こうすることで、仮に良くない勾配が出てきたときにも、その影響を少なく抑えることができる。この考え方はモーメンタムと呼ばれていて、これを入れたSGDをMomentum SGDなどと呼ぶ。</p>
+
+<p>また、SGDは、誤差を逆伝搬して与えられる勾配を(モーメンタムを使うかはともかくとして)、そのままパラメータ更新に利用する。すると、誤差に対して寄与の大きなパラメータばかりが更新されてしまい、本来重要な可能性がある他のパラメータがあまり更新されないという事態が起こる。</p>
+
+<p>これを改善するための方法として、これまで、各パラメータがどのくらい更新されたのかを記録しておき、あまり更新されていないパラメータは大きく、たくさん更新されているパラメータは小さく更新するというアプローチが考えられる。この方法を用いているものにAdaGradやRMSpropという方法がある。</p>
+
+<p>Adamはこの2つの考え方をあわせたもので、モーメンタムを使って急激な勾配の変化を防ぎつつも、まだ更新が浅いパラメータを良く更新しようとする。Adamが取るパラメータは学習率 <code class="highlighter-rouge">lr</code> の他に<code class="highlighter-rouge">beta1</code>と<code class="highlighter-rouge">beta2</code>の2つがあり、<code class="highlighter-rouge">beta1</code> が勾配の急激な変化を防ぐパラメータで<code class="highlighter-rouge">beta1</code>が大きければ大きいほど、過去の履歴を重視し、あらたま勾配が反映されづらくなる。一方、<code class="highlighter-rouge">beta2</code>はこれまでの更新量に応じて、現在の更新量を調整するパラメータで、こちらは大きければ大きいほど、より以前の更新量の大きさに応じて、現在の更新量をへらす傾向にある。逆に<code class="highlighter-rouge">beta2</code>が小さければ、以前に比較的直近の大きな更新だけを考慮する。</p>
+
+<p>Radfordらの論文では、Adamのパラメータとして<code class="highlighter-rouge">lr=2.0e-4</code>, <code class="highlighter-rouge">beta1=0.5</code>, <code class="highlighter-rouge">beta2=0.9</code>を使うことが推奨されているので、これに従ってGeneratorとDiscriminatorのそれぞれに対してOptimizerを定義する。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">optimG</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">netG</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">2.0e-4</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">))</span>
+<span class="n">optimD</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">netD</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">2.0e-4</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h3 id="学習ループ">学習ループ</h3>
+
+<p>学習の流れは、</p>
+
+<ul>
+  <li>Generatorが画像を生成</li>
+  <li>Discriminatorが画像を判別</li>
+  <li>損失関数により誤差を評価</li>
+</ul>
+
+<p>というのが基本となる。</p>
+
+<p>Generatorを学習するときにはDiscriminatorに偽物の画像だけを判別させ、その出力が1(本物)に近くなるように学習を行う。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">optimG</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">randn</span><span class="p">([</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">sample_dims</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="n">x_fake</span> <span class="o">=</span> <span class="n">netG</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">y_fake</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">x_fake</span><span class="p">)</span>
+
+<span class="n">lossG</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">))</span>
+<span class="n">lossG</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="n">optimG</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>一方で、Discriminatorを学習する場合には、本物の画像を偽物の画像の療法をDiscriminatorに通し、その出力が、本来あるべき値、すなわち本物なら1、偽物なら0になるように学習を行う。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Discriminatorの学習
+</span><span class="n">optimD</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">randn</span><span class="p">([</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">sample_dims</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="n">x_fake</span> <span class="o">=</span> <span class="n">netG</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">x_fake</span> <span class="o">=</span> <span class="n">x_fake</span><span class="p">.</span><span class="n">detach</span><span class="p">()</span>
+<span class="n">y_fake</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">x_fake</span><span class="p">)</span>
+<span class="n">y_real</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">x_real</span><span class="p">)</span>
+
+<span class="n">lossD</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">))</span> <span class="o">+</span>\
+        <span class="n">criterion</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_real</span><span class="p">))</span>
+<span class="n">lossD</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+
+<span class="n">optimD</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>なお上記のコードの中に<code class="highlighter-rouge">detach()</code>という関数が使われているが、これは、この値に対して、それ以前に誤差を逆伝搬しないようにする関数である。Discriminatorを学習する際はGeneratorまで誤差を逆伝搬する必要がないため、このようにしている。</p>
+
+<h2 id="学習結果">学習結果</h2>
+
+<p>上記のような単純な実装であったもMNISTであれば、十分に速く、かなりそれらしい画像を出すことができる。</p>
+
+<p>以下は、MNISTで10エポック(Colab上で8分程度)学習したときに得られる出力画像だが、短時間の学習でもそれらしい画像が出ていることが分かる。</p>
+
+<table class="images">
+<tr>
+  <td style="text-align: center; width: 50%;"><p><strong>教師画像</strong></p>
+</td>
+  <td style="text-align: center; width: 50%;"><p><strong>出力画像</strong></p>
+</td>
+</tr>
+<tr>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/gan/mnist_x_real_010.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/gan/mnist_x_real_010.jpg" alt="" style="width: 100%;" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+  <td><div class="lightbox-container">
+  <a class="lightbox-link" href="/programming-for-beginners/public/images/gan/mnist_x_fake_010.jpg" data-lightbox="images-1" data-title="">
+    <img src="/programming-for-beginners/public/images/gan/mnist_x_fake_010.jpg" alt="" style="width: 100%;" />
+  </a>
+  
+  <span class="lightbox-caption">
+    
+
+  </span>
+  
+</div></td>
+</tr>
+</table>
+
+<h2 id="まとめコード-次項のcganと同じ">まとめコード (次項のCGANと同じ)</h2>
+
+<p><a href="https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/gan/DCGAN_mnist_class.ipynb">https://github.com/tatsy/programming-for-beginners/blob/master/_programs/python/gan/DCGAN_mnist_class.ipynb</a></p>
+
+<h2 id="補足-変分オートエンコーダ">補足: 変分オートエンコーダ</h2>
+
+<p>現在主流の深層生成モデルにはGANの他にVAE (Variational Autoencoder) がある。Autoencoderとは入力に入れた画像を、一度多次元ベクトルとして特徴化し、その多次元ベクトルから再び、入力と同じ画像を作る操作を指す。画像を多次元ベクトルに変換するネットワークをencoder、多次元ベクトルから画像に戻すネットワークをdecoderと呼ぶ (encoder, decoderは必ずしもネットワークでなくても良い)。</p>
+
+<p>VAEはさらに、encoderが作り出す多次元ベクトルがランダムに近い分布になるよう学習する。すると、画像からエンコードされていない、ランダムな多次元画像に対しても画像を生成できるようになる。</p>
+
+</div>
+
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+(function() {
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'tatsy-github-io';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+    </div>
+  </div>
+
+  <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+  <footer class="site-footer h-card">
+    <data class="u-url" href="//programming-for-beginners/"></data>
+
+    <div class="wrapper">
+      <div class="container content">
+        <div class="footer-col-wrapper">
+          <div class="footer-col footer-col-1">
+            <ul class="contact-list">
+              <li class="p-name">Programming for Beginners</li>
+              <li><a class="u-email" href="mailto:tatsy.mail@gmail.com">tatsy.mail@gmail.com</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-2">
+            <ul class="social-media-list">
+              <li>
+                <a href="https://github.com/tatsy">
+                  <svg class="svg-icon">
+                    <use xlink:href="/programming-for-beginners/public/minima-social-icons.svg#github"></use>
+                  </svg>
+                  <span class="username">tatsy</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col footer-col-3">
+            <p>初心者・中級者向けC++/Pythonプログラミング</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src='/programming-for-beginners/public/js/script.js'></script>
+
+</body>
+
+</html>
