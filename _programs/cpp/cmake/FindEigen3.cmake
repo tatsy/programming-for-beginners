@@ -9,6 +9,7 @@ find_path(EIGEN3_INCLUDE_DIR
     /usr/include/eigen3
     /usr/local/include
     /usr/local/include/eigen3
+    /opt/homebrew/include/eigen3
     ${EIGEN3_DIR}
     ${EIGEN3_DIR}/include)
 
