@@ -26,7 +26,7 @@ jobs:
 
       # Specify the target branch (optional)
       - name: "Jekyll build"
-        uses: helaili/jekyll-action
+        uses: helaili/jekyll-action@v2
         env:
           JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
         with:
