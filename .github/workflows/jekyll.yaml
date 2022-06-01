@@ -9,19 +9,24 @@ jobs:
   jekyll:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    # Use GitHub Actions' cache to shorten build times and decrease load on servers
-    - uses: actions/cache@v1
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
-        restore-keys: |
-          ${{ runner.os }}-gems-
+      - name: Set up Ruby
+        uses: ruby/setup-ruby
+        with:
+          ruby-version: "3.0.1"
 
-    # Specify the target branch (optional)
-    - uses: helaili/jekyll-action@56f7087e21a9a8a069e5896c5caf160f1ff361c5
-      env:
-        JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-      with:
-        target_branch: 'gh-pages'
+      # Use GitHub Actions' cache to shorten build times and decrease load on servers
+      - uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      # Specify the target branch (optional)
+      - uses: helaili/jekyll-action
+        env:
+          JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+        with:
+          target_branch: "gh-pages"
