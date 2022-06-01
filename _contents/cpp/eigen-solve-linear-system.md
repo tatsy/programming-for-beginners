@@ -237,9 +237,7 @@ AA.setFromTriplets(triplets.begin(), triplets.end());
 
 ### 疎行列に対する線形ソルバー
 
-密行列を扱う場合と同様、Eigenには複数の直接法と反復法によるソルバーが用意されている。
-
-ただし、密行列の場合と違い、疎行列の場合には、疎行列でいう反復法のソルバと同じような使い方を直接法に対しても行う必要がある。
+密行列を扱う場合と同様、Eigenには複数の直接法と反復法によるソルバーが用意されている。ただし、密行列の場合と違い、疎行列の場合には、密行列でいう反復法のソルバと同じような使い方を直接法に対しても行う必要がある。
 
 例えば、直接法のソルバーである`SparseLU`を用いる場合には、以下のようになる。
 
@@ -251,4 +249,8 @@ solver.compute(AA);
 xx = solver.solve(bb);
 ```
 
-なお、Eigenのドキュメントでは`compute()`と等価なものとして`analyzePattern()`と`factorize()`を連続して呼び出しているが、`analyzePattern()`は`factorize()`のコストを減らすための行列要素の順序入れ替えで、`factorize()`は実際の行列分解を行うメソッドである。
+なお、Eigenのドキュメントによると`compute()`は内部で`analyzePattern()`と`factorize()`を連続して呼び出している。`analyzePattern()`は`factorize()`のコストを減らすための行列要素の順序入れ替えで、`factorize()`は実際の行列分解を行うメソッドである。
+
+直接法、反復法ともに、どのような行列に対して有効なのかについては、以下のEigenのドキュメントを参照すると良い。
+
+* [Eigen: List of sparse solvers](https://eigen.tuxfamily.org/dox/group__TopicSparseSystems.html){: target="_blank" }
