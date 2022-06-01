@@ -372,9 +372,7 @@ MathJax = {
 
 <h3 id="疎行列に対する線形ソルバー">疎行列に対する線形ソルバー</h3>
 
-<p>密行列を扱う場合と同様、Eigenには複数の直接法と反復法によるソルバーが用意されている。</p>
-
-<p>ただし、密行列の場合と違い、疎行列の場合には、疎行列でいう反復法のソルバと同じような使い方を直接法に対しても行う必要がある。</p>
+<p>密行列を扱う場合と同様、Eigenには複数の直接法と反復法によるソルバーが用意されている。ただし、密行列の場合と違い、疎行列の場合には、密行列でいう反復法のソルバと同じような使い方を直接法に対しても行う必要がある。</p>
 
 <p>例えば、直接法のソルバーである<code class="highlighter-rouge">SparseLU</code>を用いる場合には、以下のようになる。</p>
 
@@ -385,7 +383,13 @@ MathJax = {
 <span class="n">xx</span> <span class="o">=</span> <span class="n">solver</span><span class="p">.</span><span class="n">solve</span><span class="p">(</span><span class="n">bb</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>なお、Eigenのドキュメントでは<code class="highlighter-rouge">compute()</code>と等価なものとして<code class="highlighter-rouge">analyzePattern()</code>と<code class="highlighter-rouge">factorize()</code>を連続して呼び出しているが、<code class="highlighter-rouge">analyzePattern()</code>は<code class="highlighter-rouge">factorize()</code>のコストを減らすための行列要素の順序入れ替えで、<code class="highlighter-rouge">factorize()</code>は実際の行列分解を行うメソッドである。</p>
+<p>なお、Eigenのドキュメントによると<code class="highlighter-rouge">compute()</code>は内部で<code class="highlighter-rouge">analyzePattern()</code>と<code class="highlighter-rouge">factorize()</code>を連続して呼び出している。<code class="highlighter-rouge">analyzePattern()</code>は<code class="highlighter-rouge">factorize()</code>のコストを減らすための行列要素の順序入れ替えで、<code class="highlighter-rouge">factorize()</code>は実際の行列分解を行うメソッドである。</p>
+
+<p>直接法、反復法ともに、どのような行列に対して有効なのかについては、以下のEigenのドキュメントを参照すると良い。</p>
+
+<ul>
+  <li><a href="https://eigen.tuxfamily.org/dox/group__TopicSparseSystems.html" target="_blank">Eigen: List of sparse solvers</a></li>
+</ul>
 
 </div>
 
