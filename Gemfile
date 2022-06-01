@@ -30,3 +30,4 @@ end
 gem "wdm", :install_if => Gem.win_platform?
 gem "rubyzip"
 gem "webrick"
+gem 'eventmachine', :git => 'https://github.com/eventmachine/eventmachine.git', :branch => 'master'

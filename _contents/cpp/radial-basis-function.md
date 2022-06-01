@@ -52,22 +52,22 @@ $$
 この場合、補間後の関数を構成するパラメータが$\lambda_x, \lambda_y, \lambda_z, \lambda$だけ増加するので、その自由度の増加分を打ち消すために、以下のような条件を課す。
 
 $$
-\sum_{i=0}^{N-1} \lambda_x x_i = \sum_{i=0}^{N-1} \lambda_y y_i = \sum_{i=0}^{N-1} \lambda_z z_i = \sum_{i=0}^{N-1} \lambda = 0.
+\sum_{i=0}^{N-1} w_i x_i = \sum_{i=0}^{N-1} w_i y_i = \sum_{i=0}^{N-1} w_i z_i = \sum_{i=0}^{N-1} w_i = 0.
 $$
 
-これはより高次の多項式を用いる場合でも同様で、とある多項式が単項式$p_l(\mathbf{x})$の線形和として
+これは、より高次の多項式を用いる場合でも同様で、二次式まで含める場合であれば
 
 $$
-p(\mathbf{x}) = \sum_{l=0}^{M} a_l p_l(\mathbf{x})
+p(\mathbf{x}) = \lambda_{xx} x^2 + \lambda_{yy} y^2 + \lambda_{zz} z^2 + \lambda_{xy} xy + \lambda_{yz} yz + \lambda_{zx} zx + ...
 $$
 
-のように表されるなら、その自由度の増分を打ち消すために、
+のように多項式項を定義した上で、追加制約として
 
 $$
-\sum_{i=0}^{N-1} a_l p_l(\mathbf{x}) = 0
+\sum_{i=0}^{N-1} w_i x_i^2 = \sum_{i=0}^{N-1} w_i y_i^2 = \sum_{i=0}^{N-1} w_i z_i^2 = \sum_{i=0}^{N-1} w_i x_i y_i = \sum_{i=0}^{N-1} w_i y_i z_i = \sum_{i=0}^{N-1} w_i z_i x_i = 0.
 $$
 
-という条件を課す。
+という条件を課せば良い。
 
 > 参考: Schaback 2007, "A Practical Guide to Radial Basis Functions" \\
 > <https://num.math.uni-goettingen.de/schaback/teaching/sc.pdf>{: target="_blank" }
@@ -87,7 +87,7 @@ $$
 $$
 \phi(r) = \begin{cases}
 |r|^k & k \text{ is even} \\
-|r|^{k-1} \log |k| & k \text{ is odd}
+|r|^{k-1} \log |r| & k \text{ is odd}
 \end{cases}
 $$
 
