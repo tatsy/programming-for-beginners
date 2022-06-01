@@ -16,18 +16,14 @@ jobs:
         with:
           ruby-version: "3.0.1"
 
-      # Use GitHub Actions' cache to shorten build times and decrease load on servers
-      - uses: actions/cache@v1
+      - name: bundle install
+        run: |
+          bundle config set path 'vendor/bundle'
+          bundle install
+      - name: Jekyll Build
+        run: bundle exec jekyll build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
-      # Specify the target branch (optional)
-      - name: "Jekyll build"
-        uses: helaili/jekyll-action@v2
-        env:
-          JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
-        with:
-          target_branch: "gh-pages"
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
