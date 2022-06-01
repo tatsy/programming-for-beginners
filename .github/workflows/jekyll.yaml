@@ -20,9 +20,9 @@ jobs:
         run: |
           bundle config set path 'vendor/bundle'
           bundle install
-      - name: Jekyll Build
+      - name: Jekyll build
         run: bundle exec jekyll build
-      - name: Deploy
+      - name: Github pages deployment
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.GITHUB_TOKEN }}
