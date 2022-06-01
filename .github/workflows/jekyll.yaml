@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up Ruby
-        uses: ruby/setup-ruby
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.0.1"
 
@@ -25,7 +25,8 @@ jobs:
             ${{ runner.os }}-gems-
 
       # Specify the target branch (optional)
-      - uses: helaili/jekyll-action
+      - name: "Jekyll build"
+        uses: helaili/jekyll-action
         env:
           JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
         with:
