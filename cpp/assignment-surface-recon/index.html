@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -183,9 +183,9 @@ MathJax = {
 
 <p>これまでに解説した内容を元にテンプレート・プログラム(トップページからダウンロードする)の内容を改変して、点群データからメッシュを復元してみよう。</p>
 
-<p>変更するべき内容はいずれも<code class="highlighter-rouge">surface_recon.cpp</code>のファイル内にあり、それぞれは以下の通りである。</p>
+<p>変更するべき内容はいずれも<code class="language-plaintext highlighter-rouge">surface_recon.cpp</code>のファイル内にあり、それぞれは以下の通りである。</p>
 
-<p>なお、前回同様、これらの箇所には最初の時点では<code class="highlighter-rouge">NOT_IMPL_ERROR()</code>と書かれており、この状態で実行すると、実装されていない箇所がエラーとともに表示されるようになっている。</p>
+<p>なお、前回同様、これらの箇所には最初の時点では<code class="language-plaintext highlighter-rouge">NOT_IMPL_ERROR()</code>と書かれており、この状態で実行すると、実装されていない箇所がエラーとともに表示されるようになっている。</p>
 
 <h3 id="入力点群の位置の正規化--オフセット点の生成">入力点群の位置の正規化 + オフセット点の生成</h3>
 
@@ -197,9 +197,9 @@ MathJax = {
 
 <p>位置の正規化が終了したら、実際にオフセット点を生成する。ここでもバウンディング・ボックスの大きさに対して一定の割合でオフセット幅を決定する。ただし、実際のオフセット幅を$l$としたなら、オフセットされた点$\mathbf{x}$と、それに対する最近傍点$\mathbf{c}$ならびにその法線$\mathbf{n}$を用いて、陰関数の参照値を$d_i = \mathbf{n} \cdot (\mathbf{x} - \mathbf{c}) / l$のように計算すること。</p>
 
-<p>k-d木から最近傍点を取ってくる際には、法線の情報が取り出せるように、頂点の位置と入力点群の配列内での番号を持った<code class="highlighter-rouge">Point</code>型を定義してあるので、適宜、これをプログラムの中で、用いると良い。</p>
+<p>k-d木から最近傍点を取ってくる際には、法線の情報が取り出せるように、頂点の位置と入力点群の配列内での番号を持った<code class="language-plaintext highlighter-rouge">Point</code>型を定義してあるので、適宜、これをプログラムの中で、用いると良い。</p>
 
-<p>なお、テンプレートプログラムの中では<code class="highlighter-rouge">xyz</code>が頂点位置、<code class="highlighter-rouge">vals</code>が陰関数の参照値を格納する配列 (<code class="highlighter-rouge">std::vector</code>型)としてある。</p>
+<p>なお、テンプレートプログラムの中では<code class="language-plaintext highlighter-rouge">xyz</code>が頂点位置、<code class="language-plaintext highlighter-rouge">vals</code>が陰関数の参照値を格納する配列 (<code class="language-plaintext highlighter-rouge">std::vector</code>型)としてある。</p>
 
 <h3 id="rbf補間のための線形問題を解く">RBF補間のための線形問題を解く</h3>
 

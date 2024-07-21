@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -184,24 +184,24 @@ MathJax = {
 
 <p>上記のルールに従うと、Generatorは畳み込み、バッチ正規化、ReLUの3つを何度も行うネットワークになる。この3つの組をブロックと呼ぶことにすると、1つのブロックは以下のように定義できる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">block</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span>
-    <span class="n">nn</span><span class="p">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-    <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">out_channels</span><span class="p">),</span>
-    <span class="n">nn</span><span class="p">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">block</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="p">.</span><span class="nc">ConvTranspose2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">nn</span><span class="p">.</span><span class="nc">BatchNorm2d</span><span class="p">(</span><span class="n">out_channels</span><span class="p">),</span>
+    <span class="n">nn</span><span class="p">.</span><span class="nc">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>Generatorは画像を徐々に大きくしていくネットワークなので、畳み込み層の代わりに逆畳み込みが使われている点に注意してほしい。上記のブロックに画像を通すと、画像のチャネル数が <code class="highlighter-rouge">in_channels</code> から <code class="highlighter-rouge">out_channels</code> に変化して、さらに画像のサイズが各方向2倍に拡大される。</p>
+<p>Generatorは画像を徐々に大きくしていくネットワークなので、畳み込み層の代わりに逆畳み込みが使われている点に注意してほしい。上記のブロックに画像を通すと、画像のチャネル数が <code class="language-plaintext highlighter-rouge">in_channels</code> から <code class="language-plaintext highlighter-rouge">out_channels</code> に変化して、さらに画像のサイズが各方向2倍に拡大される。</p>
 
 <p>ところで、Generatorの入力は多次元ベクトルだという話をした。多次元ベクトルにいきなり逆畳み込みを行うことはできないので、ベクトルを1x1の画像にデータ変換するのを忘れないようにしよう。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n_batch</span><span class="p">,</span> <span class="n">n_dim</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">size</span><span class="p">()</span>  <span class="c1"># 入力のベクトルはn_dim次元
-</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="n">n_batch</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># これでチャネル数がn_dimの1x1の画像とみなされる
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n_batch</span><span class="p">,</span> <span class="n">n_dim</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="nf">size</span><span class="p">()</span>  <span class="c1"># 入力のベクトルはn_dim次元
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="nf">view</span><span class="p">(</span><span class="n">n_batch</span><span class="p">,</span> <span class="n">n_dim</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># これでチャネル数がn_dimの1x1の画像とみなされる
 </span></code></pre></div></div>
 
-<p>最後に画像を出力するときには、ReLUで活性化する代わりにtanh (Hyperbolic tangent)を使う。シグモイド関数は値域が<code class="highlighter-rouge">[0, 1]</code> であるのに対して、tanhは値域が <code class="highlighter-rouge">[-1, 1]</code> と分布中心が0になっているため、各畳み込み層がバイアスベクトルを学習する必要がなくなり、学習の進行が安定する傾向がある。</p>
+<p>最後に画像を出力するときには、ReLUで活性化する代わりにtanh (Hyperbolic tangent)を使う。シグモイド関数は値域が<code class="language-plaintext highlighter-rouge">[0, 1]</code> であるのに対して、tanhは値域が <code class="language-plaintext highlighter-rouge">[-1, 1]</code> と分布中心が0になっているため、各畳み込み層がバイアスベクトルを学習する必要がなくなり、学習の進行が安定する傾向がある。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tanh</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="k">return</span> <span class="n">x</span>
 </code></pre></div></div>
 
@@ -211,23 +211,23 @@ MathJax = {
 
 <p>これらに従うと、Discriminatorの基本ブロックは以下のように定義できる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">block</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span>
-    <span class="n">nn</span><span class="p">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-    <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">out_channels</span><span class="p">),</span>
-    <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">block</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">Sequential</span><span class="p">(</span>
+    <span class="n">nn</span><span class="p">.</span><span class="nc">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">nn</span><span class="p">.</span><span class="nc">BatchNorm2d</span><span class="p">(</span><span class="n">out_channels</span><span class="p">),</span>
+    <span class="n">nn</span><span class="p">.</span><span class="nc">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
 <span class="p">)</span>
 </code></pre></div></div>
 
-<p>このブロックに画像を通すと、チャネル数が<code class="highlighter-rouge">in_channels</code>から<code class="highlighter-rouge">out_channels</code>に変化し、画像のサイズが各方向で2分の1になる。</p>
+<p>このブロックに画像を通すと、チャネル数が<code class="language-plaintext highlighter-rouge">in_channels</code>から<code class="language-plaintext highlighter-rouge">out_channels</code>に変化し、画像のサイズが各方向で2分の1になる。</p>
 
 <p>この操作を徐々に繰り返していくと、1x1の画像になるので、あとはベクトルとして出力するために、出力形状を変換する。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">squeeze</span><span class="p">()</span>  <span class="c1"># 大きさが1の次元を削る
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="nf">squeeze</span><span class="p">()</span>  <span class="c1"># 大きさが1の次元を削る
 </span></code></pre></div></div>
 
 <p>なお、Discriminatorは本物か偽物かの識別問題を解くので、安直にはsigmoid関数で活性化して出力する。損失関数の計算では、これを交差エントロピーで評価するのだが、sigmoidと交差エントロピーを個別に評価するよりも、それらを合わせた関数を一度に評価するほうが数値的に安定することが知られている。</p>
 
-<p>PyTorchでは、交差エントロピーの関数が <code class="highlighter-rouge">torch.nn.BCELoss</code> で与えられているのに対して、sigmoidを組み合わせたものは <code class="highlighter-rouge">torch.nn.BCEWithLogitsLoss</code> で与えられる。今回は後者を使うので、Discriminatorの出力時点ではsigmoid関数で活性化する必要はない。</p>
+<p>PyTorchでは、交差エントロピーの関数が <code class="language-plaintext highlighter-rouge">torch.nn.BCELoss</code> で与えられているのに対して、sigmoidを組み合わせたものは <code class="language-plaintext highlighter-rouge">torch.nn.BCEWithLogitsLoss</code> で与えられる。今回は後者を使うので、Discriminatorの出力時点ではsigmoid関数で活性化する必要はない。</p>
 
 <h3 id="optimizerの定義">Optimizerの定義</h3>
 
@@ -241,12 +241,12 @@ MathJax = {
 
 <p>これを改善するための方法として、これまで、各パラメータがどのくらい更新されたのかを記録しておき、あまり更新されていないパラメータは大きく、たくさん更新されているパラメータは小さく更新するというアプローチが考えられる。この方法を用いているものにAdaGradやRMSpropという方法がある。</p>
 
-<p>Adamはこの2つの考え方をあわせたもので、モーメンタムを使って急激な勾配の変化を防ぎつつも、まだ更新が浅いパラメータを良く更新しようとする。Adamが取るパラメータは学習率 <code class="highlighter-rouge">lr</code> の他に<code class="highlighter-rouge">beta1</code>と<code class="highlighter-rouge">beta2</code>の2つがあり、<code class="highlighter-rouge">beta1</code> が勾配の急激な変化を防ぐパラメータで<code class="highlighter-rouge">beta1</code>が大きければ大きいほど、過去の履歴を重視し、あらたま勾配が反映されづらくなる。一方、<code class="highlighter-rouge">beta2</code>はこれまでの更新量に応じて、現在の更新量を調整するパラメータで、こちらは大きければ大きいほど、より以前の更新量の大きさに応じて、現在の更新量をへらす傾向にある。逆に<code class="highlighter-rouge">beta2</code>が小さければ、以前に比較的直近の大きな更新だけを考慮する。</p>
+<p>Adamはこの2つの考え方をあわせたもので、モーメンタムを使って急激な勾配の変化を防ぎつつも、まだ更新が浅いパラメータを良く更新しようとする。Adamが取るパラメータは学習率 <code class="language-plaintext highlighter-rouge">lr</code> の他に<code class="language-plaintext highlighter-rouge">beta1</code>と<code class="language-plaintext highlighter-rouge">beta2</code>の2つがあり、<code class="language-plaintext highlighter-rouge">beta1</code> が勾配の急激な変化を防ぐパラメータで<code class="language-plaintext highlighter-rouge">beta1</code>が大きければ大きいほど、過去の履歴を重視し、あらたま勾配が反映されづらくなる。一方、<code class="language-plaintext highlighter-rouge">beta2</code>はこれまでの更新量に応じて、現在の更新量を調整するパラメータで、こちらは大きければ大きいほど、より以前の更新量の大きさに応じて、現在の更新量をへらす傾向にある。逆に<code class="language-plaintext highlighter-rouge">beta2</code>が小さければ、以前に比較的直近の大きな更新だけを考慮する。</p>
 
-<p>Radfordらの論文では、Adamのパラメータとして<code class="highlighter-rouge">lr=2.0e-4</code>, <code class="highlighter-rouge">beta1=0.5</code>, <code class="highlighter-rouge">beta2=0.9</code>を使うことが推奨されているので、これに従ってGeneratorとDiscriminatorのそれぞれに対してOptimizerを定義する。</p>
+<p>Radfordらの論文では、Adamのパラメータとして<code class="language-plaintext highlighter-rouge">lr=2.0e-4</code>, <code class="language-plaintext highlighter-rouge">beta1=0.5</code>, <code class="language-plaintext highlighter-rouge">beta2=0.9</code>を使うことが推奨されているので、これに従ってGeneratorとDiscriminatorのそれぞれに対してOptimizerを定義する。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">optimG</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">netG</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">2.0e-4</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">))</span>
-<span class="n">optimD</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">netD</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">2.0e-4</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">optimG</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="nc">Adam</span><span class="p">(</span><span class="n">netG</span><span class="p">.</span><span class="nf">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">2.0e-4</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">))</span>
+<span class="n">optimD</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="nc">Adam</span><span class="p">(</span><span class="n">netD</span><span class="p">.</span><span class="nf">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">2.0e-4</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">))</span>
 </code></pre></div></div>
 
 <h3 id="学習ループ">学習ループ</h3>
@@ -263,37 +263,37 @@ MathJax = {
 
 <p>Generatorを学習するときにはDiscriminatorに偽物の画像だけを判別させ、その出力が1(本物)に近くなるように学習を行う。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">optimG</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">optimG</span><span class="p">.</span><span class="nf">zero_grad</span><span class="p">()</span>
 
-<span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">randn</span><span class="p">([</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">sample_dims</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-<span class="n">x_fake</span> <span class="o">=</span> <span class="n">netG</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-<span class="n">y_fake</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">x_fake</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">randn</span><span class="p">([</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">sample_dims</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="n">x_fake</span> <span class="o">=</span> <span class="nf">netG</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">y_fake</span> <span class="o">=</span> <span class="nf">netD</span><span class="p">(</span><span class="n">x_fake</span><span class="p">)</span>
 
-<span class="n">lossG</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">))</span>
-<span class="n">lossG</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">lossG</span> <span class="o">=</span> <span class="nf">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">ones_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">))</span>
+<span class="n">lossG</span><span class="p">.</span><span class="nf">backward</span><span class="p">()</span>
 
-<span class="n">optimG</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+<span class="n">optimG</span><span class="p">.</span><span class="nf">step</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>一方で、Discriminatorを学習する場合には、本物の画像を偽物の画像の療法をDiscriminatorに通し、その出力が、本来あるべき値、すなわち本物なら1、偽物なら0になるように学習を行う。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Discriminatorの学習
-</span><span class="n">optimD</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</span><span class="n">optimD</span><span class="p">.</span><span class="nf">zero_grad</span><span class="p">()</span>
 
-<span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">randn</span><span class="p">([</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">sample_dims</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-<span class="n">x_fake</span> <span class="o">=</span> <span class="n">netG</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-<span class="n">x_fake</span> <span class="o">=</span> <span class="n">x_fake</span><span class="p">.</span><span class="n">detach</span><span class="p">()</span>
-<span class="n">y_fake</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">x_fake</span><span class="p">)</span>
-<span class="n">y_real</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">x_real</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">randn</span><span class="p">([</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">sample_dims</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="n">x_fake</span> <span class="o">=</span> <span class="nf">netG</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">x_fake</span> <span class="o">=</span> <span class="n">x_fake</span><span class="p">.</span><span class="nf">detach</span><span class="p">()</span>
+<span class="n">y_fake</span> <span class="o">=</span> <span class="nf">netD</span><span class="p">(</span><span class="n">x_fake</span><span class="p">)</span>
+<span class="n">y_real</span> <span class="o">=</span> <span class="nf">netD</span><span class="p">(</span><span class="n">x_real</span><span class="p">)</span>
 
-<span class="n">lossD</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">))</span> <span class="o">+</span>\
-        <span class="n">criterion</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_real</span><span class="p">))</span>
-<span class="n">lossD</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">lossD</span> <span class="o">=</span> <span class="nf">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">))</span> <span class="o">+</span>\
+        <span class="nf">criterion</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">ones_like</span><span class="p">(</span><span class="n">y_real</span><span class="p">))</span>
+<span class="n">lossD</span><span class="p">.</span><span class="nf">backward</span><span class="p">()</span>
 
-<span class="n">optimD</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+<span class="n">optimD</span><span class="p">.</span><span class="nf">step</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>なお上記のコードの中に<code class="highlighter-rouge">detach()</code>という関数が使われているが、これは、この値に対して、それ以前に誤差を逆伝搬しないようにする関数である。Discriminatorを学習する際はGeneratorまで誤差を逆伝搬する必要がないため、このようにしている。</p>
+<p>なお上記のコードの中に<code class="language-plaintext highlighter-rouge">detach()</code>という関数が使われているが、これは、この値に対して、それ以前に誤差を逆伝搬しないようにする関数である。Discriminatorを学習する際はGeneratorまで誤差を逆伝搬する必要がないため、このようにしている。</p>
 
 <h2 id="学習結果">学習結果</h2>
 

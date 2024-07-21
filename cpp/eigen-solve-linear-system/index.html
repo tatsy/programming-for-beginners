@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -157,12 +157,12 @@ MathJax = {
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;Eigen/Core&gt;</span><span class="cp">
 </span></code></pre></div></div>
 
-<p>この<code class="highlighter-rouge">Core</code>というヘッダは、Eigenの行列の定義だけを抽出したものである。これに加えて、行列の分解や線形問題のソルバーなどを含めたい場合には、</p>
+<p>この<code class="language-plaintext highlighter-rouge">Core</code>というヘッダは、Eigenの行列の定義だけを抽出したものである。これに加えて、行列の分解や線形問題のソルバーなどを含めたい場合には、</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;Eigen/Dense&gt;</span><span class="cp">
 </span></code></pre></div></div>
 
-<p>とすれば良い。ただし、この<code class="highlighter-rouge">Dense</code>というヘッダは、その中で上記の行列分解や線形ソルバーのためのヘッダをインクルードするため、コンパイルに異様に時間がかかるようになる。</p>
+<p>とすれば良い。ただし、この<code class="language-plaintext highlighter-rouge">Dense</code>というヘッダは、その中で上記の行列分解や線形ソルバーのためのヘッダをインクルードするため、コンパイルに異様に時間がかかるようになる。</p>
 
 <p>これを防ぎたければ、必要な機能だけを選んで以下のようにするのが良い。</p>
 
@@ -191,12 +191,12 @@ MathJax = {
 
 <p>のように定義されている (<a href="https://eigen.tuxfamily.org/dox/group__TutorialMatrixClass.html" target="_blank">参考ページ</a>)。</p>
 
-<p>ウェブ上のサンプルなどで良く使われている <code class="highlighter-rouge">MatrixXd</code>というのは基本の型が<code class="highlighter-rouge">double</code>で行数、列数ともにX, すなわち動的変化可能、という意味である。これは、上記の定義に当てはめれば以下のように定義される。</p>
+<p>ウェブ上のサンプルなどで良く使われている <code class="language-plaintext highlighter-rouge">MatrixXd</code>というのは基本の型が<code class="language-plaintext highlighter-rouge">double</code>で行数、列数ともにX, すなわち動的変化可能、という意味である。これは、上記の定義に当てはめれば以下のように定義される。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Dynamic</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Dynamic</span><span class="o">&gt;</span> <span class="n">MatrixXd</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>またサイズが可変のベクトルを表す<code class="highlighter-rouge">VectorXd</code>であれば、その定義は以下のようになる。</p>
+<p>またサイズが可変のベクトルを表す<code class="language-plaintext highlighter-rouge">VectorXd</code>であれば、その定義は以下のようになる。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">Dynamic</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="n">VectorXd</span><span class="p">;</span>
 </code></pre></div></div>
@@ -337,14 +337,14 @@ MathJax = {
 <span class="n">Array</span><span class="o">&lt;</span><span class="n">DataInRow</span><span class="o">&gt;</span> <span class="n">rowData</span><span class="p">(</span><span class="n">numRows</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>そのため、Eigenで疎行列を扱うときには、各非ゼロ要素に対して<strong>行番号</strong>, <strong>列番号</strong>, <strong>要素の値</strong>の三組が必要になる。この三組を表すために、Eigenには<code class="highlighter-rouge">Triplet</code>という型が用意されている。</p>
+<p>そのため、Eigenで疎行列を扱うときには、各非ゼロ要素に対して<strong>行番号</strong>, <strong>列番号</strong>, <strong>要素の値</strong>の三組が必要になる。この三組を表すために、Eigenには<code class="language-plaintext highlighter-rouge">Triplet</code>という型が用意されている。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in namespace Eigen</span>
 <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Scalar</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">Index</span><span class="p">&gt;</span>
 <span class="k">class</span> <span class="nc">Triplet</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>この<code class="highlighter-rouge">Triplet</code>を使う場合も、要素と行、列番号を指定するための型を変更できるよう、以下のようにしておくのが良い。</p>
+<p>この<code class="language-plaintext highlighter-rouge">Triplet</code>を使う場合も、要素と行、列番号を指定するための型を変更できるよう、以下のようにしておくのが良い。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">ScalarType</span> <span class="o">=</span> <span class="kt">double</span><span class="p">;</span>
 <span class="k">using</span> <span class="n">IndexType</span> <span class="o">=</span> <span class="kt">int64_t</span><span class="p">;</span>
@@ -357,7 +357,7 @@ MathJax = {
 <span class="k">using</span> <span class="n">SparseMatrix</span> <span class="o">=</span> <span class="n">Eigen</span><span class="o">::</span><span class="n">SparseMatrix</span><span class="o">&lt;</span><span class="n">ScalarType</span><span class="o">&gt;</span><span class="p">;</span>
 </code></pre></div></div>
 
-<p>疎行列を作る際には、この<code class="highlighter-rouge">Triplet</code>を配列等に入れておき、<code class="highlighter-rouge">setFromTriplet</code>関数で要素を指定する。</p>
+<p>疎行列を作る際には、この<code class="language-plaintext highlighter-rouge">Triplet</code>を配列等に入れておき、<code class="language-plaintext highlighter-rouge">setFromTriplet</code>関数で要素を指定する。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Triplet</span><span class="o">&gt;</span> <span class="n">triplets</span><span class="p">;</span>
 
@@ -374,7 +374,7 @@ MathJax = {
 
 <p>密行列を扱う場合と同様、Eigenには複数の直接法と反復法によるソルバーが用意されている。ただし、密行列の場合と違い、疎行列の場合には、密行列でいう反復法のソルバと同じような使い方を直接法に対しても行う必要がある。</p>
 
-<p>例えば、直接法のソルバーである<code class="highlighter-rouge">SparseLU</code>を用いる場合には、以下のようになる。</p>
+<p>例えば、直接法のソルバーである<code class="language-plaintext highlighter-rouge">SparseLU</code>を用いる場合には、以下のようになる。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">VectorXd</span> <span class="n">xx</span><span class="p">;</span>
 
@@ -383,7 +383,7 @@ MathJax = {
 <span class="n">xx</span> <span class="o">=</span> <span class="n">solver</span><span class="p">.</span><span class="n">solve</span><span class="p">(</span><span class="n">bb</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>なお、Eigenのドキュメントによると<code class="highlighter-rouge">compute()</code>は内部で<code class="highlighter-rouge">analyzePattern()</code>と<code class="highlighter-rouge">factorize()</code>を連続して呼び出している。<code class="highlighter-rouge">analyzePattern()</code>は<code class="highlighter-rouge">factorize()</code>のコストを減らすための行列要素の順序入れ替えで、<code class="highlighter-rouge">factorize()</code>は実際の行列分解を行うメソッドである。</p>
+<p>なお、Eigenのドキュメントによると<code class="language-plaintext highlighter-rouge">compute()</code>は内部で<code class="language-plaintext highlighter-rouge">analyzePattern()</code>と<code class="language-plaintext highlighter-rouge">factorize()</code>を連続して呼び出している。<code class="language-plaintext highlighter-rouge">analyzePattern()</code>は<code class="language-plaintext highlighter-rouge">factorize()</code>のコストを減らすための行列要素の順序入れ替えで、<code class="language-plaintext highlighter-rouge">factorize()</code>は実際の行列分解を行うメソッドである。</p>
 
 <p>直接法、反復法ともに、どのような行列に対して有効なのかについては、以下のEigenのドキュメントを参照すると良い。</p>
 

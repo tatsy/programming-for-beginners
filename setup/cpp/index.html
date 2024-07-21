@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -178,7 +178,7 @@ MathJax = {
 
 <p>本資料では、開発環境による設定の差異を減らすためにCMakeというプロジェクト設定ツールを使って、ソースコードを管理している。CMakeはWindows, MacといったOSだけでなく、Visual StudioやCLionといった開発環境の違いも吸収する形で、統一的なソースコード管理が可能になる。</p>
 
-<p>プロジェクトの設定は <code class="highlighter-rouge">CMakeLists.txt</code> というテキストファイルを各フォルダに階層的に配置する形で行われる。CMakeの書き方は、それはそれで一つのプログラミング言語のようなものであり、一朝一夕に説明することは困難なので、詳細は割愛するが、一例として <code class="highlighter-rouge">main.cpp</code>, <code class="highlighter-rouge">module.h</code>, <code class="highlighter-rouge">module.cpp</code> という3つのファイルから構成される実行可能プログラム(名前を<code class="highlighter-rouge">myprogram</code>とする)を作る場合には、CMakeLists.txt内に以下の内容を記述する。</p>
+<p>プロジェクトの設定は <code class="language-plaintext highlighter-rouge">CMakeLists.txt</code> というテキストファイルを各フォルダに階層的に配置する形で行われる。CMakeの書き方は、それはそれで一つのプログラミング言語のようなものであり、一朝一夕に説明することは困難なので、詳細は割愛するが、一例として <code class="language-plaintext highlighter-rouge">main.cpp</code>, <code class="language-plaintext highlighter-rouge">module.h</code>, <code class="language-plaintext highlighter-rouge">module.cpp</code> という3つのファイルから構成される実行可能プログラム(名前を<code class="language-plaintext highlighter-rouge">myprogram</code>とする)を作る場合には、CMakeLists.txt内に以下の内容を記述する。</p>
 
 <div class="language-cmake highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">add_executable</span><span class="p">(</span>myprogram main.cpp module.h module.cpp<span class="p">)</span>
 </code></pre></div></div>
@@ -189,7 +189,7 @@ MathJax = {
 <span class="nb">project</span><span class="p">(</span>MyProject<span class="p">)</span>
 </code></pre></div></div>
 
-<p>なお、この設定は冒頭に1どだけ行えばよく、複数の実行可能ファイルやライブラリを追加する場合には、<code class="highlighter-rouge">add_executable</code> や <code class="highlighter-rouge">add_library</code> の呼び出しだけを追加していけば良い。</p>
+<p>なお、この設定は冒頭に1どだけ行えばよく、複数の実行可能ファイルやライブラリを追加する場合には、<code class="language-plaintext highlighter-rouge">add_executable</code> や <code class="language-plaintext highlighter-rouge">add_library</code> の呼び出しだけを追加していけば良い。</p>
 
 <p>本資料では、すでにプロジェクトの設定と、ソースコードの編集に足るCMakeの記述をしてあるので、以下では、Windows, Macのそれぞれでの利用法について述べる。</p>
 
@@ -201,7 +201,7 @@ MathJax = {
 
 <p><a href="https://cmake.org/download/" target="_blank">https://cmake.org/download/</a></p>
 
-<p>上記のページには<em>Source distributions</em>と<em>Binary distributions</em>があるが、よほど特殊な事情がない限りは<em>Binary distributions</em>で良いので、その中から自分の環境にあったものを選ぶ。特にWindowsならば<code class="highlighter-rouge">*.msi</code>、Macならば<code class="highlighter-rouge">*.dmg</code>が拡張子になっているものを選ぶと良い。</p>
+<p>上記のページには<em>Source distributions</em>と<em>Binary distributions</em>があるが、よほど特殊な事情がない限りは<em>Binary distributions</em>で良いので、その中から自分の環境にあったものを選ぶ。特にWindowsならば<code class="language-plaintext highlighter-rouge">*.msi</code>、Macならば<code class="language-plaintext highlighter-rouge">*.dmg</code>が拡張子になっているものを選ぶと良い。</p>
 
 <div class="lightbox-container">
   <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/cmake_downloads.jpg" data-lightbox="images-1" data-title="">
@@ -228,13 +228,13 @@ MathJax = {
 
 <p>Eigenはヘッダファイルのみから成るライブラリで、特にコンパイルなどをする必要がないのが特徴である。上記のウェブページから適当なバージョンのものをダウンロードしたら、フォルダを展開して、これまた適当な場所に配置する。</p>
 
-<p>以後、C++の開発をメインに行おうと考えている場合には、Windowsではライブラリの場所がややわかりづらく成るので、例えば <code class="highlighter-rouge">C:/Libraries</code> のように自分で決めた場所にまとめてライブラリを置いておくなどすると、管理が円滑になる。</p>
+<p>以後、C++の開発をメインに行おうと考えている場合には、Windowsではライブラリの場所がややわかりづらく成るので、例えば <code class="language-plaintext highlighter-rouge">C:/Libraries</code> のように自分で決めた場所にまとめてライブラリを置いておくなどすると、管理が円滑になる。</p>
 
 <h3 id="cmakeによるプロジェクト生成-visual-studio">CMakeによるプロジェクト生成 (Visual Studio)</h3>
 
 <p>Windows上でも、C++のコンパイラはいくつかの種類が選択可能なのだが、ここではVisual Studioを使う場合を前提として説明を進めていく。</p>
 
-<p>まずは、CMake GUIを開き、以下の画面右上にある「Browse Source …」を押下し、ダウンロードしてきたソースコードのルートディレクトリを選択する。その後、上記のボタンの下にある「Browse Binary …」を押下し、ルートディレクトリ内に <code class="highlighter-rouge">build</code> というディレクトリを作った上で、それを選択する。</p>
+<p>まずは、CMake GUIを開き、以下の画面右上にある「Browse Source …」を押下し、ダウンロードしてきたソースコードのルートディレクトリを選択する。その後、上記のボタンの下にある「Browse Binary …」を押下し、ルートディレクトリ内に <code class="language-plaintext highlighter-rouge">build</code> というディレクトリを作った上で、それを選択する。</p>
 
 <div class="lightbox-container">
   <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/cmake_gui_default.jpg" data-lightbox="images-1" data-title="">
@@ -248,7 +248,7 @@ MathJax = {
   
 </div>
 
-<p>ディレクトリの指定が済んだら、今度は画面下になる「Configure」ボタンを押下する。すると、画面下のウィンドウに少し文字列が表示されたあとで、エラーとなって停止するはずだ。このエラーは<strong>Eigen</strong>というライブラリが見つからない、というエラーなので、Eigenをインストールした場所を <code class="highlighter-rouge">EIGEN3_DIR</code>に指定する (以下の画面では <code class="highlighter-rouge">C:/Libraries/Eigen33</code> にインストールされているものとした)。</p>
+<p>ディレクトリの指定が済んだら、今度は画面下になる「Configure」ボタンを押下する。すると、画面下のウィンドウに少し文字列が表示されたあとで、エラーとなって停止するはずだ。このエラーは<strong>Eigen</strong>というライブラリが見つからない、というエラーなので、Eigenをインストールした場所を <code class="language-plaintext highlighter-rouge">EIGEN3_DIR</code>に指定する (以下の画面では <code class="language-plaintext highlighter-rouge">C:/Libraries/Eigen33</code> にインストールされているものとした)。</p>
 
 <div class="lightbox-container">
   <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/cmake_gui_eigen_error.jpg" data-lightbox="images-1" data-title="">
@@ -262,7 +262,7 @@ MathJax = {
   
 </div>
 
-<p>指定後、再度「Configure」ボタンを押すと、今度はエラーが出ずに、画面中央の赤くなっていた部分が白くなるはずである。これが確認できたら次は同じく画面下にある「Generate」ボタンを押す。するとVisual Studioのソリューションファイル (<code class="highlighter-rouge">*.sln</code>が拡張子)が生成されるので、ボタンの右にある「Open Project」ボタンを押すと、以下のように設定済みのVisual Studioソリューションが開く。</p>
+<p>指定後、再度「Configure」ボタンを押すと、今度はエラーが出ずに、画面中央の赤くなっていた部分が白くなるはずである。これが確認できたら次は同じく画面下にある「Generate」ボタンを押す。するとVisual Studioのソリューションファイル (<code class="language-plaintext highlighter-rouge">*.sln</code>が拡張子)が生成されるので、ボタンの右にある「Open Project」ボタンを押すと、以下のように設定済みのVisual Studioソリューションが開く。</p>
 
 <div class="lightbox-container">
   <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/visual_studio_launch.jpg" data-lightbox="images-1" data-title="">
@@ -287,7 +287,7 @@ MathJax = {
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>eigen3
 </code></pre></div></div>
 
-<p>すると <code class="highlighter-rouge">/usr/local/include/eigen3</code> にEigenのヘッダファイルがインストールされる。このパスは以下で使用するので覚えておくと良い。</p>
+<p>すると <code class="language-plaintext highlighter-rouge">/usr/local/include/eigen3</code> にEigenのヘッダファイルがインストールされる。このパスは以下で使用するので覚えておくと良い。</p>
 
 <h3 id="cmakeによるプロジェクトの生成-clion">CMakeによるプロジェクトの生成 (CLion)</h3>
 
@@ -319,7 +319,7 @@ MathJax = {
   
 </div>
 
-<p>が、おそらく途中でいくつかのエラーが出ると思われるので、その設定を行う。CLionのメニューから「Preferences」を選び、「Build, Execution, Development」→「CMake」を選び、以下の用に設定を行う。具体的には「Build Type」を「Release」に変更しており、「CMake Options」に<code class="highlighter-rouge">-D WITH_OPENMP=OFF</code> を指定している。</p>
+<p>が、おそらく途中でいくつかのエラーが出ると思われるので、その設定を行う。CLionのメニューから「Preferences」を選び、「Build, Execution, Development」→「CMake」を選び、以下の用に設定を行う。具体的には「Build Type」を「Release」に変更しており、「CMake Options」に<code class="language-plaintext highlighter-rouge">-D WITH_OPENMP=OFF</code> を指定している。</p>
 
 <div class="lightbox-container">
   <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/clion_preference.jpg" data-lightbox="images-1" data-title="">
@@ -343,7 +343,7 @@ MathJax = {
 
 <p>最も基本的には、ソースコードのダウンロード後、ルート・ディレクトリでターミナル環境を開き、以下のコマンドを打ち込めば良い。</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Windowsの場合
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Windowsの場合
 mkdir build &amp;&amp; cd build
 cmake .. -D EIGEN3_DIR="C:/Libraries/Eigen33/" -G "Visual Studio 16 2019"
 cmake --build . --config Release --parallel 4

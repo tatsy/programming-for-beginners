@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -176,34 +176,34 @@ MathJax = {
 
 <p>上記の通り、線形モデルではベクトルを扱うので、画像の画素値を1列に並べ直してベクトル化しよう。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n_images</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">images</span><span class="p">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">n_images</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n_images</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">images</span><span class="p">.</span><span class="nf">reshape</span><span class="p">((</span><span class="n">n_images</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>さらに、配列の型を1バイト符号なし整数から32ビット浮動小数に変換しておく。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">.</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">.</span><span class="nf">astype</span><span class="p">(</span><span class="sh">'</span><span class="s">float32</span><span class="sh">'</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>あとは<a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html" target="_blank">ドキュメント</a>の内容に従い<code class="highlighter-rouge">LogisticRegression</code>クラスを使って識別器を学習する。</p>
+<p>あとは<a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html" target="_blank">ドキュメント</a>の内容に従い<code class="language-plaintext highlighter-rouge">LogisticRegression</code>クラスを使って識別器を学習する。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">multi_class</span><span class="o">=</span><span class="s">'multinomial'</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">clf</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="nc">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">multi_class</span><span class="o">=</span><span class="sh">'</span><span class="s">multinomial</span><span class="sh">'</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">clf</span><span class="p">.</span><span class="nf">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>少し時間がかかるが、しばらくすると学習が終わる。なお上記のコード内での <code class="highlighter-rouge">y</code> は整数型のラベルを格納したNumPyの配列で良い(分かりやすくするために名前を変更した)。</p>
+<p>少し時間がかかるが、しばらくすると学習が終わる。なお上記のコード内での <code class="language-plaintext highlighter-rouge">y</code> は整数型のラベルを格納したNumPyの配列で良い(分かりやすくするために名前を変更した)。</p>
 
 <h2 id="テストデータに対する予測">テストデータに対する予測</h2>
 
-<p>学習が終わったら、次はテストデータを読み込んで、正解率を求める。上記の <code class="highlighter-rouge">clf</code> というオブジェクトに対して、以下のようなコードを呼び出すと、ラベルが自動で計算される。</p>
+<p>学習が終わったら、次はテストデータを読み込んで、正解率を求める。上記の <code class="language-plaintext highlighter-rouge">clf</code> というオブジェクトに対して、以下のようなコードを呼び出すと、ラベルが自動で計算される。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pred_labels</span> <span class="o">=</span> <span class="n">clf</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pred_labels</span> <span class="o">=</span> <span class="n">clf</span><span class="p">.</span><span class="nf">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>正解率は、このラベルがテストのラベルとどのくらい近いかを計算すれば良いのだから、正解かどうか(0 or 1)の平均を全てのテストデータに対して計算すれば良い。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">acc</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred_labels</span> <span class="o">==</span> <span class="n">y_test</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">acc</span> <span class="o">=</span> <span class="p">(</span><span class="n">pred_labels</span> <span class="o">==</span> <span class="n">y_test</span><span class="p">).</span><span class="nf">mean</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>ただしく学習できていれば90%程度の正解率となるはずである。</p>

@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -219,15 +219,15 @@ MathJax = {
 
 <p>k-d木の実装はなれていないとやや難しい部分もあるため、今回は最近傍点の探索と、一定の半径内に含まれる点の探索を行う関数を備えた実装をそのまま提供している。</p>
 
-<p>このk-d木の実装はテンプレート・クラス (テンプレート・プログラムと言葉がややこしいが、ここでのテンプレートはC++における用語)となっていて、<code class="highlighter-rouge">KDTree&lt;Vec3&gt;</code>のように入力の点を表す変数の型を与えて用いる。</p>
+<p>このk-d木の実装はテンプレート・クラス (テンプレート・プログラムと言葉がややこしいが、ここでのテンプレートはC++における用語)となっていて、<code class="language-plaintext highlighter-rouge">KDTree&lt;Vec3&gt;</code>のように入力の点を表す変数の型を与えて用いる。</p>
 
 <p>テンプレート・クラス (およびテンプレート関数)は、異なる型に対して、共通の機能を実装することができ、さらにテンプレート引数に与えられた型が利用条件を満たさないときにはコンパイルエラーとすることができる。</p>
 
-<p>今回の実装においては、k-d木の入力点群を表す型が、<code class="highlighter-rouge">T::x, T::y, T::z</code> のように三次元座標の各要素を返し、さらに2つの点をとって、その間の距離を返す関数<code class="highlighter-rouge">length(const T&amp;, const T&amp;)</code>が定義されていることを仮定している。</p>
+<p>今回の実装においては、k-d木の入力点群を表す型が、<code class="language-plaintext highlighter-rouge">T::x, T::y, T::z</code> のように三次元座標の各要素を返し、さらに2つの点をとって、その間の距離を返す関数<code class="language-plaintext highlighter-rouge">length(const T&amp;, const T&amp;)</code>が定義されていることを仮定している。</p>
 
-<p>テンプレート・プログラムで与えている<code class="highlighter-rouge">Vec3</code>型はどちらの条件も満たすため、そのまま<code class="highlighter-rouge">KDTree&lt;Vec3&gt;</code>のようにして使うことが可能である。また、頂点の番号などの追加情報をもたせたいときには、<code class="highlighter-rouge">Vec3</code>型を継承して、新しい型を定義するのが良いだろう。</p>
+<p>テンプレート・プログラムで与えている<code class="language-plaintext highlighter-rouge">Vec3</code>型はどちらの条件も満たすため、そのまま<code class="language-plaintext highlighter-rouge">KDTree&lt;Vec3&gt;</code>のようにして使うことが可能である。また、頂点の番号などの追加情報をもたせたいときには、<code class="language-plaintext highlighter-rouge">Vec3</code>型を継承して、新しい型を定義するのが良いだろう。</p>
 
-<p>クラスの継承は、初心者には難しい部分もあるので、テンプレート・プログラム内に<code class="highlighter-rouge">Vec3</code>型を継承して頂点番号を加えた<code class="highlighter-rouge">Point</code>型を定義しておいた。</p>
+<p>クラスの継承は、初心者には難しい部分もあるので、テンプレート・プログラム内に<code class="language-plaintext highlighter-rouge">Vec3</code>型を継承して頂点番号を加えた<code class="language-plaintext highlighter-rouge">Point</code>型を定義しておいた。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Custom struct for KD tree</span>
 <span class="k">struct</span> <span class="nc">Point</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Vec3</span> <span class="p">{</span>

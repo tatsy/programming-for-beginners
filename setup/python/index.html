@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -151,7 +151,7 @@ MathJax = {
 <p><a href="https://docs.conda.io/en/latest/miniconda.html" target="_blank">Miniconda</a> にアクセスして、手順に従いインストールする。Windowsならばインストーラがあるので、それほど難しくはないだろう。MacやLinuxの場合にはシェルスクリプトを使うことになるが、これでも難しくはない。最初はシェルを使うことに慣れないだろうが、これからはずっと使うことになる。慣れよう。</p>
 
 <p><strong>注意</strong><br />
-WindowsでMinicondaをインストールする場合は、非推奨ではあるが、環境変数の<code class="highlighter-rouge">PATH</code>にMinicondaを設定するように以下の画面でチェックをいれること。</p>
+WindowsでMinicondaをインストールする場合は、非推奨ではあるが、環境変数の<code class="language-plaintext highlighter-rouge">PATH</code>にMinicondaを設定するように以下の画面でチェックをいれること。</p>
 
 <div class="lightbox-container">
   <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/miniconda_add_path.jpg" data-lightbox="images-1" data-title="">
@@ -165,7 +165,7 @@ WindowsでMinicondaをインストールする場合は、非推奨ではある�
   
 </div>
 
-<p>インストールが完了したら作業用のPython仮想環境を作る。WindowsならPowerShell, Macならターミナルを使う。仮想環境を作るコマンドは<code class="highlighter-rouge">conda create</code>でそのあとに<code class="highlighter-rouge">-n name_of_env</code>というように名前を指定する。合わせて、そのあとに<code class="highlighter-rouge">python=3.6</code>などのように書くことでライブラリ(Pythonの場合にはパッケージということが多い)をバージョンを指定した上で一緒にインストールすることができる。</p>
+<p>インストールが完了したら作業用のPython仮想環境を作る。WindowsならPowerShell, Macならターミナルを使う。仮想環境を作るコマンドは<code class="language-plaintext highlighter-rouge">conda create</code>でそのあとに<code class="language-plaintext highlighter-rouge">-n name_of_env</code>というように名前を指定する。合わせて、そのあとに<code class="language-plaintext highlighter-rouge">python=3.6</code>などのように書くことでライブラリ(Pythonの場合にはパッケージということが多い)をバージョンを指定した上で一緒にインストールすることができる。</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Anaconda環境の初期化 (最初に1回だけやればいい, 自分の使っているシェルに合わせる)</span>
 <span class="nv">$ </span>conda init <span class="o">[</span>powershell,zsh,bash]
@@ -177,7 +177,7 @@ WindowsでMinicondaをインストールする場合は、非推奨ではある�
 <span class="nv">$ </span>conda deactivate
 </code></pre></div></div>
 
-<p>仮想環境を作り終わったら<code class="highlighter-rouge">conda activate name_of_env</code>で仮想環境をオンに、<code class="highlighter-rouge">conda deactivate</code>でオフにできる。</p>
+<p>仮想環境を作り終わったら<code class="language-plaintext highlighter-rouge">conda activate name_of_env</code>で仮想環境をオンに、<code class="language-plaintext highlighter-rouge">conda deactivate</code>でオフにできる。</p>
 
 <p>ちなみにMinicondaと似たものにAnacondaがある。正直どちらを使ってもいいが、Anacondaは仮想環境を作る時に、勝手に色々なライブラリがインストールされる。それはそれで便利なのだが、ディスクをたくさん使用する(Anacondaは数GBを使う)し、必ずしもそれら全部が必要というわけでもないので、筆者はMinicondaを好んで使っている。</p>
 
@@ -192,7 +192,7 @@ conda <span class="nb">install </span>numpy scipy matplotlib scikit-learn scikit
 conda <span class="nb">install</span> <span class="nt">-c</span> conda-forge jupyterlab
 </code></pre></div></div>
 
-<p>二つ目のコマンドにある<code class="highlighter-rouge">-c conda-forge</code>というのは<code class="highlighter-rouge">conda-forge</code>というチャンネルから必要なパッケージをインストールせよ、という意味だ。デフォルトのconda環境には存在しないものも<code class="highlighter-rouge">conda-forge</code>チャネルには存在していることが多い。もちろん他にも様々なチャネルが存在していて、以下で使うPyTorchなどは<code class="highlighter-rouge">pytorch</code>というチャネルからインストールできる。</p>
+<p>二つ目のコマンドにある<code class="language-plaintext highlighter-rouge">-c conda-forge</code>というのは<code class="language-plaintext highlighter-rouge">conda-forge</code>というチャンネルから必要なパッケージをインストールせよ、という意味だ。デフォルトのconda環境には存在しないものも<code class="language-plaintext highlighter-rouge">conda-forge</code>チャネルには存在していることが多い。もちろん他にも様々なチャネルが存在していて、以下で使うPyTorchなどは<code class="language-plaintext highlighter-rouge">pytorch</code>というチャネルからインストールできる。</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda <span class="nb">install</span> <span class="nt">-c</span> pytorch pytorch torchvision
 </code></pre></div></div>
@@ -211,19 +211,19 @@ conda <span class="nb">install</span> <span class="nt">-c</span> conda-forge jup
   <li>コード規則のチェック
     <ul>
       <li>ソースコードが読みやすく、Pythonの標準に従った書き方になっているかをチェックする</li>
-      <li><code class="highlighter-rouge">pylint</code>, <code class="highlighter-rouge">flake8などがある</code> (おすすめは<code class="highlighter-rouge">flake8</code>)</li>
+      <li><code class="language-plaintext highlighter-rouge">pylint</code>, <code class="language-plaintext highlighter-rouge">flake8などがある</code> (おすすめは<code class="language-plaintext highlighter-rouge">flake8</code>)</li>
     </ul>
   </li>
   <li>コード静的解析
     <ul>
       <li>ソースコードを走らせずに、バグを生みそうな書き方をチェックする (これを静的解析という)</li>
-      <li><code class="highlighter-rouge">mypy</code>の一択</li>
+      <li><code class="language-plaintext highlighter-rouge">mypy</code>の一択</li>
     </ul>
   </li>
   <li>コードの自動整形
     <ul>
       <li>ソースコードを規則に従うように自動的に整形してくれる</li>
-      <li><code class="highlighter-rouge">autopep8</code>, <code class="highlighter-rouge">yapf</code>, <code class="highlighter-rouge">black</code>などがある (おすすめは<code class="highlighter-rouge">yapf</code>)</li>
+      <li><code class="language-plaintext highlighter-rouge">autopep8</code>, <code class="language-plaintext highlighter-rouge">yapf</code>, <code class="language-plaintext highlighter-rouge">black</code>などがある (おすすめは<code class="language-plaintext highlighter-rouge">yapf</code>)</li>
     </ul>
   </li>
 </ul>
@@ -300,7 +300,7 @@ conda <span class="nb">install</span> <span class="nt">-c</span> conda-forge jup
 
 <h3 id="ライブラリの設定">ライブラリの設定</h3>
 
-<p>Colabはコマンドの先頭に<code class="highlighter-rouge">!</code>をつけることで<strong>pip</strong>を使用することができる。そこで、各ノートブックの先頭に必要なライブラリをインストールするコマンドを書いておく。なおColabは最初からNumPyやscikit-learnなどの機械学習系のパッケージがインストールされているので、PyTorchだけをインストールすればおおよそ事足りる。</p>
+<p>Colabはコマンドの先頭に<code class="language-plaintext highlighter-rouge">!</code>をつけることで<strong>pip</strong>を使用することができる。そこで、各ノートブックの先頭に必要なライブラリをインストールするコマンドを書いておく。なおColabは最初からNumPyやscikit-learnなどの機械学習系のパッケージがインストールされているので、PyTorchだけをインストールすればおおよそ事足りる。</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!</span>pip <span class="nb">install </span>torch torchvision
 </code></pre></div></div>
@@ -309,10 +309,10 @@ conda <span class="nb">install</span> <span class="nt">-c</span> conda-forge jup
 
 <p>なおColabは最初の状態ではGPUが使えない。試しにPyTorchでGPUが使えるかどうかを調べるコマンドを叩いてみる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">cuda</span><span class="p">.</span><span class="n">is_available</span><span class="p">())</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">print</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">cuda</span><span class="p">.</span><span class="nf">is_available</span><span class="p">())</span>
 </code></pre></div></div>
 
-<p>すると<code class="highlighter-rouge">False</code>と表示されるはずだ。設定を変更するには、ページ上部のメニューから「ランタイム」→「ランタイムのタイプを変更」を選び、そこから「ハードウェアアクセラレータ」のタイプを「GPU」に変更する。再度、上記のコマンドを叩くと、今度は<code class="highlighter-rouge">True</code>が表示されるはずだ。</p>
+<p>すると<code class="language-plaintext highlighter-rouge">False</code>と表示されるはずだ。設定を変更するには、ページ上部のメニューから「ランタイム」→「ランタイムのタイプを変更」を選び、そこから「ハードウェアアクセラレータ」のタイプを「GPU」に変更する。再度、上記のコマンドを叩くと、今度は<code class="language-plaintext highlighter-rouge">True</code>が表示されるはずだ。</p>
 
 <div class="lightbox-container">
   <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/colab_use_gpu.jpg" data-lightbox="images-1" data-title="">

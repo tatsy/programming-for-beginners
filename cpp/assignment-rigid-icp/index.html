@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -148,14 +148,14 @@ MathJax = {
   <h1 class="post-title">課題: Rigid-ICP法の実装</h1>
   <h2 id="課題1-point-to-point-icpの実装">課題1: Point to Point ICPの実装</h2>
 
-<p>これまでに解説した内容を元にしてPoint to Point ICPを実装しよう。マーチング・キューブ法の課題と同様に、最初の時点では実装すべき箇所に<code class="highlighter-rouge">NOT_IMPL_ERROR()</code>と書かれており、実行するとこの箇所でエラーが発生するようになっている。</p>
+<p>これまでに解説した内容を元にしてPoint to Point ICPを実装しよう。マーチング・キューブ法の課題と同様に、最初の時点では実装すべき箇所に<code class="language-plaintext highlighter-rouge">NOT_IMPL_ERROR()</code>と書かれており、実行するとこの箇所でエラーが発生するようになっている。</p>
 
 <p>ICPに必要な計算を繰り返す部分についてはテンプレートで既に与えてあるので、Point to Point ICPの1ステップ分の処理を実装すれば良い。実装に必要な変更箇所は以下の通り。</p>
 
 <ul>
   <li>入力頂点のそれぞれに対して、ターゲット頂点の中で最も近い点をk-d木を用いて探索する。その後、探索の結果を$N \times 3$の大きさの行列の$\mathbf{X}$と$\mathbf{P}$を用意し、その各行に入力点の座標と近傍点の座標をそれぞれ格納する。</li>
   <li>入力点の位置の平均と近傍点の位置の平均を求めて、$\mathbf{X}$, $\mathbf{P}$の各行に格納された座標から、それぞれ減算する。</li>
-  <li>Eigenを用いて特異値分解を行う関数 (<code class="highlighter-rouge">eigenSVD</code>が<code class="highlighter-rouge">svd.h</code>内に用意されている)を用いて、回転行列$\mathbf{R}$を求め、さらにそれを用いて平行移動料$\mathbf{t}$を求める。</li>
+  <li>Eigenを用いて特異値分解を行う関数 (<code class="language-plaintext highlighter-rouge">eigenSVD</code>が<code class="language-plaintext highlighter-rouge">svd.h</code>内に用意されている)を用いて、回転行列$\mathbf{R}$を求め、さらにそれを用いて平行移動料$\mathbf{t}$を求める。</li>
 </ul>
 
 <p>上記の実装すべき内容についてはテンプレート内にも同じものが記述されているので、そちらも参考にすると良い。</p>
@@ -167,8 +167,8 @@ MathJax = {
 <ul>
   <li>Point to Plane ICPの説明中で述べた行列$\mathbf{A} \in \mathbb{R}^{6 \times 6}$とベクトル$\mathbf{b} \in \mathbb{R}^{6}$を用意し、ゼロで初期化しておく。</li>
   <li>その後、入力の各点に対して、ターゲット点内の最近傍点をk-d木を用いて求めつつ、$\mathbf{A}$ならびに$\mathbf{b}$を説明に従って計算する。</li>
-  <li>部分ピボット付きLU分解による線形問題の解法 <code class="highlighter-rouge">PartialPivLU</code> を用いて、$\mathbf{A}\mathbf{u} = \mathbf{b}$を解く。興味のある人はそれ以外の線形ソルバを用いても良い。</li>
-  <li>前工程で得られた$\mathbf{u} \in \mathbf{R}^6$から回転行列$\mathbf{R}$と平行移動料$\mathbf{t}$を求める。回転軸と回転量から回転行列を求める際には、<code class="highlighter-rouge">icp.cpp</code>内に実装された <code class="highlighter-rouge">rodrigues</code>関数を使うと良い。</li>
+  <li>部分ピボット付きLU分解による線形問題の解法 <code class="language-plaintext highlighter-rouge">PartialPivLU</code> を用いて、$\mathbf{A}\mathbf{u} = \mathbf{b}$を解く。興味のある人はそれ以外の線形ソルバを用いても良い。</li>
+  <li>前工程で得られた$\mathbf{u} \in \mathbf{R}^6$から回転行列$\mathbf{R}$と平行移動料$\mathbf{t}$を求める。回転軸と回転量から回転行列を求める際には、<code class="language-plaintext highlighter-rouge">icp.cpp</code>内に実装された <code class="language-plaintext highlighter-rouge">rodrigues</code>関数を使うと良い。</li>
 </ul>
 
 <p>こちらについても、Point to Point ICPの課題と同様に、実装すべき内容はソースコード中にも記述してあるので、そちらも参考にすると良い。</p>

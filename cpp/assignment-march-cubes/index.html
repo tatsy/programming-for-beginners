@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -184,12 +184,12 @@ MathJax = {
 <p>これまでに解説した内容を元にテンプレートプログラム(トップページからダウンロードする)の内容を改変して、マーチング・キューブ法を実装しよう。変更するべき内容は以下の通り。</p>
 
 <ul>
-  <li><code class="highlighter-rouge">volume.h</code>内にあるボリュームデータを読み取る関数<code class="highlighter-rouge">Volume::load</code>を完成させる。</li>
-  <li><code class="highlighter-rouge">mcubes.cpp</code>内にある大津の二値化により等値面を張るための閾値を決定する<code class="highlighter-rouge">getThresholdOtsu</code>関数を完成させる。</li>
-  <li><code class="highlighter-rouge">mcubes.cpp</code>内にある<code class="highlighter-rouge">marchCubes</code>関数にあるfor文の内部に三角形取得するソースコードを追加する。</li>
+  <li><code class="language-plaintext highlighter-rouge">volume.h</code>内にあるボリュームデータを読み取る関数<code class="language-plaintext highlighter-rouge">Volume::load</code>を完成させる。</li>
+  <li><code class="language-plaintext highlighter-rouge">mcubes.cpp</code>内にある大津の二値化により等値面を張るための閾値を決定する<code class="language-plaintext highlighter-rouge">getThresholdOtsu</code>関数を完成させる。</li>
+  <li><code class="language-plaintext highlighter-rouge">mcubes.cpp</code>内にある<code class="language-plaintext highlighter-rouge">marchCubes</code>関数にあるfor文の内部に三角形取得するソースコードを追加する。</li>
 </ul>
 
-<p>なお、これらの箇所には、最初の時点では <code class="highlighter-rouge">NOT_IMPL_ERROR()</code> と書かれており、この状態で実行すると、実装されていない箇所がエラーとともに表示されるようになっている。</p>
+<p>なお、これらの箇所には、最初の時点では <code class="language-plaintext highlighter-rouge">NOT_IMPL_ERROR()</code> と書かれており、この状態で実行すると、実装されていない箇所がエラーとともに表示されるようになっている。</p>
 
 <h2 id="課題2-マーチングキューブ法の発展を実装">課題2: マーチング・キューブ法の発展を実装</h2>
 
@@ -205,7 +205,7 @@ MathJax = {
 
 <p>Dual Contouringを実行するためには、キューブの立方体が持つ12のエッジについて、そのエッジがどの4つのキューブに共有されているのかを知る必要がある。今、陰関数を評価するバウンディング・ボックスの最も外側に位置するエッジ以外のエッジの本数はバウンディング・ボックスをキューブへと分割する分割数を$n$として$3 n (n-2)^2$本ある(各軸と平行なエッジがそれぞれ$n(n-2)^2$本ずつある)が、これらに対して上手く番号を降ることで、番号の計算だけから共有される4つのキューブを割り出すことができる。</p>
 
-<p>例えば、x方向に平行なエッジに <code class="highlighter-rouge">edges(0, i, j, k)</code> (0はx軸ということ, i, j, kは各軸方向のインデックス)でアクセスできるように準備したとすると、このエッジを共有している4つのキューブは <code class="highlighter-rouge">cubes(i, j, k)</code>, <code class="highlighter-rouge">cubes(i, j + 1, k)</code>, <code class="highlighter-rouge">cubes(i, j, k+1)</code>, <code class="highlighter-rouge">cubes(i, j + 1, k + 1)</code> のように表わすようにデータを持つようにしよう。</p>
+<p>例えば、x方向に平行なエッジに <code class="language-plaintext highlighter-rouge">edges(0, i, j, k)</code> (0はx軸ということ, i, j, kは各軸方向のインデックス)でアクセスできるように準備したとすると、このエッジを共有している4つのキューブは <code class="language-plaintext highlighter-rouge">cubes(i, j, k)</code>, <code class="language-plaintext highlighter-rouge">cubes(i, j + 1, k)</code>, <code class="language-plaintext highlighter-rouge">cubes(i, j, k+1)</code>, <code class="language-plaintext highlighter-rouge">cubes(i, j + 1, k + 1)</code> のように表わすようにデータを持つようにしよう。</p>
 
 <p>その上で、各エッジにはエッジ上で表面メッシュが交わる位置とその位置での法線を記録しておく (ボリュームデータを使う場合には、あまり本質的ではないが線形補間で計算しておく)。この情報を元に各キューブの中に発生させる頂点の位置を計算し、あとはキューブとエッジの隣接関係の情報を元に四角形を発生させる。この際、四角形は三角形2つとして表現するとよいだろう。</p>
 

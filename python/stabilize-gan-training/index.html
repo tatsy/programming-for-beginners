@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -169,13 +169,13 @@ MathJax = {
 
 <p>実際の実装では、これまで</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">BCEWithLogitsLoss</span><span class="p">()</span>
-<span class="n">lossD</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_real</span><span class="p">))</span> <span class="o">+</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">BCEWithLogitsLoss</span><span class="p">()</span>
+<span class="n">lossD</span> <span class="o">=</span> <span class="nf">criterion</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">ones_like</span><span class="p">(</span><span class="n">y_real</span><span class="p">))</span> <span class="o">+</span> <span class="nf">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">ones_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>のように学習していたものを、</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lossD</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_real</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">)</span> <span class="o">+</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lossD</span> <span class="o">=</span> <span class="nf">criterion</span><span class="p">(</span><span class="n">y_real</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">ones_like</span><span class="p">(</span><span class="n">y_real</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">)</span> <span class="o">+</span> <span class="nf">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>のように書き換えるだけでよく、実装も簡単である。</p>
@@ -228,8 +228,8 @@ MathJax = {
 
 <p>Wasserstein GANの基本的な考え方は誤差関数にリプシッツ連続性 (平たく言うと、勾配が大きくなりすぎないということ) を導入すると、学習が安定することを解いている。実際の実装では、誤差関数に交差エントロピーを用いるのをやめ、</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lossD</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_real</span><span class="p">)</span> <span class="o">-</span> <span class="n">torch</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_fake</span><span class="p">)</span>
-<span class="n">lossG</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_fake</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lossD</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">mean</span><span class="p">(</span><span class="n">y_real</span><span class="p">)</span> <span class="o">-</span> <span class="n">torch</span><span class="p">.</span><span class="nf">mean</span><span class="p">(</span><span class="n">y_fake</span><span class="p">)</span>
+<span class="n">lossG</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">mean</span><span class="p">(</span><span class="n">y_fake</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>とし、パラメータ更新の際に勾配が一定以上の大きさの場合にクリッピングする処理を入れることで、上記のリプシッツ連続性を実現している。</p>
@@ -254,10 +254,10 @@ MathJax = {
 <p>実装自体もとても簡単で、誤差関数を交差エントロピーから以下のような二乗誤差に置き換えるだけです。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span>
-<span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">MSELoss</span><span class="p">()</span>
-<span class="n">lossD</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> \
-        <span class="mf">0.5</span> <span class="o">*</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
-<span class="n">lossG</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">)</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">MSELoss</span><span class="p">()</span>
+<span class="n">lossD</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="nf">criterion</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">ones_like</span><span class="p">(</span><span class="n">y_true</span><span class="p">)</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> \
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="nf">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">ones_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+<span class="n">lossG</span> <span class="o">=</span> <span class="nf">criterion</span><span class="p">(</span><span class="n">y_fake</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">ones_like</span><span class="p">(</span><span class="n">y_fake</span><span class="p">)</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h2 id="two-time-scale-update-rule-ttur">Two time-scale Update Rule (TTUR)</h2>
@@ -302,9 +302,9 @@ MathJax = {
 
 <p>これも上記のSNGANの論文で用いられているテクニックで、WGANで用いられていたロスをhingeロスという閾値計算の入ったロスに変更すると、inception scoreやFIDの観点から画像の性質が向上することが報告されている。実装は非常に単純でReLUを用いて以下のように書ける (generatorのロスは変更なし)。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="n">F</span>
-<span class="n">lossD</span> <span class="o">=</span> <span class="n">F</span><span class="p">.</span><span class="n">relu</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">y_real</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="n">F</span><span class="p">.</span><span class="n">relu</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">y_fake</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">lossG</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_fake</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">torch.nn.functional</span> <span class="k">as</span> <span class="n">F</span>
+<span class="n">lossD</span> <span class="o">=</span> <span class="n">F</span><span class="p">.</span><span class="nf">relu</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">y_real</span><span class="p">).</span><span class="nf">mean</span><span class="p">()</span> <span class="o">+</span> <span class="n">F</span><span class="p">.</span><span class="nf">relu</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">y_fake</span><span class="p">).</span><span class="nf">mean</span><span class="p">()</span>
+<span class="n">lossG</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="p">.</span><span class="nf">mean</span><span class="p">(</span><span class="n">y_fake</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h2 id="self-attention-sagan">Self-Attention (SAGAN)</h2>

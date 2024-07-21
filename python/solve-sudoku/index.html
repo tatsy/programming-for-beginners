@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -160,7 +160,7 @@ MathJax = {
 
 <p>今回は数独の問題が以下の形式のテキストとして与えられることとする。Pythonは複数行のテキストを以下のように定義することができる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">
 -35-9--48
 --9--8--3
 -4-6-5--1
@@ -170,36 +170,36 @@ MathJax = {
 8--9-2-7-
 9--5--2--
 61--4-53-
-'''</span>
+</span><span class="sh">'''</span>
 </code></pre></div></div>
 
 <p>これを扱いやすくするためにNumPyの配列に直してみる。</p>
 
 <p>まずはテキストを行ごとの配列に変換する。行は `\n’ という文字で区切られているので、これで文字列を分割する。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="n">problem</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="n">problem</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>ただし、このやり方だと空行が入る可能性があるので、以下のリスト内包表記を用いて取り除く。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">problem</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s">''</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">problem</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="sh">''</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>すると<code class="highlighter-rouge">problem</code>の長さは9となるはずだ。各行を文字ごとに分割するには、同じようにリスト内包表記を用いると簡単だ。以下は二重ループを用いたリスト内包表記の例だ。</p>
+<p>すると<code class="language-plaintext highlighter-rouge">problem</code>の長さは9となるはずだ。各行を文字ごとに分割するには、同じようにリスト内包表記を用いると簡単だ。以下は二重ループを用いたリスト内包表記の例だ。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">problem</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>すると今度は<code class="highlighter-rouge">problem</code>が9x9の二次元配列になる。あとは各文字を数字に置き換える。まだ埋まっていないセルを表す’-‘を0に置き換えたいので、以下のようにハッシュ(Pythonの用語では<code class="highlighter-rouge">dict</code>)を使うと良い。</p>
+<p>すると今度は<code class="language-plaintext highlighter-rouge">problem</code>が9x9の二次元配列になる。あとは各文字を数字に置き換える。まだ埋まっていないセルを表す’-‘を0に置き換えたいので、以下のようにハッシュ(Pythonの用語では<code class="language-plaintext highlighter-rouge">dict</code>)を使うと良い。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">numbers</span> <span class="o">=</span> <span class="p">{</span><span class="s">'-'</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-<span class="n">numbers</span><span class="p">.</span><span class="n">update</span><span class="p">({</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">):</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)})</span>
-<span class="k">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">numbers</span> <span class="o">=</span> <span class="p">{</span><span class="sh">'</span><span class="s">-</span><span class="sh">'</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="n">numbers</span><span class="p">.</span><span class="nf">update</span><span class="p">({</span><span class="nf">str</span><span class="p">(</span><span class="n">i</span><span class="p">):</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)})</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>この出力は以下のようになる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="s">'-'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'1'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'2'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">'3'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">'4'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">'5'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">'6'</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s">'7'</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s">'8'</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">'9'</span><span class="p">:</span> <span class="mi">9</span><span class="p">}</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="sh">'</span><span class="s">-</span><span class="sh">'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="sh">'</span><span class="s">1</span><span class="sh">'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="sh">'</span><span class="s">2</span><span class="sh">'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="sh">'</span><span class="s">3</span><span class="sh">'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="sh">'</span><span class="s">4</span><span class="sh">'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="sh">'</span><span class="s">5</span><span class="sh">'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="sh">'</span><span class="s">6</span><span class="sh">'</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="sh">'</span><span class="s">7</span><span class="sh">'</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="sh">'</span><span class="s">8</span><span class="sh">'</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="sh">'</span><span class="s">9</span><span class="sh">'</span><span class="p">:</span> <span class="mi">9</span><span class="p">}</span>
 </code></pre></div></div>
 
 <p>あとはこれを使って文字を数字に置き換える。再び二重ループのリスト内包表記で、</p>
@@ -209,31 +209,31 @@ MathJax = {
 
 <p>とすると、先ほどまでの文字が数字に置き換わるはずだ。なお、ここまで繰り返しリスト内包表記も用いたが、これらをまとめて1行で書くこともできる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="p">[</span><span class="n">numbers</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">problem</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s">''</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">problem</span> <span class="o">=</span> <span class="p">[</span><span class="n">numbers</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">problem</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="sh">'</span><span class="se">\n</span><span class="sh">'</span><span class="p">)</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="sh">''</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
 </code></pre></div></div>
 
 <h2 id="使用済みの数字を調べる">使用済みの数字を調べる</h2>
 
-<p>問題が数字の配列として表せたところで、使用済みの数字を調べる方法を見ていく。今 <code class="highlighter-rouge">(i, j)</code> にある数字に何が使えるのかを調べたいとする。</p>
+<p>問題が数字の配列として表せたところで、使用済みの数字を調べる方法を見ていく。今 <code class="language-plaintext highlighter-rouge">(i, j)</code> にある数字に何が使えるのかを調べたいとする。</p>
 
-<p>当然ながら<code class="highlighter-rouge">i</code>行目にある数字は <code class="highlighter-rouge">problem[i, :]</code> という配列で、<code class="highlighter-rouge">j</code>列目にある数字は<code class="highlighter-rouge">problem[:, j]</code>という配列で表せる。また3x3のブロックについては、ブロックの右上の座標が<code class="highlighter-rouge">(3 * (i // 3), 3 * (j // 3))</code>と表せることに注目する (Python 3.xでは<code class="highlighter-rouge">//</code>は整数の割り算を表す)。これを用いれば、以下のようにしてブロック内の数字が得られる。</p>
+<p>当然ながら<code class="language-plaintext highlighter-rouge">i</code>行目にある数字は <code class="language-plaintext highlighter-rouge">problem[i, :]</code> という配列で、<code class="language-plaintext highlighter-rouge">j</code>列目にある数字は<code class="language-plaintext highlighter-rouge">problem[:, j]</code>という配列で表せる。また3x3のブロックについては、ブロックの右上の座標が<code class="language-plaintext highlighter-rouge">(3 * (i // 3), 3 * (j // 3))</code>と表せることに注目する (Python 3.xでは<code class="language-plaintext highlighter-rouge">//</code>は整数の割り算を表す)。これを用いれば、以下のようにしてブロック内の数字が得られる。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">k</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">//</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">l</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">j</span> <span class="o">//</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">blk_nums</span> <span class="o">=</span> <span class="n">problem</span><span class="p">[</span><span class="n">k</span><span class="p">:</span><span class="n">k</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span> <span class="n">l</span><span class="p">:</span><span class="n">l</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
 </code></pre></div></div>
 
-<p>これらの配列の中では0が重複して現れるので、1つの数字が1回ずつしか現れないように<code class="highlighter-rouge">set</code>を用いる。<code class="highlighter-rouge">set</code>は引数に一次元配列しか取らないので、NumPyのtolist関数を使って、上記のNumPyの配列をPythonの1次元配列に置き換えておく。なお<code class="highlighter-rouge">blk_nums</code>は二次元配列であることに注意すること。</p>
+<p>これらの配列の中では0が重複して現れるので、1つの数字が1回ずつしか現れないように<code class="language-plaintext highlighter-rouge">set</code>を用いる。<code class="language-plaintext highlighter-rouge">set</code>は引数に一次元配列しか取らないので、NumPyのtolist関数を使って、上記のNumPyの配列をPythonの1次元配列に置き換えておく。なお<code class="language-plaintext highlighter-rouge">blk_nums</code>は二次元配列であることに注意すること。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">used_nums</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">row_nums</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="n">col_nums</span><span class="p">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="n">blk_nums</span><span class="p">.</span><span class="n">flatten</span><span class="p">().</span><span class="n">tolist</span><span class="p">())</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">used_nums</span> <span class="o">=</span> <span class="nf">set</span><span class="p">(</span><span class="n">row_nums</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="n">col_nums</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="n">blk_nums</span><span class="p">.</span><span class="nf">flatten</span><span class="p">().</span><span class="nf">tolist</span><span class="p">())</span>
 </code></pre></div></div>
 
-<p>まだ使える数字は1-9の数字の中で、この<code class="highlighter-rouge">set</code>にあらわれていない数字なので、集合演算の関数 <code class="highlighter-rouge">difference</code> を使って0-9の数字の集合と、使用済みの数字の集合の差分を取る。</p>
+<p>まだ使える数字は1-9の数字の中で、この<code class="language-plaintext highlighter-rouge">set</code>にあらわれていない数字なので、集合演算の関数 <code class="language-plaintext highlighter-rouge">difference</code> を使って0-9の数字の集合と、使用済みの数字の集合の差分を取る。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nums</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]).</span><span class="n">difference</span><span class="p">(</span><span class="n">used_nums</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nums</span> <span class="o">=</span> <span class="nf">set</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]).</span><span class="nf">difference</span><span class="p">(</span><span class="n">used_nums</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>例として、最初に示した問題の<code class="highlighter-rouge">(0, 0)</code>成分に対して上記のコードを実行すると <code class="highlighter-rouge">{1, 2, 7}</code> という集合が得られるはずである。</p>
+<p>例として、最初に示した問題の<code class="language-plaintext highlighter-rouge">(0, 0)</code>成分に対して上記のコードを実行すると <code class="language-plaintext highlighter-rouge">{1, 2, 7}</code> という集合が得られるはずである。</p>
 
 <h2 id="バックトラック法">バックトラック法</h2>
 
@@ -274,9 +274,9 @@ MathJax = {
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sudoku_solve</span><span class="p">(</span><span class="n">problem</span><span class="p">):</span>
     <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">problem</span><span class="p">.</span><span class="n">shape</span>
-    <span class="n">all_nums</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+    <span class="n">all_nums</span> <span class="o">=</span> <span class="nf">set</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">problem</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># 候補の数字を調べる (以下のnumsに代入する)
 </span>                <span class="n">nums</span> <span class="o">=</span> <span class="bp">None</span>
@@ -286,7 +286,7 @@ MathJax = {
                 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
                     <span class="c1"># 数字を代入
 </span>                    <span class="n">problem</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
-                    <span class="k">if</span> <span class="n">sudoku_solve</span><span class="p">(</span><span class="n">problem</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nf">sudoku_solve</span><span class="p">(</span><span class="n">problem</span><span class="p">):</span>
                         <span class="n">success</span> <span class="o">=</span> <span class="bp">True</span>
                         <span class="k">break</span>
 
@@ -304,7 +304,7 @@ MathJax = {
 <p>上記の方法でも、最初に示した数独の問題であれば数十ミリ秒で解くことができる。だが、次の問題はどうだろう？</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># https://www.j-cast.com/premium/2018/10/19341452.html?p=all
-</span><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+</span><span class="n">problem</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">
 ---------
 3--2-9--7
 94--1--82
@@ -314,17 +314,17 @@ MathJax = {
 ---------
 -82-3-59-
 1--9-4--6
-'''</span>
+</span><span class="sh">'''</span>
 </code></pre></div></div>
 
-<p>この問題だと、おそらく1秒以上は時間がかかるはずだ。実は、上記のコードは次の0のマスを探すまでの処理の効率が非常に悪い。0のマスは左上から右下に向かって探しているのだから、今新しく<code class="highlighter-rouge">(i, j)</code>というマスに数字を入れたら <code class="highlighter-rouge">(i, j+1)</code> 以降の数字だけを調べれば良いのである。</p>
+<p>この問題だと、おそらく1秒以上は時間がかかるはずだ。実は、上記のコードは次の0のマスを探すまでの処理の効率が非常に悪い。0のマスは左上から右下に向かって探しているのだから、今新しく<code class="language-plaintext highlighter-rouge">(i, j)</code>というマスに数字を入れたら <code class="language-plaintext highlighter-rouge">(i, j+1)</code> 以降の数字だけを調べれば良いのである。</p>
 
 <p>答えは示さないので、上記のプログラムを更新したマスより後のものからだけ0を探すように更新しよう。すると、高難易度の問題でも1秒以内には解けるようになる(コンピュータの速さにもよる)。</p>
 
 <p>その他にも、候補の数が少ないものから埋めていくなどの効率化が考えられる。余裕があれば試してみよう。確認用に難易度の異なる4問を示しておく。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># レベル1
-</span><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+</span><span class="n">problem</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">
 -35-9--48
 --9--8--3
 -4-6-5--1
@@ -334,12 +334,12 @@ MathJax = {
 8--9-2-7-
 9--5--2--
 61--4-53-
-'''</span>
+</span><span class="sh">'''</span>
 </code></pre></div></div>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># レベル2
 # https://si-coding.net/sudoku10.html
-</span><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+</span><span class="n">problem</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">
 ------1-4
 4---78---
 -3------2
@@ -349,12 +349,12 @@ MathJax = {
 -27------
 --56----7
 -6--13---
-'''</span>
+</span><span class="sh">'''</span>
 </code></pre></div></div>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># レベル3
 # https://www.j-cast.com/premium/2018/10/19341452.html?p=all
-</span><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+</span><span class="n">problem</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">
 ---------
 3--2-9--7
 94--1--82
@@ -364,12 +364,12 @@ MathJax = {
 ---------
 -82-3-59-
 1--9-4--6
-'''</span>
+</span><span class="sh">'''</span>
 </code></pre></div></div>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 世界一難しい？
 # https://www.conceptispuzzles.com/ja/index.aspx?uri=info/article/424
-</span><span class="n">problem</span> <span class="o">=</span> <span class="s">'''
+</span><span class="n">problem</span> <span class="o">=</span> <span class="sh">'''</span><span class="s">
 8--------
 --36-----
 -7--9-2--
@@ -379,7 +379,7 @@ MathJax = {
 --1----68
 --85---1-
 -9----4--
-'''</span>
+</span><span class="sh">'''</span>
 </code></pre></div></div>
 
 </div>

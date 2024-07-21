@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -150,7 +150,7 @@ MathJax = {
 
 <p>勉強か研究かに関わらず、Gitなどのバージョン管理システムを使うことを強く勧める。今の時代、<em>プログラムを日付ごとにコピーするのは完全に時代遅れだ</em>。</p>
 
-<p>しかし、Gitは大変便利である反面、初心者には敷居が高いということは理解できる。ともかく、最初は<code class="highlighter-rouge">commit</code>と<code class="highlighter-rouge">push</code>だけを覚えよう。コミットコメントなどは丁寧に書くに越したことはないが、<em>兎にも角にも「記録を取っておく」ということが一番重要である</em>。</p>
+<p>しかし、Gitは大変便利である反面、初心者には敷居が高いということは理解できる。ともかく、最初は<code class="language-plaintext highlighter-rouge">commit</code>と<code class="language-plaintext highlighter-rouge">push</code>だけを覚えよう。コミットコメントなどは丁寧に書くに越したことはないが、<em>兎にも角にも「記録を取っておく」ということが一番重要である</em>。</p>
 
 <p>Gitで変更履歴を残しておけば、プログラムが動かなくなった時に、履歴を遡って、どこからエラーが発生したかを調べられるだけでなく、エラーの起こった日がわかったら、その時から今までの変更履歴を一覧で見ることもできる。</p>
 
@@ -211,7 +211,7 @@ MathJax = {
 
 <p>Gitリポジトリを用意する方法は、他の人が公開しているプログラムを「クローン」してくる方法と、自分で一からリポジトリを作る方法の2通りがある。ここでは、少し標準的なやり方からは外れるかもしれないが、覚えやすいやり方としてGitHub上でリポジトリを作ってクローンする方法を説明する。</p>
 
-<p>まずGitHubにアクセスして、適当なリポジトリを作成しよう。ここでは、リポジトリの名前を<code class="highlighter-rouge">my-first-repo</code>とした。ここで「Add a README.md file」にチェックを入れておくと、リポジトリがファイルを含めて初期化される (本来このチェックはオプションだが、以下のやり方に従う場合はチェックが必要)。</p>
+<p>まずGitHubにアクセスして、適当なリポジトリを作成しよう。ここでは、リポジトリの名前を<code class="language-plaintext highlighter-rouge">my-first-repo</code>とした。ここで「Add a README.md file」にチェックを入れておくと、リポジトリがファイルを含めて初期化される (本来このチェックはオプションだが、以下のやり方に従う場合はチェックが必要)。</p>
 
 <div class="lightbox-container">
   <a class="lightbox-link" href="/programming-for-beginners/public/images/setup/create_git_repo.jpg" data-lightbox="images-1" data-title="">
@@ -234,7 +234,7 @@ MathJax = {
 
 <h3 id="gitリポジトリの設定">Gitリポジトリの設定</h3>
 
-<p>このあと、実際にリポジトリ上で作業を行っていくが、まず最初にリポジトリ上でユーザの設定を行おう。まずは<code class="highlighter-rouge">cd</code>コマンドでリポジトリのフォルダに入る。</p>
+<p>このあと、実際にリポジトリ上で作業を行っていくが、まず最初にリポジトリ上でユーザの設定を行おう。まずは<code class="language-plaintext highlighter-rouge">cd</code>コマンドでリポジトリのフォルダに入る。</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd </span>my-first-repo
 </code></pre></div></div>
@@ -245,20 +245,20 @@ MathJax = {
 <span class="nv">$ </span>git config <span class="nt">--local</span> user.email <span class="s2">"tatsy.mail@gmail.com"</span>
 </code></pre></div></div>
 
-<p>上記のコマンドではオプションに<code class="highlighter-rouge">--local</code>を渡しているが、これを指定すると、このフォルダに含まれるリポジトリにだけ設定が反映される。自分のPC全体に設定を反映したい場合には上記の<code class="highlighter-rouge">--local</code>を<code class="highlighter-rouge">--global</code>に変更すれば良い。なお、ここに指定するメールアドレスは何でも問題ないが、このアドレスをGitHubに登録したときに使用したメールアドレスにしておくと、自分のコミットの数などがGitHubに記録されてやる気が出る。</p>
+<p>上記のコマンドではオプションに<code class="language-plaintext highlighter-rouge">--local</code>を渡しているが、これを指定すると、このフォルダに含まれるリポジトリにだけ設定が反映される。自分のPC全体に設定を反映したい場合には上記の<code class="language-plaintext highlighter-rouge">--local</code>を<code class="language-plaintext highlighter-rouge">--global</code>に変更すれば良い。なお、ここに指定するメールアドレスは何でも問題ないが、このアドレスをGitHubに登録したときに使用したメールアドレスにしておくと、自分のコミットの数などがGitHubに記録されてやる気が出る。</p>
 
 <p>この他、リポジトリの設定項目には</p>
 
 <ul>
   <li>コミットコメントを書くときのエディタを何にするか？</li>
   <li>ソースコードの改行コードを自動で変換するか？</li>
-  <li><code class="highlighter-rouge">git status</code>を<code class="highlighter-rouge">git st</code>にするなど、エイリアスの設定</li>
+  <li><code class="language-plaintext highlighter-rouge">git status</code>を<code class="language-plaintext highlighter-rouge">git st</code>にするなど、エイリアスの設定</li>
   <li>コミットの差分を色付きで表示するか？</li>
 </ul>
 
 <p>などが設定できる。設定項目は非常に多いが、よく探してみると便利な機能が見つかるかもしれない (<a href="https://git-scm.com/docs/git-config" target="_blank">参考</a>)。</p>
 
-<p>また、複数の環境でこのような設定を共有したい場合には<code class="highlighter-rouge">~/.gitconfig</code>ファイルをコピーすれば良い。ちなみに著者の<code class="highlighter-rouge">.gitconfig</code>は以下のように設定している。</p>
+<p>また、複数の環境でこのような設定を共有したい場合には<code class="language-plaintext highlighter-rouge">~/.gitconfig</code>ファイルをコピーすれば良い。ちなみに著者の<code class="language-plaintext highlighter-rouge">.gitconfig</code>は以下のように設定している。</p>
 
 <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[user]</span>
 	<span class="py">name</span> <span class="p">=</span> <span class="s">Tatsuya Yatagawa</span>
@@ -284,7 +284,7 @@ MathJax = {
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">touch </span>file.txt
 </code></pre></div></div>
 
-<p>するとファイルが作成されるので、適当に中身を編集する。とりあえずは<code class="highlighter-rouge">echo</code>コマンドを使って中身を入れてもいい。</p>
+<p>するとファイルが作成されるので、適当に中身を編集する。とりあえずは<code class="language-plaintext highlighter-rouge">echo</code>コマンドを使って中身を入れてもいい。</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"Hello, world!"</span> <span class="o">&gt;&gt;</span> file.txt
 <span class="nv">$ </span><span class="nb">cat </span>file.txt  <span class="c"># 中身が表示される</span>
@@ -294,15 +294,15 @@ MathJax = {
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git status
 </code></pre></div></div>
 
-<p>なお、フォルダにファイルが入っている場合には、フォルダ名だけしか表示されないので、その場合にはオプションとして<code class="highlighter-rouge">-u</code>をつけて<code class="highlighter-rouge">git status -u</code>とする。このコマンドで、上記のファイルが追加されていることが分かるが、この状態では更新がGitにより記録されない状態(unstaged)なので、ファイルをGitの記録対象に追加する。</p>
+<p>なお、フォルダにファイルが入っている場合には、フォルダ名だけしか表示されないので、その場合にはオプションとして<code class="language-plaintext highlighter-rouge">-u</code>をつけて<code class="language-plaintext highlighter-rouge">git status -u</code>とする。このコマンドで、上記のファイルが追加されていることが分かるが、この状態では更新がGitにより記録されない状態(unstaged)なので、ファイルをGitの記録対象に追加する。</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git add file.txt
 <span class="nv">$ </span>git status  <span class="c"># ファイルが記録対象に追加されて色が変わる(おそらく赤から緑)</span>
 </code></pre></div></div>
 
-<p>ただ、ファイルが多い場合には、いちいちファイルを1つずつ追加していくのは非常に面倒だと思われる。Gitの運用にあたっては、追加しない対象を<code class="highlighter-rouge">.gitignore</code>ファイルで指定しておき、それ以外のファイルを<code class="highlighter-rouge">git add -A</code>というコマンドで一括追加するのが良いと思われる。</p>
+<p>ただ、ファイルが多い場合には、いちいちファイルを1つずつ追加していくのは非常に面倒だと思われる。Gitの運用にあたっては、追加しない対象を<code class="language-plaintext highlighter-rouge">.gitignore</code>ファイルで指定しておき、それ以外のファイルを<code class="language-plaintext highlighter-rouge">git add -A</code>というコマンドで一括追加するのが良いと思われる。</p>
 
-<p>また、すでに記録対象になっているファイルの変更履歴を更新するには<code class="highlighter-rouge">--update</code>あるいは<code class="highlighter-rouge">-u</code>オプションをつけて、</p>
+<p>また、すでに記録対象になっているファイルの変更履歴を更新するには<code class="language-plaintext highlighter-rouge">--update</code>あるいは<code class="language-plaintext highlighter-rouge">-u</code>オプションをつけて、</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git add <span class="nt">-u</span>
 </code></pre></div></div>
@@ -311,7 +311,7 @@ MathJax = {
 
 <h3 id="変更のコミット">変更のコミット</h3>
 
-<p>上記の<code class="highlighter-rouge">add</code>コマンドは履歴の「追加」あるいは「更新」の<strong>予定</strong>を表すものであり、実際にはコミットをするまで記録は変更されない。コミットでは、この変更が何であるかを表すコミットコメントをつけて記録を取ることができる。</p>
+<p>上記の<code class="language-plaintext highlighter-rouge">add</code>コマンドは履歴の「追加」あるいは「更新」の<strong>予定</strong>を表すものであり、実際にはコミットをするまで記録は変更されない。コミットでは、この変更が何であるかを表すコミットコメントをつけて記録を取ることができる。</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git commit
 </code></pre></div></div>
@@ -321,7 +321,7 @@ MathJax = {
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git commit <span class="nt">-m</span> <span class="s2">"First commit."</span>
 </code></pre></div></div>
 
-<p>のようにしてターミナルから直接コメントを指定することもできる。加えて、コミットコメントを修正したいときには<code class="highlighter-rouge">--amend</code>オプションを追加して、</p>
+<p>のようにしてターミナルから直接コメントを指定することもできる。加えて、コミットコメントを修正したいときには<code class="language-plaintext highlighter-rouge">--amend</code>オプションを追加して、</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git commit <span class="nt">--amend</span> <span class="nt">-m</span> <span class="s2">"Last one was mistake!"</span>
 </code></pre></div></div>
@@ -351,7 +351,7 @@ MathJax = {
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git push origin master
 </code></pre></div></div>
 
-<p>じつは<code class="highlighter-rouge">origin</code>や<code class="highlighter-rouge">master</code>の部分は省略することもできるのだが、個人的には都度これを明示することを最初のうちはお勧めする(挙動がわかりづらい時があるため)。なお、最近のGitHubはデフォルトのブランチ名が<code class="highlighter-rouge">master</code>から<code class="highlighter-rouge">main</code>に変更になっているので、自分がどのブランチで作業しているかを</p>
+<p>じつは<code class="language-plaintext highlighter-rouge">origin</code>や<code class="language-plaintext highlighter-rouge">master</code>の部分は省略することもできるのだが、個人的には都度これを明示することを最初のうちはお勧めする(挙動がわかりづらい時があるため)。なお、最近のGitHubはデフォルトのブランチ名が<code class="language-plaintext highlighter-rouge">master</code>から<code class="language-plaintext highlighter-rouge">main</code>に変更になっているので、自分がどのブランチで作業しているかを</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git branch
 </code></pre></div></div>
@@ -369,7 +369,7 @@ MathJax = {
 
 <p>とすればよい。特に更新に問題なければ自動的にソースコードが更新される。ただ、ノートPCとデスクトップの両方でソースコードを更新してしまった場合などは競合(conflict)が起こってプルがうまくいかない時がある。</p>
 
-<p>競合が起こったときにはには<code class="highlighter-rouge">git status</code>で確認すると、どのファイルで競合が起こっているかを教えてくれるので、競合している箇所を修正した後でコミットし直すと、リモート環境の内容がローカルに反映された状態となる。</p>
+<p>競合が起こったときにはには<code class="language-plaintext highlighter-rouge">git status</code>で確認すると、どのファイルで競合が起こっているかを教えてくれるので、競合している箇所を修正した後でコミットし直すと、リモート環境の内容がローカルに反映された状態となる。</p>
 
 <p>ちなみにプルという操作は、フェッチ(fetch)とマージ(merge)という操作から成っていて、これらを別々に行うこともできる。</p>
 
@@ -377,7 +377,7 @@ MathJax = {
 <span class="nv">$ </span>git merge FETCH_HEAD
 </code></pre></div></div>
 
-<p>先にフェッチだけを行うと、例えば<code class="highlighter-rouge">git diff</code>で変更箇所を確認できたり、特定のファイルだけを選んでマージしたりすることもできる。</p>
+<p>先にフェッチだけを行うと、例えば<code class="language-plaintext highlighter-rouge">git diff</code>で変更箇所を確認できたり、特定のファイルだけを選んでマージしたりすることもできる。</p>
 
 <h3 id="最後に">最後に</h3>
 

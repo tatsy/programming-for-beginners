@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -150,123 +150,123 @@ MathJax = {
 
 <h2 id="データセットクラスの用意">データセット・クラスの用意</h2>
 
-<p>PyTorchに限らず、TensorFlowなどの多くの深層学習フレームワークにおいて、データセットからのデータの読み出しを抽象化するクラスが用意されている。PyTorchでは <code class="highlighter-rouge">torch.utils.data.Dataset</code> というクラスがそれにあたる。このクラスを継承したサブクラスでデータを読み出し、そのインスタンスを <code class="highlighter-rouge">torch.utils.data.DataLoader</code> クラスの引数に与えることで、データを柔軟に読み出すことが可能となる。最も簡単な例では以下のようになる。</p>
+<p>PyTorchに限らず、TensorFlowなどの多くの深層学習フレームワークにおいて、データセットからのデータの読み出しを抽象化するクラスが用意されている。PyTorchでは <code class="language-plaintext highlighter-rouge">torch.utils.data.Dataset</code> というクラスがそれにあたる。このクラスを継承したサブクラスでデータを読み出し、そのインスタンスを <code class="language-plaintext highlighter-rouge">torch.utils.data.DataLoader</code> クラスの引数に与えることで、データを柔軟に読み出すことが可能となる。最も簡単な例では以下のようになる。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># torch.utils.data.Datasetを継承したクラス
-</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">MyDataset</span><span class="p">()</span>  
+</span><span class="n">dataset</span> <span class="o">=</span> <span class="nc">MyDataset</span><span class="p">()</span>  
 <span class="c1"># ミニバッチのサイズを32とし, 4スレッドで並列にデータを読み出し、データ順序をランダムに入れ替える
-</span><span class="n">data_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="n">data_loader</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="nc">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">torch.utils.data.Dataset</code> クラスでは、データセットの大きさ (データの数) を返すメソッド <code class="highlighter-rouge">___len__(self)</code> と、1つ分のデータを返すメソッド <code class="highlighter-rouge">__getitem__(self, idx)</code> を実装すると、並列にデータを読み出ししたり、データの順序をランダムにしたりといった操作をクラス内で行ってくれる。例えばMNISTを用いる場合なら、以下のような実装になるだろう。</p>
+<p><code class="language-plaintext highlighter-rouge">torch.utils.data.Dataset</code> クラスでは、データセットの大きさ (データの数) を返すメソッド <code class="language-plaintext highlighter-rouge">___len__(self)</code> と、1つ分のデータを返すメソッド <code class="language-plaintext highlighter-rouge">__getitem__(self, idx)</code> を実装すると、並列にデータを読み出ししたり、データの順序をランダムにしたりといった操作をクラス内で行ってくれる。例えばMNISTを用いる場合なら、以下のような実装になるだろう。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MnistDataset</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">Dataset</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_dir</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">'train'</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MnistDataset</span><span class="p">,</span> <span class="bp">self</span><span class="p">).</span><span class="n">__init__</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">root_dir</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="sh">'</span><span class="s">train</span><span class="sh">'</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">(</span><span class="n">MnistDataset</span><span class="p">,</span> <span class="n">self</span><span class="p">).</span><span class="nf">__init__</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="p">.</span><span class="n">root_dir</span> <span class="o">=</span> <span class="n">root_dir</span>
-        <span class="bp">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">root_dir</span> <span class="o">=</span> <span class="n">root_dir</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">'train'</span><span class="p">:</span>
-            <span class="bp">self</span><span class="p">.</span><span class="n">image_file</span> <span class="o">=</span> <span class="s">'train-images-idx3-ubyte'</span>
-            <span class="bp">self</span><span class="p">.</span><span class="n">label_file</span> <span class="o">=</span> <span class="s">'train-labels-idx1-ubyte'</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s">'test'</span><span class="p">:</span>
-            <span class="bp">self</span><span class="p">.</span><span class="n">image_file</span> <span class="o">=</span> <span class="s">'t10k-images-idx3-ubyte'</span>
-            <span class="bp">self</span><span class="p">.</span><span class="n">label_file</span> <span class="o">=</span> <span class="s">'t10k-labels-idx1-ubyte'</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">train</span><span class="sh">'</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">image_file</span> <span class="o">=</span> <span class="sh">'</span><span class="s">train-images-idx3-ubyte</span><span class="sh">'</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">label_file</span> <span class="o">=</span> <span class="sh">'</span><span class="s">train-labels-idx1-ubyte</span><span class="sh">'</span>
+        <span class="k">elif</span> <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">==</span> <span class="sh">'</span><span class="s">test</span><span class="sh">'</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">image_file</span> <span class="o">=</span> <span class="sh">'</span><span class="s">t10k-images-idx3-ubyte</span><span class="sh">'</span>
+            <span class="n">self</span><span class="p">.</span><span class="n">label_file</span> <span class="o">=</span> <span class="sh">'</span><span class="s">t10k-labels-idx1-ubyte</span><span class="sh">'</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="nb">Exception</span><span class="p">(</span><span class="s">'MNIST dataset mode must be "train" or "test"'</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">'</span><span class="s">MNIST dataset mode must be </span><span class="sh">"</span><span class="s">train</span><span class="sh">"</span><span class="s"> or </span><span class="sh">"</span><span class="s">test</span><span class="sh">"'</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="p">.</span><span class="n">image_data</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_load_images</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">root_dir</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">image_file</span><span class="p">))</span>
-        <span class="bp">self</span><span class="p">.</span><span class="n">label_data</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_load_labels</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">root_dir</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">label_file</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">image_data</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_load_images</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">image_file</span><span class="p">))</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">label_data</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_load_labels</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">label_file</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">image_data</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">image_data</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s">'images'</span><span class="p">:</span> <span class="bp">self</span><span class="p">.</span><span class="n">image_data</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
-            <span class="s">'labels'</span><span class="p">:</span> <span class="bp">self</span><span class="p">.</span><span class="n">label_data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="sh">'</span><span class="s">images</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">image_data</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+            <span class="sh">'</span><span class="s">labels</span><span class="sh">'</span><span class="p">:</span> <span class="n">self</span><span class="p">.</span><span class="n">label_data</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
         <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">_load_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-            <span class="n">magic</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;i'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">_load_images</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="sh">'</span><span class="s">rb</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">magic</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;i</span><span class="sh">'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">magic</span> <span class="o">!=</span> <span class="mi">2051</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="nb">Exception</span><span class="p">(</span><span class="s">'Magic number does not match!'</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">'</span><span class="s">Magic number does not match!</span><span class="sh">'</span><span class="p">)</span>
 
-            <span class="n">n_images</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;iii'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">n_images</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;iii</span><span class="sh">'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">3</span><span class="p">))</span>
 
             <span class="n">n_pixels</span> <span class="o">=</span> <span class="n">n_images</span> <span class="o">*</span> <span class="n">height</span> <span class="o">*</span> <span class="n">width</span>
-            <span class="n">pixels</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;'</span> <span class="o">+</span> <span class="s">'B'</span> <span class="o">*</span> <span class="n">n_pixels</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">n_pixels</span><span class="p">))</span>
-            <span class="n">pixels</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'uint8'</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="n">n_images</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+            <span class="n">pixels</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;</span><span class="sh">'</span> <span class="o">+</span> <span class="sh">'</span><span class="s">B</span><span class="sh">'</span> <span class="o">*</span> <span class="n">n_pixels</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="n">n_pixels</span><span class="p">))</span>
+            <span class="n">pixels</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">asarray</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="sh">'</span><span class="s">uint8</span><span class="sh">'</span><span class="p">).</span><span class="nf">reshape</span><span class="p">((</span><span class="n">n_images</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
 
             <span class="c1"># 画像サイズを2べきにしておく
-</span>            <span class="n">pixels</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">pad</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span> <span class="n">mode</span><span class="o">=</span><span class="s">'constant'</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">pixels</span> <span class="o">=</span> <span class="p">(</span><span class="n">pixels</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'float32'</span><span class="p">)</span>
+</span>            <span class="n">pixels</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">pad</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span> <span class="n">mode</span><span class="o">=</span><span class="sh">'</span><span class="s">constant</span><span class="sh">'</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">pixels</span> <span class="o">=</span> <span class="p">(</span><span class="n">pixels</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">).</span><span class="nf">astype</span><span class="p">(</span><span class="sh">'</span><span class="s">float32</span><span class="sh">'</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">pixels</span>
 
-    <span class="k">def</span> <span class="nf">_load_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-            <span class="n">magic</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;i'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">_load_labels</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="sh">'</span><span class="s">rb</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">magic</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;i</span><span class="sh">'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">magic</span> <span class="o">!=</span> <span class="mi">2049</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="nb">Exception</span><span class="p">(</span><span class="s">'Magic number does not match!'</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="nc">Exception</span><span class="p">(</span><span class="sh">'</span><span class="s">Magic number does not match!</span><span class="sh">'</span><span class="p">)</span>
 
-            <span class="n">n_labels</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;i'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">labels</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;'</span> <span class="o">+</span> <span class="s">'B'</span> <span class="o">*</span> <span class="n">n_labels</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">n_labels</span><span class="p">))</span>
+            <span class="n">n_labels</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;i</span><span class="sh">'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;</span><span class="sh">'</span> <span class="o">+</span> <span class="sh">'</span><span class="s">B</span><span class="sh">'</span> <span class="o">*</span> <span class="n">n_labels</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="n">n_labels</span><span class="p">))</span>
 
             <span class="c1"># 誤差関数用にlongで表しておく
-</span>            <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'int64'</span><span class="p">)</span>
+</span>            <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">asarray</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="sh">'</span><span class="s">int64</span><span class="sh">'</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">labels</span>
 </code></pre></div></div>
 
-<p>この例では <code class="highlighter-rouge">__getitem__</code> の戻り値が <code class="highlighter-rouge">dict</code> 型になっている。この場合、取り出し側では <code class="highlighter-rouge">dict</code> の各要素ごとにバッチにまとめた値が取り出せる。例えば、</p>
+<p>この例では <code class="language-plaintext highlighter-rouge">__getitem__</code> の戻り値が <code class="language-plaintext highlighter-rouge">dict</code> 型になっている。この場合、取り出し側では <code class="language-plaintext highlighter-rouge">dict</code> の各要素ごとにバッチにまとめた値が取り出せる。例えば、</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
-    <span class="n">images</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">'images'</span><span class="p">]</span>  <span class="c1"># 画像が32個分
-</span>    <span class="n">labels</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">'labels'</span><span class="p">]</span>  <span class="c1"># ラベルが32個分
+    <span class="n">images</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">'</span><span class="s">images</span><span class="sh">'</span><span class="p">]</span>  <span class="c1"># 画像が32個分
+</span>    <span class="n">labels</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">'</span><span class="s">labels</span><span class="sh">'</span><span class="p">]</span>  <span class="c1"># ラベルが32個分
 </span></code></pre></div></div>
 
 <p>のような形でデータを取り出せる。</p>
 
 <h2 id="モジュールクラスの用意">モジュール・クラスの用意</h2>
 
-<p>PyTorchでは深層学習のネットワークを <code class="highlighter-rouge">torch.nn.Module</code> というクラスのサブクラスとして定義する。このサブクラスに <code class="highlighter-rouge">forward(self, ...)</code> というメソッドを実装すると、データをネットワークに通す操作と、誤差逆伝搬によりパラメータの更新幅を求める計算をほぼ自動化できる。</p>
+<p>PyTorchでは深層学習のネットワークを <code class="language-plaintext highlighter-rouge">torch.nn.Module</code> というクラスのサブクラスとして定義する。このサブクラスに <code class="language-plaintext highlighter-rouge">forward(self, ...)</code> というメソッドを実装すると、データをネットワークに通す操作と、誤差逆伝搬によりパラメータの更新幅を求める計算をほぼ自動化できる。</p>
 
 <p>もっとも単純なネットワークとしてYan LeCun氏 (2019年のチューリング賞受賞者だ！) がニューラルネットの黎明期に提案したLeNet5の構造を実装してみる。なお、現代的な深層学習のフレームワークに合わせるため一部実装を変更してある。LeNet5についての説明は<a href="https://pytorch.org/tutorials/beginner/blitz/neural_networks_tutorial.html" target="_blank">こちら</a>のウェブページを参考にしてほしい。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="n">nn</span>
-<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="n">F</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">torch</span>
+<span class="kn">import</span> <span class="n">torch.nn</span> <span class="k">as</span> <span class="n">nn</span>
+<span class="kn">import</span> <span class="n">torch.nn.functional</span> <span class="k">as</span> <span class="n">F</span>
 
 <span class="k">class</span> <span class="nc">LeNet5</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LeNet5</span><span class="p">,</span> <span class="bp">self</span><span class="p">).</span><span class="n">__init__</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">(</span><span class="n">LeNet5</span><span class="p">,</span> <span class="n">self</span><span class="p">).</span><span class="nf">__init__</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="p">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">Sigmoid</span><span class="p">(),</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">Sigmoid</span><span class="p">()</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Sigmoid</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Conv2d</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">MaxPool2d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Sigmoid</span><span class="p">()</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="p">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sequential</span><span class="p">(</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">Sigmoid</span><span class="p">(),</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">84</span><span class="p">),</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">Sigmoid</span><span class="p">(),</span>
-            <span class="n">nn</span><span class="p">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">84</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Linear</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">120</span><span class="p">),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Sigmoid</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Linear</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">84</span><span class="p">),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Sigmoid</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="p">.</span><span class="nc">Linear</span><span class="p">(</span><span class="mi">84</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">n_batches</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">size</span><span class="p">()</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">fc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">n_batches</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="nf">size</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">net</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="nf">view</span><span class="p">(</span><span class="n">n_batches</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">fc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="p">.</span><span class="nf">log_softmax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>上記の例は、なるべくオリジナルのLeNet5に忠実に、活性化関数にsigmoid関数を用いており、バッチ正規化などの処理も入れていない。また、ロスの計算を安定させるため、softmax関数ではなく対数softmax関数を用いている。</p>
@@ -277,8 +277,8 @@ MathJax = {
 
 <p>Optimizerには様々ないくつかのパラメータがあるが、基本はOptimizerに更新させるパラメータのリストと、ステップ幅 (learning rate, lrと略されることが多い) の2つを与えれば良い。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">net</span> <span class="o">=</span> <span class="n">LeNet5</span><span class="p">()</span>
-<span class="n">optim</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">net</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1.0e-3</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">net</span> <span class="o">=</span> <span class="nc">LeNet5</span><span class="p">()</span>
+<span class="n">optim</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="nc">SGD</span><span class="p">(</span><span class="n">net</span><span class="p">.</span><span class="nf">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1.0e-3</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h2 id="学習ループ">学習ループ</h2>
@@ -287,11 +287,11 @@ MathJax = {
 
 <p>多くの場合、この2つのループをネストさせて二重ループで学習ループを実装する。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
     <span class="c1"># エポックに関するループ
 </span>    <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data_loader</span><span class="p">:</span>
         <span class="c1"># ミニバッチを用いたパラメータ更新
-</span>        <span class="p">...</span>
+</span>        <span class="bp">...</span>
 </code></pre></div></div>
 
 <p>1ステップの処理は、</p>
@@ -307,31 +307,31 @@ MathJax = {
 <p>の5つの処理からなる。これらをまとめたコードは以下の通りだ。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># データの取り出し
-</span><span class="n">images</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">'images'</span><span class="p">]</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">'labels'</span><span class="p">]</span>
+</span><span class="n">images</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">'</span><span class="s">images</span><span class="sh">'</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="sh">'</span><span class="s">labels</span><span class="sh">'</span><span class="p">]</span>
 
 <span class="c1"># トレーニングモードに変更
-</span><span class="n">net</span><span class="p">.</span><span class="n">train</span><span class="p">()</span>
+</span><span class="n">net</span><span class="p">.</span><span class="nf">train</span><span class="p">()</span>
 
 <span class="c1"># 勾配の初期化
-</span><span class="n">net</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</span><span class="n">net</span><span class="p">.</span><span class="nf">zero_grad</span><span class="p">()</span>
 
 <span class="c1"># ネットワークへのデータ転送
-</span><span class="n">y</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+</span><span class="n">y</span> <span class="o">=</span> <span class="nf">net</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
 
 <span class="c1"># 誤差の評価
-</span><span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+</span><span class="n">loss</span> <span class="o">=</span> <span class="nf">criterion</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
 <span class="c1"># 誤差逆伝搬
-</span><span class="n">loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+</span><span class="n">loss</span><span class="p">.</span><span class="nf">backward</span><span class="p">()</span>
 
 <span class="c1"># パラメータの更新
-</span><span class="n">optim</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+</span><span class="n">optim</span><span class="p">.</span><span class="nf">step</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>より複雑なネットワークになればネットワークへのデータ転送や誤差の評価は複雑にはなるが、基本的な流れはほとんど変わらない。なお上記のコードに現れる <code class="highlighter-rouge">criterion</code> は誤差を評価する損失関数で、ネットワークの最終出力に<code class="highlighter-rouge">log_softmax</code>用いた場合には <code class="highlighter-rouge">nn.NLLLoss</code> (非負対数尤度, Non-Negative Likelihood)を用いる。 (効率は落ちるが通常の<code class="highlighter-rouge">softmax</code>を使った場合には <code class="highlighter-rouge">nn.CrossEntropyLoss</code> を使う)。</p>
+<p>より複雑なネットワークになればネットワークへのデータ転送や誤差の評価は複雑にはなるが、基本的な流れはほとんど変わらない。なお上記のコードに現れる <code class="language-plaintext highlighter-rouge">criterion</code> は誤差を評価する損失関数で、ネットワークの最終出力に<code class="language-plaintext highlighter-rouge">log_softmax</code>用いた場合には <code class="language-plaintext highlighter-rouge">nn.NLLLoss</code> (非負対数尤度, Non-Negative Likelihood)を用いる。 (効率は落ちるが通常の<code class="language-plaintext highlighter-rouge">softmax</code>を使った場合には <code class="language-plaintext highlighter-rouge">nn.CrossEntropyLoss</code> を使う)。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">NLLLoss</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="nc">NLLLoss</span><span class="p">()</span>
 </code></pre></div></div>
 
 <h2 id="学習の結果とネットワークの改良">学習の結果とネットワークの改良</h2>

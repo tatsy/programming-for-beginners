@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -159,59 +159,59 @@ MathJax = {
   <li>t10k-labels-idx1-ubyte.gz:   test set labels (4542 bytes)</li>
 </ul>
 
-<p><em>注意: これらのファイルは <code class="highlighter-rouge">*.gz</code> 形式で圧縮されているので展開してから使う</em></p>
+<p><em>注意: これらのファイルは <code class="language-plaintext highlighter-rouge">*.gz</code> 形式で圧縮されているので展開してから使う</em></p>
 
-<p>これらのファイルのうち <code class="highlighter-rouge">images-idx3</code> とあるものは画像の情報を <code class="highlighter-rouge">labels-idx1</code> とあるものは、各画像が数字のいくつを表しているのかを保存している。各ファイル内のデータのバイトオーダ (何バイト目に何が書いてあるか) はページ下部の「FILE FORMATS FOR THE MNIST DATABASE」に説明がある。</p>
+<p>これらのファイルのうち <code class="language-plaintext highlighter-rouge">images-idx3</code> とあるものは画像の情報を <code class="language-plaintext highlighter-rouge">labels-idx1</code> とあるものは、各画像が数字のいくつを表しているのかを保存している。各ファイル内のデータのバイトオーダ (何バイト目に何が書いてあるか) はページ下部の「FILE FORMATS FOR THE MNIST DATABASE」に説明がある。</p>
 
 <h2 id="バイナリデータを読む">バイナリデータを読む</h2>
 
-<p>Pythonではバイナリデータの読み込みは <code class="highlighter-rouge">struct</code> というパッケージを使う。</p>
+<p>Pythonではバイナリデータの読み込みは <code class="language-plaintext highlighter-rouge">struct</code> というパッケージを使う。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">struct</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">struct</span>
 
 <span class="c1"># ファイルを開く (rbはread binaryの意味)
-</span><span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'binary_file.bin'</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span>
+</span><span class="n">fp</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">binary_file.bin</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">rb</span><span class="sh">'</span><span class="p">)</span>
 
 <span class="c1"># 4バイト読む
-</span><span class="n">b</span> <span class="o">=</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</span><span class="n">b</span> <span class="o">=</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="c1"># バイトを整数に変換
 # MNISTの先頭4バイトはファイル識別用のマジックナンバー
-</span><span class="n">magic</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;i'</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">magic</span><span class="p">)</span>
+</span><span class="n">magic</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;i</span><span class="sh">'</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">magic</span><span class="p">)</span>
 
 <span class="c1"># ファイルを閉じる
-</span><span class="n">fp</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class="n">fp</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p>上記のコードで <code class="highlighter-rouge">struct.unpack('&gt;i', b)</code> とあるが、この中の <code class="highlighter-rouge">&gt;i</code> の部分はリトルエンディアン (<code class="highlighter-rouge">&gt;</code>) で、4バイト符号付き整数を読むということ。他のフォーマットについては<a href="https://docs.python.org/ja/3/library/struct.html" target="_blank">ドキュメント</a>を見よう。</p>
+<p>上記のコードで <code class="language-plaintext highlighter-rouge">struct.unpack('&gt;i', b)</code> とあるが、この中の <code class="language-plaintext highlighter-rouge">&gt;i</code> の部分はリトルエンディアン (<code class="language-plaintext highlighter-rouge">&gt;</code>) で、4バイト符号付き整数を読むということ。他のフォーマットについては<a href="https://docs.python.org/ja/3/library/struct.html" target="_blank">ドキュメント</a>を見よう。</p>
 
 <h2 id="mnist内の画像を表示する">MNIST内の画像を表示する</h2>
 
 <p>「FILE FORMATS FOR THE MNIST DATABASE」によれば画像ファイルは最初の4バイトがマジックナンバー (2051) で、その後、4バイト区切りで画像数 (6000)、画像の高さ (28)、画像の幅 (28)が入っている。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># マジックナンバー
-</span><span class="n">magic</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;i'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</span><span class="n">magic</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;i</span><span class="sh">'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
 <span class="c1"># 画像数、高さ、幅 (一気に複数の数字をunpackすることもできる)
-</span><span class="n">n_images</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;iii'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">3</span><span class="p">))</span>
+</span><span class="n">n_images</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;iii</span><span class="sh">'</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="mi">3</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>それ以後は1枚1枚の画像の情報が書かれている。1枚の画像の各画素は白黒の値が0-255 (1バイト符号なし整数)で書かれていて、それが28x28=784画素分ある。故に画像1枚分のデータは784バイトになる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pixels</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;'</span> <span class="o">+</span> <span class="s">'B'</span> <span class="o">*</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pixels</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;</span><span class="sh">'</span> <span class="o">+</span> <span class="sh">'</span><span class="s">B</span><span class="sh">'</span> <span class="o">*</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>このままでは画像として表示できないので、これを <strong>NumPy</strong> の配列に変更して、形を変更しよう。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pixels</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'uint8'</span><span class="p">)</span>
-<span class="n">pixels</span> <span class="o">=</span> <span class="n">pixels</span><span class="p">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pixels</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">asarray</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="sh">'</span><span class="s">uint8</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">pixels</span> <span class="o">=</span> <span class="n">pixels</span><span class="p">.</span><span class="nf">reshape</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>次に<strong>Matplotlib</strong>を使って、この画像を表示してみる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">pixels</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">imshow</span><span class="p">(</span><span class="n">pixels</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>すると以下のような画像が出る。</p>
@@ -230,8 +230,8 @@ MathJax = {
 
 <p>色が変だが、これはMatplotLibのカラーマップが自動的に適用されたため。グレースケールの画像にしたければ、カラーマップを自分で指定する。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'gray'</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="nf">imshow</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="sh">'</span><span class="s">gray</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
 </code></pre></div></div>
 
 <div class="lightbox-container">
@@ -251,30 +251,30 @@ MathJax = {
 <p>これは一工夫必要。まず100枚画像を読み込もう。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-    <span class="n">pixels</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">'&gt;'</span> <span class="o">+</span> <span class="s">'B'</span> <span class="o">*</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span><span class="p">))</span>
-    <span class="n">pixels</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'uint8'</span><span class="p">)</span>
-    <span class="n">pixels</span> <span class="o">=</span> <span class="n">pixels</span><span class="p">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
-    <span class="n">images</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">pixels</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">pixels</span> <span class="o">=</span> <span class="n">struct</span><span class="p">.</span><span class="nf">unpack</span><span class="p">(</span><span class="sh">'</span><span class="s">&gt;</span><span class="sh">'</span> <span class="o">+</span> <span class="sh">'</span><span class="s">B</span><span class="sh">'</span> <span class="o">*</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span><span class="p">,</span> <span class="n">fp</span><span class="p">.</span><span class="nf">read</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="mi">28</span> <span class="o">*</span> <span class="mi">28</span><span class="p">))</span>
+    <span class="n">pixels</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">asarray</span><span class="p">(</span><span class="n">pixels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="sh">'</span><span class="s">uint8</span><span class="sh">'</span><span class="p">)</span>
+    <span class="n">pixels</span> <span class="o">=</span> <span class="n">pixels</span><span class="p">.</span><span class="nf">reshape</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+    <span class="n">images</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">pixels</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>これを10x10のタイル状に表示したい。MatplotLibは描画のウィンドウを表す <code class="highlighter-rouge">figure</code> と、実際に画像やグラフが表示される <code class="highlighter-rouge">axis</code> があり、<code class="highlighter-rouge">figure</code>に<code class="highlighter-rouge">axis</code>を追加していく形で複数の画像を表示できる。</p>
+<p>これを10x10のタイル状に表示したい。MatplotLibは描画のウィンドウを表す <code class="language-plaintext highlighter-rouge">figure</code> と、実際に画像やグラフが表示される <code class="language-plaintext highlighter-rouge">axis</code> があり、<code class="language-plaintext highlighter-rouge">figure</code>に<code class="language-plaintext highlighter-rouge">axis</code>を追加していく形で複数の画像を表示できる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="nf">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
         <span class="n">index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">j</span>
         <span class="n">image</span> <span class="o">=</span> <span class="n">images</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
 
         <span class="c1"># 10x10のタイルのindex番目のaxisという意味
 </span>        <span class="c1"># 番号は1から始まるので1を足しておく
-</span>        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="p">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span>        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="p">.</span><span class="nf">add_subplot</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="c1"># グレースケールで表示
-</span>        <span class="n">ax</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'gray'</span><span class="p">)</span>
+</span>        <span class="n">ax</span><span class="p">.</span><span class="nf">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="sh">'</span><span class="s">gray</span><span class="sh">'</span><span class="p">)</span>
         <span class="c1"># 画像の周りにある目盛りを消す
-</span>        <span class="n">ax</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+</span>        <span class="n">ax</span><span class="p">.</span><span class="nf">axis</span><span class="p">(</span><span class="sh">'</span><span class="s">off</span><span class="sh">'</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
 </code></pre></div></div>
 
 <div class="lightbox-container">

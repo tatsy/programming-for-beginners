@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -241,27 +241,27 @@ MathJax = {
   <li>得られた数字から数独を解く</li>
 </ul>
 
-<p>なお、数字の画像認識に関しては自作のロジスティック回帰では不十分だと思われるので <code class="highlighter-rouge">scikit-learn</code> のロジスティック回帰を用いて良い(最初はこれを試そう)。ただ、残念ながらそれでも精度は不十分と思われるので、必要に応じて <code class="highlighter-rouge">tessearct</code> と呼ばれるライブラリを使うこと(CNNによる画像認識を予習しても良い)。</p>
+<p>なお、数字の画像認識に関しては自作のロジスティック回帰では不十分だと思われるので <code class="language-plaintext highlighter-rouge">scikit-learn</code> のロジスティック回帰を用いて良い(最初はこれを試そう)。ただ、残念ながらそれでも精度は不十分と思われるので、必要に応じて <code class="language-plaintext highlighter-rouge">tessearct</code> と呼ばれるライブラリを使うこと(CNNによる画像認識を予習しても良い)。</p>
 
 <p>レベル2以降の画像は数独の外枠が歪んで写っているので、ホモグラフィー変換を使って四角形を正方形に直す必要があり、また画像にも余計なものが多く写り込んでいるので、より頑健な外枠検出のプログラムを作る必要がある。</p>
 
 <h2 id="補足-tesseractの使い方">補足: Tesseractの使い方</h2>
 
-<p>TesseractはGoogleが開発しているOCR用のライブラリで、通常はコマンドライン上で動作する。Python用のライブラリである<code class="highlighter-rouge">pytesseract</code>も公開されているので、pipなどでインストールして使う (<code class="highlighter-rouge">conda</code>では入らない)。</p>
+<p>TesseractはGoogleが開発しているOCR用のライブラリで、通常はコマンドライン上で動作する。Python用のライブラリである<code class="language-plaintext highlighter-rouge">pytesseract</code>も公開されているので、pipなどでインストールして使う (<code class="language-plaintext highlighter-rouge">conda</code>では入らない)。</p>
 
 <p>TesseractはNumPyではなくPillowと呼ばれる別の画像処理ライブラリ形式のデータを受け取る。1文字だけが写り込んだ画像から数字を検出するコードは以下のようになる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="n">config</span> <span class="o">=</span> <span class="s">'--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789'</span>
-<span class="n">text</span> <span class="o">=</span> <span class="n">pytesseract</span><span class="p">.</span><span class="n">image_to_string</span><span class="p">(</span><span class="n">Image</span><span class="p">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">image</span><span class="p">),</span> <span class="n">lang</span><span class="o">=</span><span class="s">'eng'</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="c1"># 一文字のstringが得られる
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="n">config</span> <span class="o">=</span> <span class="sh">'</span><span class="s">--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789</span><span class="sh">'</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">pytesseract</span><span class="p">.</span><span class="nf">image_to_string</span><span class="p">(</span><span class="n">Image</span><span class="p">.</span><span class="nf">fromarray</span><span class="p">(</span><span class="n">image</span><span class="p">),</span> <span class="n">lang</span><span class="o">=</span><span class="sh">'</span><span class="s">eng</span><span class="sh">'</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="c1"># 一文字のstringが得られる
 </span></code></pre></div></div>
 
 <h2 id="補足-ホモグラフィー変換">補足: ホモグラフィー変換</h2>
 
 <p>ホモグラフィー変換(日本語では透視投影変換)とは、平面上の図形をピンホールカメラで撮影したときに、元々の図形を写真に映り込む図形の形に移す変換を指す。この変換は同次座標表現と呼ばれる座標の表現法を使うことで、4x4の行列として変換を定義できる。</p>
 
-<p>OpenCVには変換前後の座標の組からホモグラフィー変換の行列を求める <code class="highlighter-rouge">getPerspectiveTransform</code> と、その行列を使って実際に画像を変換する <code class="highlighter-rouge">warpPerspective</code> が用意されている。また得られる行列の逆行列を使って画像を逆変換することで、ページ上部に示した画像のように実際の画像上に数字を並べることもできる。</p>
+<p>OpenCVには変換前後の座標の組からホモグラフィー変換の行列を求める <code class="language-plaintext highlighter-rouge">getPerspectiveTransform</code> と、その行列を使って実際に画像を変換する <code class="language-plaintext highlighter-rouge">warpPerspective</code> が用意されている。また得られる行列の逆行列を使って画像を逆変換することで、ページ上部に示した画像のように実際の画像上に数字を並べることもできる。</p>
 
 
 </div>

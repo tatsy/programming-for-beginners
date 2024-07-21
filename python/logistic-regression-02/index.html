@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -217,34 +217,34 @@ MathJax = {
 
 <p>ここまで理解できたら、実際に実装をしてみよう。これをPythonでどう実装すべきか迷うかもしれない。例えば三階のテンソルが出てくる$\frac{\partial \mathbf{t}}{\partial \mathbf{A}}$は特に難しそうだ。もちろん愚直にfor文を回して要素を入れていけば良いのかもしれないが、それではあまりに効率が悪い。では、どうするか？実はちょっとしたコツがある。</p>
 
-<p>NumPyは行列計算をするライブラリだが、その中に<code class="highlighter-rouge">einsum</code>という関数が用意されている。この関数は<a href="https://ja.wikipedia.org/wiki/%E3%82%A2%E3%82%A4%E3%83%B3%E3%82%B7%E3%83%A5%E3%82%BF%E3%82%A4%E3%83%B3%E3%81%AE%E7%B8%AE%E7%B4%84%E8%A8%98%E6%B3%95" target="_blank">アインシュタインの縮約記法</a>を計算するためのものだ。例えば行列同士の積ならば次のように書ける。</p>
+<p>NumPyは行列計算をするライブラリだが、その中に<code class="language-plaintext highlighter-rouge">einsum</code>という関数が用意されている。この関数は<a href="https://ja.wikipedia.org/wiki/%E3%82%A2%E3%82%A4%E3%83%B3%E3%82%B7%E3%83%A5%E3%82%BF%E3%82%A4%E3%83%B3%E3%81%AE%E7%B8%AE%E7%B4%84%E8%A8%98%E6%B3%95" target="_blank">アインシュタインの縮約記法</a>を計算するためのものだ。例えば行列同士の積ならば次のように書ける。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">'ik,kj-&gt;ij'</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">einsum</span><span class="p">(</span><span class="sh">'</span><span class="s">ik,kj-&gt;ij</span><span class="sh">'</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>これを利用すると$\frac{\partial \mathbf{t}}{\partial \mathbf{A}}$なども比較的簡単に書ける。この式はアインシュタインの縮約記法そのものだからだ。</p>
 
 <p>もう少し詳しくみていこう。式中にある $\delta_{ik}$ は $i = k$ ときだけ1である行列なのだから、単なる単位行列だ。一方、ここにかかっている $x_j$ は単なるベクトルだ。つまりここでは行列とベクトルの積を考えているわけだが、通常の行列・ベクトル積とは少し異なる。これは二つのベクトルから行列を作ることを考えると分かりやすいかもしれない。その場合には$\mathbf{x} \mathbf{x}^T$ のような積をとるだろう。これ内積のようにスカラーが得られる代わりに行列が得られる。それと同じだ。</p>
 
-<p>実際に<code class="highlighter-rouge">einsum</code>を使って書いてみると、以下のようになる。</p>
+<p>実際に<code class="language-plaintext highlighter-rouge">einsum</code>を使って書いてみると、以下のようになる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dtdA</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">'ik,j-&gt;ijk'</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dtdA</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">einsum</span><span class="p">(</span><span class="sh">'</span><span class="s">ik,j-&gt;ijk</span><span class="sh">'</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>どうだろうか？何となくイメージがつかめるはずだ。ここまでくれば、他の式についても、同様に計算できることがわかるだろう。以下では結果だけを示しておくので、どうしてそうなるかは各自考えてほしい。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">identity</span><span class="p">(</span><span class="n">AA</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">identity</span><span class="p">(</span><span class="n">AA</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">dLdy</span> <span class="o">=</span> <span class="o">-</span><span class="n">y_real</span> <span class="o">/</span> <span class="n">y_pred</span>
-<span class="n">dydt</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">'ij,i-&gt;ij'</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">'i,j-&gt;ij'</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
-<span class="n">dtdA</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">'ij,k-&gt;ijk'</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-<span class="n">dtdb</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">((</span><span class="n">bb</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">bb</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">dydt</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">einsum</span><span class="p">(</span><span class="sh">'</span><span class="s">ij,i-&gt;ij</span><span class="sh">'</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="nf">einsum</span><span class="p">(</span><span class="sh">'</span><span class="s">i,j-&gt;ij</span><span class="sh">'</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">dtdA</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">einsum</span><span class="p">(</span><span class="sh">'</span><span class="s">ij,k-&gt;ijk</span><span class="sh">'</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">dtdb</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">ones</span><span class="p">((</span><span class="n">bb</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">bb</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
 </code></pre></div></div>
 
 <p>各項が計算できたら、これらの積を取ろう。そうすることで$\frac{\partial L}{\partial \mathbf{A}}$および$\frac{\partial L}{\partial \mathbf{b}}$が計算できる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dLdt</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dLdy</span><span class="p">,</span> <span class="n">dydt</span><span class="p">)</span>
-<span class="n">dLdA</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dLdt</span><span class="p">,</span> <span class="n">dtdA</span><span class="p">)</span>
-<span class="n">dLdb</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dLdt</span><span class="p">,</span> <span class="n">dtdb</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dLdt</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">dot</span><span class="p">(</span><span class="n">dLdy</span><span class="p">,</span> <span class="n">dydt</span><span class="p">)</span>
+<span class="n">dLdA</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">dot</span><span class="p">(</span><span class="n">dLdt</span><span class="p">,</span> <span class="n">dtdA</span><span class="p">)</span>
+<span class="n">dLdb</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">dot</span><span class="p">(</span><span class="n">dLdt</span><span class="p">,</span> <span class="n">dtdb</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>あとは、これを全ての学習データで平均をとって、パラメータ $\mathbf{A}$と$\mathbf{b}$を更新すれば良い。</p>
@@ -257,18 +257,18 @@ MathJax = {
 
 <p>確率的勾配法を用いる際に、サンプルしてきたデータの集合をミニバッチと呼ぶ。データをミニバッチに分けるメソッドは通常の機械学習や深層学習のフレームワークに含まれていることが多いが、ここでは自前でミニバッチに分割しよう。Pythonのスライスを使えば簡単に実装できる。</p>
 
-<p>NumPyには配列をシャッフルする関数が二つ用意されている。<code class="highlighter-rouge">numpy.random.shuffle</code>と<code class="highlighter-rouge">numpy.random.permutation</code>だ。<code class="highlighter-rouge">shuffle</code>は入力した配列自体をランダムに並び変えるのに対して<code class="highlighter-rouge">permutation</code>はランダムに入れ替えた配列を返す。今回は配列のインデックスを作成して、それを<code class="highlighter-rouge">permutation</code>で入れ替えたものを使い、ランダムな順序に学習データを取り出す。</p>
+<p>NumPyには配列をシャッフルする関数が二つ用意されている。<code class="language-plaintext highlighter-rouge">numpy.random.shuffle</code>と<code class="language-plaintext highlighter-rouge">numpy.random.permutation</code>だ。<code class="language-plaintext highlighter-rouge">shuffle</code>は入力した配列自体をランダムに並び変えるのに対して<code class="language-plaintext highlighter-rouge">permutation</code>はランダムに入れ替えた配列を返す。今回は配列のインデックスを作成して、それを<code class="language-plaintext highlighter-rouge">permutation</code>で入れ替えたものを使い、ランダムな順序に学習データを取り出す。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">32</span>
-<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_data</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">num_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="nf">permutation</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nf">arange</span><span class="p">(</span><span class="n">num_data</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">num_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
     <span class="n">batch_indices</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">b</span><span class="p">:</span><span class="n">b</span><span class="o">+</span><span class="n">batch_size</span><span class="p">]</span>
     <span class="n">X_batch</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">batch_indices</span><span class="p">,</span> <span class="p">:]</span>
     <span class="n">y_batch</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">batch_indices</span><span class="p">,</span> <span class="p">:]</span>
     <span class="c1"># 以下、各バッチに対する処理
 </span></code></pre></div></div>
 
-<p>あとはバッチ内の各データに対して、コスト、精度、勾配の平均値を計算して、パラメータを更新する。NumPyを用いる場合、バッチ内のデータ全てに対して、一度にコストを求めたり、勾配を求めたりすることも可能(しかも高速)なので、上記の<code class="highlighter-rouge">einsum</code>をうまく使って、これらを一度に計算できるようにしよう。</p>
+<p>あとはバッチ内の各データに対して、コスト、精度、勾配の平均値を計算して、パラメータを更新する。NumPyを用いる場合、バッチ内のデータ全てに対して、一度にコストを求めたり、勾配を求めたりすることも可能(しかも高速)なので、上記の<code class="language-plaintext highlighter-rouge">einsum</code>をうまく使って、これらを一度に計算できるようにしよう。</p>
 
 <h3 id="モメンタムの使用">モメンタムの使用</h3>
 
@@ -300,10 +300,10 @@ MathJax = {
 
 <p>という関数であった。この分母にある指数の計算は$\mathbf{x}$の要素のうちどれか一つが大きくなると、非常に大きな値になってしまい、softmax関数の分子がオーバーフローしてしまう。例えば$\mathbf{x} = (1, 1000, 1)$のようなベクトルであるとして、愚直にsoftmax関数を計算すると以下のようになってしまう。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">/</span> <span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>  <span class="c1"># -&gt; array([ 0., nan, 0.])
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">/</span> <span class="n">np</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>  <span class="c1"># -&gt; array([ 0., nan, 0.])
 </span></code></pre></div></div>
 
 <p>そこで、softmax関数の式を以下のように等値変換する。</p>
@@ -312,15 +312,15 @@ MathJax = {
 
 <p>このようにあらかじめ指数部から$\mathbf{x}$の要素の最大値を引いておけば、要素の値は最大0であり、指数をとってもその値は最大1であるのでオーバーフローを防ぐことができる。実際、上記のベクトルにこの計算を施すと以下のようになる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="p">.</span><span class="nb">max</span><span class="p">())</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">e</span> <span class="o">/</span> <span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>  <span class="c1"># -&gt; array([ 0., 1., 0.])
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">exp</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="p">.</span><span class="nf">max</span><span class="p">())</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">e</span> <span class="o">/</span> <span class="n">np</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>  <span class="c1"># -&gt; array([ 0., 1., 0.])
 </span></code></pre></div></div>
 
 <p>続いて、交差エントロピーの値を計算することを考えてみる。特に上記のようにsoftmax関数を取る前の値が、1つだけ大きな要素を含む場合には、softmaxをとったあとの値に0に非常に近い値が含まれてしまう。</p>
 
-<p>すると、交差エントロピーではこの値の対数を取らなければならず、そのまま計算してしまうと、<code class="highlighter-rouge">-inf</code>が出ててくるが、これは数値計算上好ましくない。そこで、softmax関数を計算する代わりにその対数をとった対数softmax関数を直接計算することを試みる。</p>
+<p>すると、交差エントロピーではこの値の対数を取らなければならず、そのまま計算してしまうと、<code class="language-plaintext highlighter-rouge">-inf</code>が出ててくるが、これは数値計算上好ましくない。そこで、softmax関数を計算する代わりにその対数をとった対数softmax関数を直接計算することを試みる。</p>
 
 <p>まず、対数softmax関数は、次のようにかける。</p>
 
@@ -341,14 +341,14 @@ MathJax = {
 <p>直接的に計算した場合と結果を比較してみると以下の通りである。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 直接的な計算
-</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="p">.</span><span class="nb">max</span><span class="p">())</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">e</span> <span class="o">/</span> <span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>  <span class="c1"># -&gt; array([-inf, 0., -inf])
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">exp</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="p">.</span><span class="nf">max</span><span class="p">())</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">e</span> <span class="o">/</span> <span class="n">np</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>  <span class="c1"># -&gt; array([-inf, 0., -inf])
 </span>
 <span class="c1"># 工夫した計算
-</span><span class="n">logs</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="p">.</span><span class="nb">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span>  <span class="c1"># -&gt; array([-999., 0., -999.])
+</span><span class="n">logs</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="p">.</span><span class="nf">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span>  <span class="c1"># -&gt; array([-999., 0., -999.])
 </span></code></pre></div></div>
 
 <p>このように数値計算においては、数学的には等価であっても、計算方法次第で結果が大きく変わる場合があるので、特に分数、指数、対数の計算には注意が必要である。</p>

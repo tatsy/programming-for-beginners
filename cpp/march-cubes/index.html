@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -168,35 +168,35 @@ MathJax = {
 
 <p>これらの辞書の用意と、回転や考慮したメッシュへの変換は煩雑ではあるが、幸運なことに、ウェブ上に基本的な実装を含むソースコードが多数公開されている。</p>
 
-<p>今回は<a href="http://paulbourke.net/geometry/polygonise/" target="_blank">http://paulbourke.net/geometry/polygonise/</a>で公開されているコードを元に、マーチング・キューブ法を実装していく。なお、このコードは<em>キューブの8頂点に対するインデックスの付け方に特徴</em>があり、ビットでこれを管理しようとすると少し工夫が必要なので気をつけること (テンプレートプログラムの<code class="highlighter-rouge">indexTable</code>とウェブページ内の図を見比べてほしい)。</p>
+<p>今回は<a href="http://paulbourke.net/geometry/polygonise/" target="_blank">http://paulbourke.net/geometry/polygonise/</a>で公開されているコードを元に、マーチング・キューブ法を実装していく。なお、このコードは<em>キューブの8頂点に対するインデックスの付け方に特徴</em>があり、ビットでこれを管理しようとすると少し工夫が必要なので気をつけること (テンプレートプログラムの<code class="language-plaintext highlighter-rouge">indexTable</code>とウェブページ内の図を見比べてほしい)。</p>
 
 <h2 id="処理の流れ">処理の流れ</h2>
 
-<p>上記のウェブページに公開されているコードでは<code class="highlighter-rouge">GRIDCELL</code>が冒頭の図で言うところのキューブひとつに対応する。この構造体に対して、8つのコーナーの位置と、そのコーナーが持つ<em>ボリュームの値を<code class="highlighter-rouge">double</code>で格納する</em>。</p>
+<p>上記のウェブページに公開されているコードでは<code class="language-plaintext highlighter-rouge">GRIDCELL</code>が冒頭の図で言うところのキューブひとつに対応する。この構造体に対して、8つのコーナーの位置と、そのコーナーが持つ<em>ボリュームの値を<code class="language-plaintext highlighter-rouge">double</code>で格納する</em>。</p>
 
-<p>その結果を<code class="highlighter-rouge">Polygonize</code>関数に閾値 (こちらも<code class="highlighter-rouge">double</code>型)で渡す。すると、第3引数にある三角形 (<code class="highlighter-rouge">TRIANGLE</code>型) の配列に対して、三角形とその頂点位置を代入してくれる。何個の三角形を生成したかは<code class="highlighter-rouge">Polygonize</code> 関数の戻り値に格納される。</p>
+<p>その結果を<code class="language-plaintext highlighter-rouge">Polygonize</code>関数に閾値 (こちらも<code class="language-plaintext highlighter-rouge">double</code>型)で渡す。すると、第3引数にある三角形 (<code class="language-plaintext highlighter-rouge">TRIANGLE</code>型) の配列に対して、三角形とその頂点位置を代入してくれる。何個の三角形を生成したかは<code class="language-plaintext highlighter-rouge">Polygonize</code> 関数の戻り値に格納される。</p>
 
-<p>あとは<code class="highlighter-rouge">TRIANGLE</code>型の配列は三角形の個数分処理して、出力の頂点リストと面を構成する頂点番号リスト(テンプレートコードではそれぞれ<code class="highlighter-rouge">vertices</code>と<code class="highlighter-rouge">indices</code>)に格納すれば良い。これらの手順を元にテンプレートのプログラムを埋めて、マーチング・キューブ法のプログラムを完成させよう (テンプレートプログラムは<a href="/programming-for-beginners/cpp/assignment-march-cubes/">課題のページ</a>から入手できる)。</p>
+<p>あとは<code class="language-plaintext highlighter-rouge">TRIANGLE</code>型の配列は三角形の個数分処理して、出力の頂点リストと面を構成する頂点番号リスト(テンプレートコードではそれぞれ<code class="language-plaintext highlighter-rouge">vertices</code>と<code class="language-plaintext highlighter-rouge">indices</code>)に格納すれば良い。これらの手順を元にテンプレートのプログラムを埋めて、マーチング・キューブ法のプログラムを完成させよう (テンプレートプログラムは<a href="/programming-for-beginners/cpp/assignment-march-cubes/">課題のページ</a>から入手できる)。</p>
 
 <h2 id="polygonize関数の中身">Polygonize関数の中身</h2>
 
-<p>上記の手順に従えば、マーチング・キューブ法の実装自体は可能だが、<code class="highlighter-rouge">Polygonize</code> 関数の中身についても見ておこう。以下の議論は自分で後述するマーチング・テトラヘドラ法を実装するときに役に立つ。</p>
+<p>上記の手順に従えば、マーチング・キューブ法の実装自体は可能だが、<code class="language-plaintext highlighter-rouge">Polygonize</code> 関数の中身についても見ておこう。以下の議論は自分で後述するマーチング・テトラヘドラ法を実装するときに役に立つ。</p>
 
 <h3 id="edgetable">edgeTable</h3>
 
-<p>関数の冒頭にある <code class="highlighter-rouge">edgeTable</code> はキューブが持つ12本のエッジのうち、どのエッジ上に頂点が発生するのかを表している。</p>
+<p>関数の冒頭にある <code class="language-plaintext highlighter-rouge">edgeTable</code> はキューブが持つ12本のエッジのうち、どのエッジ上に頂点が発生するのかを表している。</p>
 
-<p><code class="highlighter-rouge">edgeTable</code> の定義から分かる通り、この配列の長さは$2^8 = 256$であり、キューブの8つの頂点のどれが内側で、どれが外側なのかを表すビットマスクから、各エッジ上に新たな頂点が発生するのかどうかを取得できる。例えば、(0始まりで) 2番目の要素である16進数の <code class="highlighter-rouge">0x203</code> (最初の<code class="highlighter-rouge">0x</code>は16進数ということ)であれば、10進数で$2 \cdot 16^2 + 0 \cdot 16^1 + 3 \cdot 16^0 = 515$を表していて、これは2進数なら <code class="highlighter-rouge">0b001000000011</code> (最初の<code class="highlighter-rouge">0b</code> は2進数ということ)だから、1が立っているビットに相当する0, 1, 9番目のエッジ上に頂点が発生することを意味している。</p>
+<p><code class="language-plaintext highlighter-rouge">edgeTable</code> の定義から分かる通り、この配列の長さは$2^8 = 256$であり、キューブの8つの頂点のどれが内側で、どれが外側なのかを表すビットマスクから、各エッジ上に新たな頂点が発生するのかどうかを取得できる。例えば、(0始まりで) 2番目の要素である16進数の <code class="language-plaintext highlighter-rouge">0x203</code> (最初の<code class="language-plaintext highlighter-rouge">0x</code>は16進数ということ)であれば、10進数で$2 \cdot 16^2 + 0 \cdot 16^1 + 3 \cdot 16^0 = 515$を表していて、これは2進数なら <code class="language-plaintext highlighter-rouge">0b001000000011</code> (最初の<code class="language-plaintext highlighter-rouge">0b</code> は2進数ということ)だから、1が立っているビットに相当する0, 1, 9番目のエッジ上に頂点が発生することを意味している。</p>
 
-<p>2番目の要素は2が2進数表示で <code class="highlighter-rouge">0b00000010</code>となることから、1番目の頂点だけが外側であることを表している。この場合には三角形が1つだけ発生するから、上記の考察において、3本のエッジ上に頂点が発生する事実とも一致することが分かる。</p>
+<p>2番目の要素は2が2進数表示で <code class="language-plaintext highlighter-rouge">0b00000010</code>となることから、1番目の頂点だけが外側であることを表している。この場合には三角形が1つだけ発生するから、上記の考察において、3本のエッジ上に頂点が発生する事実とも一致することが分かる。</p>
 
-<p>なお、前半の128個と後半の128個はキューブの頂点の内外が入れ替わったものを表しているので、新たな頂点が発生するエッジが変化することはなく、それ故<code class="highlighter-rouge">edgeTable</code>の後半は前半を逆順に並べ直したものになっている。</p>
+<p>なお、前半の128個と後半の128個はキューブの頂点の内外が入れ替わったものを表しているので、新たな頂点が発生するエッジが変化することはなく、それ故<code class="language-plaintext highlighter-rouge">edgeTable</code>の後半は前半を逆順に並べ直したものになっている。</p>
 
 <h3 id="tritable">triTable</h3>
 
-<p><code class="highlighter-rouge">edgeTable</code>の後にある<code class="highlighter-rouge">triTable</code>はキューブの8頂点の内外を表すビットマスクから、何番のエッジ上に発生した頂点を結んで三角形とするのかを表している。</p>
+<p><code class="language-plaintext highlighter-rouge">edgeTable</code>の後にある<code class="language-plaintext highlighter-rouge">triTable</code>はキューブの8頂点の内外を表すビットマスクから、何番のエッジ上に発生した頂点を結んで三角形とするのかを表している。</p>
 
-<p><code class="highlighter-rouge">triTable</code>は二次元配列で、第1軸の長さはビットマスクの大きさに合わせて$2^8 = 256$となっている。一方、第2軸の大きさはマーチング・キューブ法において、1つのキューブに最大5個の三角形が発生し、それぞれが3つずつ頂点を持つことから15あれば良く、加えて、配列の終点を表すために最後の要素に<code class="highlighter-rouge">-1</code>を入れることを考慮して長さが16となっている。この時に考慮される最大の三角形5つというのは、冒頭の図に示したものよりも詳細なパターンであり、必ずしも図と一致しないことに注意してほしい。</p>
+<p><code class="language-plaintext highlighter-rouge">triTable</code>は二次元配列で、第1軸の長さはビットマスクの大きさに合わせて$2^8 = 256$となっている。一方、第2軸の大きさはマーチング・キューブ法において、1つのキューブに最大5個の三角形が発生し、それぞれが3つずつ頂点を持つことから15あれば良く、加えて、配列の終点を表すために最後の要素に<code class="language-plaintext highlighter-rouge">-1</code>を入れることを考慮して長さが16となっている。この時に考慮される最大の三角形5つというのは、冒頭の図に示したものよりも詳細なパターンであり、必ずしも図と一致しないことに注意してほしい。</p>
 
 <h3 id="頂点の内外ビットマスクの計算">頂点の内外ビットマスクの計算</h3>
 

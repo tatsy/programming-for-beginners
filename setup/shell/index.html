@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -153,12 +153,12 @@ MathJax = {
 <p>Windowsのシェルは2021年現在、過渡期にあって、いくつかのシェル環境が混在している。この中では、オープンソース版のPowerShellかWindows Subsystem 2 (WSL2)のどちらかを使うのが良いと思われる。</p>
 
 <ul>
-  <li>コマンドプロンプト (<code class="highlighter-rouge">cmd.exe</code>)
+  <li>コマンドプロンプト (<code class="language-plaintext highlighter-rouge">cmd.exe</code>)
     <ul>
       <li>Windowsに昔からあるシェル。最初の選択肢にはならないと思うが、Windowsのシステム設定変更などでたまに使う時がある。</li>
     </ul>
   </li>
-  <li>PowerShell (<code class="highlighter-rouge">pwsh.exe</code>)
+  <li>PowerShell (<code class="language-plaintext highlighter-rouge">pwsh.exe</code>)
     <ul>
       <li>コマンドプロンプトの改善のために導入されたシェル。デフォルトでも入っているが<a href="https://docs.microsoft.com/ja-jp/powershell/" target="_blank">オープンソース版</a>もあり、こちらの方が機能が多い。</li>
     </ul>
@@ -174,7 +174,7 @@ MathJax = {
 
 <h3 id="powershellのインストール">PowerShellのインストール</h3>
 
-<p>GitHubのリポジトリからWindows用のインストーラ(拡張子が<code class="highlighter-rouge">.msi</code>になっているもの)で、特にこだわりがなければ最新のものをダウンロード、インストールする。</p>
+<p>GitHubのリポジトリからWindows用のインストーラ(拡張子が<code class="language-plaintext highlighter-rouge">.msi</code>になっているもの)で、特にこだわりがなければ最新のものをダウンロード、インストールする。</p>
 
 <p><a href="https://github.com/PowerShell/PowerShell/releases" target="_blank">https://github.com/PowerShell/PowerShell/releases</a></p>
 
@@ -213,12 +213,12 @@ MathJax = {
 <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get-ExecutionPolicy</span><span class="w">
 </span></code></pre></div></div>
 
-<p>この結果は、特に変更していなければ<code class="highlighter-rouge">RemoteSigned</code>となっているはずなので、以下のようにタイプして、設定を<code class="highlighter-rouge">Bypass</code>に設定し直す。なおChocolateyをインストールした場合には、この設定はすでに済んでいると思われる。</p>
+<p>この結果は、特に変更していなければ<code class="language-plaintext highlighter-rouge">RemoteSigned</code>となっているはずなので、以下のようにタイプして、設定を<code class="language-plaintext highlighter-rouge">Bypass</code>に設定し直す。なおChocolateyをインストールした場合には、この設定はすでに済んでいると思われる。</p>
 
 <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Set-ExecutionPolicy</span><span class="w"> </span><span class="nx">Bypass</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">Process</span><span class="w">
 </span></code></pre></div></div>
 
-<p>設定後、<code class="highlighter-rouge">oh-my-posh</code>と必要なGitのモジュールをインストールする。</p>
+<p>設定後、<code class="language-plaintext highlighter-rouge">oh-my-posh</code>と必要なGitのモジュールをインストールする。</p>
 
 <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Install-Module</span><span class="w"> </span><span class="nx">posh-git</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">CurrentUser</span><span class="w">
 </span><span class="n">Install-Module</span><span class="w"> </span><span class="nx">oh-my-posh</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">CurrentUser</span><span class="w">
@@ -236,7 +236,7 @@ MathJax = {
 </span><span class="n">Set-Theme</span><span class="w"> </span><span class="nx">Paradox</span><span class="w">
 </span></code></pre></div></div>
 
-<p>なお<code class="highlighter-rouge">Set-Theme</code>の部分は<a href="https://github.com/JanDeDobbeleer/oh-my-posh#themes" target="_blank">oh-my-posh</a>のGitリポジトリにあるものを見て、好きなものを使用すると良い。</p>
+<p>なお<code class="language-plaintext highlighter-rouge">Set-Theme</code>の部分は<a href="https://github.com/JanDeDobbeleer/oh-my-posh#themes" target="_blank">oh-my-posh</a>のGitリポジトリにあるものを見て、好きなものを使用すると良い。</p>
 
 <h3 id="nerdフォントのインストール">Nerdフォントのインストール</h3>
 
@@ -256,7 +256,7 @@ MathJax = {
 
 <p>Windows Terminalは表示に使うフォントを設定ファイルで管理できるので、適当なNerdフォントを設定する。設定についてはWindows Terminalを立ち上げて、画面上部、タブの右隣にある「+」ボタンをクリックし、そこから「設定」を選ぶ。</p>
 
-<p>するとエディタで設定ファイルが開くので、設定ファイル内の<code class="highlighter-rouge">Windows.Terminal.PowershellCore</code>という場所を探して、以下のように設定する。</p>
+<p>するとエディタで設定ファイルが開くので、設定ファイル内の<code class="language-plaintext highlighter-rouge">Windows.Terminal.PowershellCore</code>という場所を探して、以下のように設定する。</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"guid"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">...</span><span class="p">},</span><span class="w">
@@ -269,7 +269,7 @@ MathJax = {
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
-<p>すると、以下の画像のように画面が設定されて、Anacondaの開発環境名 (以下の画像では<code class="highlighter-rouge">base</code>)やGitリポジトリのブランチ名 (以下の画像では<code class="highlighter-rouge">master</code>)などが表示されるようになる。</p>
+<p>すると、以下の画像のように画面が設定されて、Anacondaの開発環境名 (以下の画像では<code class="language-plaintext highlighter-rouge">base</code>)やGitリポジトリのブランチ名 (以下の画像では<code class="language-plaintext highlighter-rouge">master</code>)などが表示されるようになる。</p>
 
 <hr />
 
@@ -277,30 +277,30 @@ MathJax = {
 
 <p>MacやLinuxにはデフォルトで「ターミナル」というソフトウェアが用意されているが、おすすめはMacなら<a href="https://iterm2.com/" target="_blank">iTerm</a>、Linuxなら<a href="https://www.byobu.org/">Byobu</a>というソフトウェアを使うと、タブの数を増やしたり、画面を分割したりできる。</p>
 
-<p>これらのターミナル環境の中では、MacとLinuxともに<code class="highlighter-rouge">bash</code>というシェルを使用するように設定されている(ターミナルはCUI操作を行うソフト、シェルはコマンドを受け取ってOS上で命令を実行するソフトウェアのこと)。例えばMacでターミナルを立ち上げると、<code class="highlighter-rouge">bash</code>のソフトウェアが走って、ターミナル上に入力を受け付ける画面を表示する。</p>
+<p>これらのターミナル環境の中では、MacとLinuxともに<code class="language-plaintext highlighter-rouge">bash</code>というシェルを使用するように設定されている(ターミナルはCUI操作を行うソフト、シェルはコマンドを受け取ってOS上で命令を実行するソフトウェアのこと)。例えばMacでターミナルを立ち上げると、<code class="language-plaintext highlighter-rouge">bash</code>のソフトウェアが走って、ターミナル上に入力を受け付ける画面を表示する。</p>
 
-<p>筆者はあまり<code class="highlighter-rouge">bash</code>は使ったことがなく、より拡張性などが優れている(と思われる)<code class="highlighter-rouge">zsh</code>をよく使っている。というわけで<code class="highlighter-rouge">zsh</code>を使う方法を紹介する。最低限の設定であれば非常に簡単で、まずは以下の手順で<code class="highlighter-rouge">zsh</code>と<code class="highlighter-rouge">oh-my-zsh</code>をインストールすると良い。</p>
+<p>筆者はあまり<code class="language-plaintext highlighter-rouge">bash</code>は使ったことがなく、より拡張性などが優れている(と思われる)<code class="language-plaintext highlighter-rouge">zsh</code>をよく使っている。というわけで<code class="language-plaintext highlighter-rouge">zsh</code>を使う方法を紹介する。最低限の設定であれば非常に簡単で、まずは以下の手順で<code class="language-plaintext highlighter-rouge">zsh</code>と<code class="language-plaintext highlighter-rouge">oh-my-zsh</code>をインストールすると良い。</p>
 
 <h3 id="zshのインストール">Zshのインストール</h3>
 
-<p>Macなら<a href="https://brew.sh/index_ja" target="_blank">Homebrew</a>, Linuxなら<code class="highlighter-rouge">apt-get</code>(Debian系)とか<code class="highlighter-rouge">yum</code> (CentOS系)で<code class="highlighter-rouge">zsh</code>を入れる。ちなみに、最近は<code class="highlighter-rouge">Fish</code>というシェルも人気らしく、興味があれば下の補足の項を見て欲しい。</p>
+<p>Macなら<a href="https://brew.sh/index_ja" target="_blank">Homebrew</a>, Linuxなら<code class="language-plaintext highlighter-rouge">apt-get</code>(Debian系)とか<code class="language-plaintext highlighter-rouge">yum</code> (CentOS系)で<code class="language-plaintext highlighter-rouge">zsh</code>を入れる。ちなみに、最近は<code class="language-plaintext highlighter-rouge">Fish</code>というシェルも人気らしく、興味があれば下の補足の項を見て欲しい。</p>
 
 <h3 id="oh-my-zshのインストール">Oh-my-zshのインストール</h3>
 
-<p><code class="highlighter-rouge">zsh</code>には多数のプラグインが用意されていて、細かな設定が可能ではあるのだが、最初から細かい設定をするのは少々骨が折れる。まだ設定に慣れないうちは、最も設定が簡単で、使い勝手もそれなりに良い<a href="https://ohmyz.sh/" target="_blank">oh-my-zsh</a>を使うのが良いと思う。</p>
+<p><code class="language-plaintext highlighter-rouge">zsh</code>には多数のプラグインが用意されていて、細かな設定が可能ではあるのだが、最初から細かい設定をするのは少々骨が折れる。まだ設定に慣れないうちは、最も設定が簡単で、使い勝手もそれなりに良い<a href="https://ohmyz.sh/" target="_blank">oh-my-zsh</a>を使うのが良いと思う。</p>
 
-<p>インストール方法は非常に簡単で、上記のサイトをおとづれて、<code class="highlighter-rouge">zsh</code>を立ちあげた状態でインストール用のスクリプトを実行する。</p>
+<p>インストール方法は非常に簡単で、上記のサイトをおとづれて、<code class="language-plaintext highlighter-rouge">zsh</code>を立ちあげた状態でインストール用のスクリプトを実行する。</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sh <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="si">)</span><span class="s2">"</span>
 </code></pre></div></div>
 
-<p>もしかするとCurl (Web上のファイルをCLI経由でインストールするソフトウェア)が見つからないと言われるかもしれないので、その場合は<code class="highlighter-rouge">zsh</code>と同様にHomebrew等でインストールする。</p>
+<p>もしかするとCurl (Web上のファイルをCLI経由でインストールするソフトウェア)が見つからないと言われるかもしれないので、その場合は<code class="language-plaintext highlighter-rouge">zsh</code>と同様にHomebrew等でインストールする。</p>
 
 <h3 id="補足-zplug">補足: zplug</h3>
 
-<p>ちなみに著者は<a href="https://github.com/zplug/zplug" target="_blank">zplug</a>という<code class="highlighter-rouge">zsh</code>のプラグインマネージャを使っているので、興味がある人は調べてみると良い。</p>
+<p>ちなみに著者は<a href="https://github.com/zplug/zplug" target="_blank">zplug</a>という<code class="language-plaintext highlighter-rouge">zsh</code>のプラグインマネージャを使っているので、興味がある人は調べてみると良い。</p>
 
-<p>参考までの<code class="highlighter-rouge">zplug</code>の設定ファイルを掲載しておく。</p>
+<p>参考までの<code class="language-plaintext highlighter-rouge">zplug</code>の設定ファイルを掲載しておく。</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># zsh/zplug settings</span>
 <span class="nb">source</span> <span class="s2">"</span><span class="k">${</span><span class="nv">HOME</span><span class="k">}</span><span class="s2">/.zplug/init.zsh"</span>

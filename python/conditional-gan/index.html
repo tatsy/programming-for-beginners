@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -154,18 +154,18 @@ MathJax = {
 
 <p>GANからConditional GANへの拡張は単純で、GeneratorとDiscriminatorの両方の入力に対して、どの種類の画像を生成したいのかを意味する余剰次元を追加するだけだ。</p>
 
-<p>例えば、MNISTのデータを利用している場合、画像の種類は10種類なので、追加する余剰次元は10である。もし5という数字を生成したければ、ランダムベクトルに対して <code class="highlighter-rouge">[0, 0, 0, 0, 0, 1, 0, 0, 0, 0]</code> という10次元ベクトルを追加して、それをGeneratorに渡す。</p>
+<p>例えば、MNISTのデータを利用している場合、画像の種類は10種類なので、追加する余剰次元は10である。もし5という数字を生成したければ、ランダムベクトルに対して <code class="language-plaintext highlighter-rouge">[0, 0, 0, 0, 0, 1, 0, 0, 0, 0]</code> という10次元ベクトルを追加して、それをGeneratorに渡す。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">randn</span><span class="p">([</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">sample_dims</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
-<span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">cat</span><span class="p">([</span><span class="n">z</span><span class="p">,</span> <span class="n">c_onehot</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># c_onehotが10次元の余剰次元を表すベクトル
-</span><span class="n">x_fake</span> <span class="o">=</span> <span class="n">netG</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">randn</span><span class="p">([</span><span class="n">n_batches</span><span class="p">,</span> <span class="n">sample_dims</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">([</span><span class="n">z</span><span class="p">,</span> <span class="n">c_onehot</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># c_onehotが10次元の余剰次元を表すベクトル
+</span><span class="n">x_fake</span> <span class="o">=</span> <span class="nf">netG</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Discriminatorの場合は入力が画像なので、画像の各画素に対して、上記の10次元ベクトルを追加する。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c_onehot_tile</span> <span class="o">=</span> <span class="n">c_onehot</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="n">num_batch</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
-<span class="n">x_and_c</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">c_onehot_tile</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">x_and_c</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c_onehot_tile</span> <span class="o">=</span> <span class="n">c_onehot</span><span class="p">.</span><span class="nf">view</span><span class="p">(</span><span class="n">num_batch</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nf">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+<span class="n">x_and_c</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">c_onehot_tile</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="nf">netD</span><span class="p">(</span><span class="n">x_and_c</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>前回のDCGANのプログラムを参考に、この書き換えには各自で取り組んでほしい。</p>

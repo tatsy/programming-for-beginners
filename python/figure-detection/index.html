@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -167,15 +167,15 @@ MathJax = {
 <p>以下がOpenCVでSobelフィルタとCanny法によりエッジ画像を得るプログラムと、その結果である。なお、以下のコードでは結果を見やすくするため、Sobelフィルタの結果を強調した後、二値化の処理をいれている。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 画像をグレースケールにする
-</span><span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+</span><span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nf">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
 <span class="c1"># Sobelフィルタ
-</span><span class="n">dx</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CV_8U</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">dy</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CV_8U</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">sobel</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">dy</span><span class="p">)</span>
-<span class="n">sobel</span> <span class="o">=</span> <span class="p">(</span><span class="n">sobel</span> <span class="o">*</span> <span class="mf">128.0</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'uint8'</span><span class="p">)</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">sobel</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">sobel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">THRESH_BINARY</span> <span class="o">+</span> <span class="n">cv2</span><span class="p">.</span><span class="n">THRESH_OTSU</span><span class="p">)</span>
+</span><span class="n">dx</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nc">Sobel</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CV_8U</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">dy</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nc">Sobel</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CV_8U</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">sobel</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">dy</span><span class="p">)</span>
+<span class="n">sobel</span> <span class="o">=</span> <span class="p">(</span><span class="n">sobel</span> <span class="o">*</span> <span class="mf">128.0</span><span class="p">).</span><span class="nf">astype</span><span class="p">(</span><span class="sh">'</span><span class="s">uint8</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">sobel</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nf">threshold</span><span class="p">(</span><span class="n">sobel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">THRESH_BINARY</span> <span class="o">+</span> <span class="n">cv2</span><span class="p">.</span><span class="n">THRESH_OTSU</span><span class="p">)</span>
 <span class="c1"># Canny法
-</span><span class="n">canny</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">Canny</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+</span><span class="n">canny</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nc">Canny</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 </code></pre></div></div>
 
 <table class="images">
@@ -232,8 +232,8 @@ MathJax = {
 
 <p>モルフォロジー演算は構造要素と呼ばれる小さな画像のようなものを入力の二値画像にしたがって繰り返す操作に対応する。したがって、OpenCV(やMATLABなどの他のライブラリ)では、モルフォロジー演算の関数は二値画像と構造要素を引数にとる。OpenCVを用いる場合には、dilationとerosionはそれぞれ以下のようなコードで実現される。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">res_dilate</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">dilate</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">binary</span><span class="p">.</span><span class="n">dtype</span><span class="p">))</span>
-<span class="n">res_erode</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">erode</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">binary</span><span class="p">.</span><span class="n">dtype</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">res_dilate</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nf">dilate</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="nf">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">binary</span><span class="p">.</span><span class="n">dtype</span><span class="p">))</span>
+<span class="n">res_erode</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nf">erode</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="nf">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">binary</span><span class="p">.</span><span class="n">dtype</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>エッジを統合する場合、エッジが白色の領域に検出されているとすると、先にdilation、次にerosionの順序で処理を施す。dilationにより二重のエッジのそれぞれが太くなり、重なることで、太い1本のエッジとなる。その後、erosionをかけることで、そのエッジが細くなり、1本の細いエッジとなる。</p>
@@ -275,12 +275,12 @@ MathJax = {
 
 <p>なおdilationのあとにerosionをする操作をclosingとも呼び、以下のコードでも同じことができる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">res_close</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">morphologyEx</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">MORPH_CLOSE</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">binary</span><span class="p">.</span><span class="n">dtype</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">res_close</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nf">morphologyEx</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">MORPH_CLOSE</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="nf">ones</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">binary</span><span class="p">.</span><span class="n">dtype</span><span class="p">))</span>
 </code></pre></div></div>
 
 <h2 id="輪郭線の検出">輪郭線の検出</h2>
 
-<p>ここまでに検出したエッジの情報を使って輪郭線を抽出する。輪郭線の抽出にはOpenCVの<code class="highlighter-rouge">findContours</code>という関数を用いる。この関数には1985年にSuzukiさんとAbeさんという日本人が提案したアルゴリズムが実装されている(*1)。</p>
+<p>ここまでに検出したエッジの情報を使って輪郭線を抽出する。輪郭線の抽出にはOpenCVの<code class="language-plaintext highlighter-rouge">findContours</code>という関数を用いる。この関数には1985年にSuzukiさんとAbeさんという日本人が提案したアルゴリズムが実装されている(*1)。</p>
 
 <p>(*1) S. Suzuki and K. Abe, “Topological structural analysis of digitized binary images by border following”, Computer Vision, Graphics and Image Processing”, 1985.</p>
 
@@ -288,22 +288,22 @@ MathJax = {
 
 <p>輪郭線の追跡はある画素の周りを時計回りに見ていき、初めて1となる画素にスキャン位置を移動する、という操作を繰り返すことで行われる。端点に到達するか、元の位置の画素に戻ってきたら、再びラスタスキャン順に値が1の画素で、まだどの輪郭にも含まれていない画素を探し、以後、同様の処理を繰り返していく。</p>
 
-<p>OpenCVの<code class="highlighter-rouge">findContours</code>は3つの引数を取り、第1引数が入力の二値画像、第2引数が検出される輪郭線の階層関係、第3引数が抽出する輪郭線をどのように近似表現するかを表す。代表的な使い方は、</p>
+<p>OpenCVの<code class="language-plaintext highlighter-rouge">findContours</code>は3つの引数を取り、第1引数が入力の二値画像、第2引数が検出される輪郭線の階層関係、第3引数が抽出する輪郭線をどのように近似表現するかを表す。代表的な使い方は、</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">_</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">findContours</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CHAIN_APPROX_SIMPLE</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">_</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nf">findContours</span><span class="p">(</span><span class="n">binary</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CHAIN_APPROX_SIMPLE</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>になる。<code class="highlighter-rouge">cv2.RETR_EXTERNAL</code> は二重丸のような階層的な輪郭線が現れたときに最も外側の閉曲線のみを抽出する。また<code class="highlighter-rouge">cv2.CHAIN_APPROX_SIMPLE</code>は抽出される輪郭線が水平方向、垂直方向、45度傾き, 135度の傾きに直線的につながるときに、それらを端点だけで近似する。</p>
+<p>になる。<code class="language-plaintext highlighter-rouge">cv2.RETR_EXTERNAL</code> は二重丸のような階層的な輪郭線が現れたときに最も外側の閉曲線のみを抽出する。また<code class="language-plaintext highlighter-rouge">cv2.CHAIN_APPROX_SIMPLE</code>は抽出される輪郭線が水平方向、垂直方向、45度傾き, 135度の傾きに直線的につながるときに、それらを端点だけで近似する。</p>
 
 <p>この他の使い方については公式の<a href="https://docs.opencv.org/2.4/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html#findcontours" target="_blank">ドキュメント</a>を参考にしてほしい。</p>
 
 <h2 id="輪郭線の描画">輪郭線の描画</h2>
 
-<p>上記の方法で検出された輪郭線は<code class="highlighter-rouge">findContours</code>と対になる<code class="highlighter-rouge">drawContours</code>という関数で描画できる。</p>
+<p>上記の方法で検出された輪郭線は<code class="language-plaintext highlighter-rouge">findContours</code>と対になる<code class="language-plaintext highlighter-rouge">drawContours</code>という関数で描画できる。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cv2</span><span class="p">.</span><span class="n">drawContours</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">LINE_AA</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
-<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cv2</span><span class="p">.</span><span class="nf">drawContours</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">LINE_AA</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>こちらも詳しい使い方は公式の<a href="https://docs.opencv.org/2.4/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html#drawcontours" target="_blank">ドキュメント</a>を参考にしてほしい。</p>
@@ -326,46 +326,46 @@ MathJax = {
 
 <p>各輪郭線がどのような図形か(円か？多角形か？そうなら何角形か？)を判別するには、輪郭線を多角形として近似して、その時の角の数を調べればいい。</p>
 
-<p>上記の通り、<code class="highlighter-rouge">findContours</code>で検出された輪郭線(<code class="highlighter-rouge">cv2.CHAIN_APPROX_SIMPLE</code>を使った場合)は特定の向きの直線のみを端点で近似している。そのため、現在検出されている多角形は、必ずしも角の点だけで表されているわけではない (<code class="highlighter-rouge">contours[i]</code>の長さを見てみると分かる)。</p>
+<p>上記の通り、<code class="language-plaintext highlighter-rouge">findContours</code>で検出された輪郭線(<code class="language-plaintext highlighter-rouge">cv2.CHAIN_APPROX_SIMPLE</code>を使った場合)は特定の向きの直線のみを端点で近似している。そのため、現在検出されている多角形は、必ずしも角の点だけで表されているわけではない (<code class="language-plaintext highlighter-rouge">contours[i]</code>の長さを見てみると分かる)。</p>
 
-<p>そこで、検出されている輪郭線を更に粗く角の点だけで近似することを考える。これにはOpenCVの<code class="highlighter-rouge">cv2.approxPolyDP</code>という関数が使える。この関数には<a href="https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm" target="_blank">Ramer-Douglas-Peucker法</a>というアルゴリズムが使われている。</p>
+<p>そこで、検出されている輪郭線を更に粗く角の点だけで近似することを考える。これにはOpenCVの<code class="language-plaintext highlighter-rouge">cv2.approxPolyDP</code>という関数が使える。この関数には<a href="https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm" target="_blank">Ramer-Douglas-Peucker法</a>というアルゴリズムが使われている。</p>
 
 <p>このアルゴリズムは、ある図形を適当な離散点(開曲線なら端点)を選んでその間を直線で結んだときに、最も離れている点を順次追加してポリライン(直線を結んで曲線を近似したもの)を更新していく。最も離れた点までの距離が一定以下になったら処理を終える。閉曲線の場合には、すべての候補となる点の中で最も離れた2点を見つけ、その二点を直線で結んで、二点の上部と下部を別々のポリラインで近似する。</p>
 
-<p>それでは<code class="highlighter-rouge">cv2.findContours</code>で検出した各輪郭線について<code class="highlighter-rouge">cv2.approxPolyDP</code>を用いて近似してみる。</p>
+<p>それでは<code class="language-plaintext highlighter-rouge">cv2.findContours</code>で検出した各輪郭線について<code class="language-plaintext highlighter-rouge">cv2.approxPolyDP</code>を用いて近似してみる。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
     <span class="c1"># 輪郭線の長さを計算
-</span>    <span class="n">arclen</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">arcLength</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+</span>    <span class="n">arclen</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nf">arcLength</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
     <span class="c1"># 輪郭線の近似
-</span>    <span class="n">approx</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">approxPolyDP</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">arclen</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+</span>    <span class="n">approx</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="nf">approxPolyDP</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">arclen</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
     <span class="c1"># 何角形かを見てみる
-</span>    <span class="k">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">approx</span><span class="p">))</span>
+</span>    <span class="nf">print</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">approx</span><span class="p">))</span>
     <span class="c1"># 輪郭線の描画
-</span>    <span class="n">cv2</span><span class="p">.</span><span class="n">drawContours</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">[</span><span class="n">approx</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">LINE_AA</span><span class="p">)</span>
+</span>    <span class="n">cv2</span><span class="p">.</span><span class="nf">drawContours</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">[</span><span class="n">approx</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">LINE_AA</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>上記のコードでは<code class="highlighter-rouge">cv2.arcLength</code>を使って曲線の長さを計算し、その長さの100分の1の精度を持つように輪郭線を近似している。この精度はあまり細かすぎると角が増え、粗過ぎても角が減ってしまうので、多少の調整が必要ではある。<code class="highlighter-rouge">print</code>で出力された内容を見てみると6や4といった角の数と思われる数字が得られていることが分かる。</p>
+<p>上記のコードでは<code class="language-plaintext highlighter-rouge">cv2.arcLength</code>を使って曲線の長さを計算し、その長さの100分の1の精度を持つように輪郭線を近似している。この精度はあまり細かすぎると角が増え、粗過ぎても角が減ってしまうので、多少の調整が必要ではある。<code class="language-plaintext highlighter-rouge">print</code>で出力された内容を見てみると6や4といった角の数と思われる数字が得られていることが分かる。</p>
 
-<p>角の数が正しく得られていることが分かったら、その角の数に基づいて、画像中にラベルを入れてみよう。OpenCVでテキストを画像中に入れるには<code class="highlighter-rouge">cv2.putText</code>を使う。ラベルを入れるコードは例えば次のようになるだろう。</p>
+<p>角の数が正しく得られていることが分かったら、その角の数に基づいて、画像中にラベルを入れてみよう。OpenCVでテキストを画像中に入れるには<code class="language-plaintext highlighter-rouge">cv2.putText</code>を使う。ラベルを入れるコードは例えば次のようになるだろう。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n_gon</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">approx</span><span class="p">)</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s">'unknown'</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n_gon</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">approx</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="sh">'</span><span class="s">unknown</span><span class="sh">'</span>
 <span class="k">if</span> <span class="n">n_gon</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">'circle'</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="sh">'</span><span class="s">circle</span><span class="sh">'</span>
 <span class="k">elif</span> <span class="n">n_gon</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">'hexagon'</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="sh">'</span><span class="s">hexagon</span><span class="sh">'</span>
 <span class="k">elif</span> <span class="n">n_gon</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">'pentagon'</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="sh">'</span><span class="s">pentagon</span><span class="sh">'</span>
 <span class="k">elif</span> <span class="n">n_gon</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">'rectangle'</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="sh">'</span><span class="s">rectangle</span><span class="sh">'</span>
 <span class="k">elif</span> <span class="n">n_gon</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">'triangle'</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="sh">'</span><span class="s">triangle</span><span class="sh">'</span>
     
 <span class="n">font</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">FONT_HERSHEY_SIMPLEX</span>
-<span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">approx</span><span class="p">).</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)).</span><span class="nb">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="s">'int32'</span><span class="p">)</span>
+<span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nf">asarray</span><span class="p">(</span><span class="n">approx</span><span class="p">).</span><span class="nf">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)).</span><span class="nf">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="nf">astype</span><span class="p">(</span><span class="sh">'</span><span class="s">int32</span><span class="sh">'</span><span class="p">)</span>
 <span class="n">px</span><span class="p">,</span> <span class="n">py</span> <span class="o">=</span> <span class="n">position</span>
-<span class="n">cv2</span><span class="p">.</span><span class="n">putText</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="p">(</span><span class="n">px</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">py</span> <span class="o">+</span> <span class="mi">10</span><span class="p">),</span> <span class="n">font</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">LINE_AA</span><span class="p">)</span>
+<span class="n">cv2</span><span class="p">.</span><span class="nf">putText</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="p">(</span><span class="n">px</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">py</span> <span class="o">+</span> <span class="mi">10</span><span class="p">),</span> <span class="n">font</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">LINE_AA</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>正しくプログラムがかけていれば、以下のような画像が得られるはずである。</p>

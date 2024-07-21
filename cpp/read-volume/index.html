@@ -126,7 +126,7 @@ MathJax = {
 
   <div class="sidebar-item">
     <p>
-      &copy; 2022. All rights reserved.
+      &copy; 2024. All rights reserved.
     </p>
   </div>
 </div>
@@ -150,7 +150,7 @@ MathJax = {
 
 <h2 id="ファイルを開く">ファイルを開く</h2>
 
-<p>C言語では <code class="highlighter-rouge">stdio.h</code> にある <code class="highlighter-rouge">FILE</code> 型を用いてバイナリファイルを読み書きを行うが、C++では <code class="highlighter-rouge">ifstream</code> で読み込み、<code class="highlighter-rouge">ofstream</code> で書き込みを行う。いずれも、第1引数の <code class="highlighter-rouge">const char*</code> 型のファイル名文字列を取り、第2引数にファイルを開く際のオプションを取る。</p>
+<p>C言語では <code class="language-plaintext highlighter-rouge">stdio.h</code> にある <code class="language-plaintext highlighter-rouge">FILE</code> 型を用いてバイナリファイルを読み書きを行うが、C++では <code class="language-plaintext highlighter-rouge">ifstream</code> で読み込み、<code class="language-plaintext highlighter-rouge">ofstream</code> で書き込みを行う。いずれも、第1引数の <code class="language-plaintext highlighter-rouge">const char*</code> 型のファイル名文字列を取り、第2引数にファイルを開く際のオプションを取る。</p>
 
 <p>テキスト形式 (ASCII形式ともいう)のテキストデータを読み書きするときは、以下のようにしてファイルを開く。</p>
 
@@ -170,7 +170,7 @@ MathJax = {
 <span class="n">reader</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">in</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>ファイルを開いたときに、例えばファイルが見つからないなどのエラーが生じると <code class="highlighter-rouge">fail()</code> メソッドの戻り値が <code class="highlighter-rouge">true</code> になる。ファイルを開く操作は比較的失敗しやすい操作なので、エラー処理は必ず入れておくこと。</p>
+<p>ファイルを開いたときに、例えばファイルが見つからないなどのエラーが生じると <code class="language-plaintext highlighter-rouge">fail()</code> メソッドの戻り値が <code class="language-plaintext highlighter-rouge">true</code> になる。ファイルを開く操作は比較的失敗しやすい操作なので、エラー処理は必ず入れておくこと。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">reader</span><span class="p">.</span><span class="n">fail</span><span class="p">())</span> <span class="p">{</span>
     <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Failed to open file: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">filename</span><span class="p">);</span>
@@ -178,19 +178,19 @@ MathJax = {
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>ここまではテキスト形式のデータを見てきたが、バイナリ形式のデータを読み書きするときには第2引数に <code class="highlighter-rouge">std::ios::binary</code> を追加する。</p>
+<p>ここまではテキスト形式のデータを見てきたが、バイナリ形式のデータを読み書きするときには第2引数に <code class="language-plaintext highlighter-rouge">std::ios::binary</code> を追加する。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="nf">reader</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">in</span> <span class="o">|</span> <span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>ファイルへの操作が終わったら <code class="highlighter-rouge">close()</code> メソッドを呼んでファイルを閉じる。ただし、C++の場合には <code class="highlighter-rouge">ifstream</code>, <code class="highlighter-rouge">ofstream</code> を値型で宣言している場合には、それらが破棄されるときに自動的にファイルも閉じられる。</p>
+<p>ファイルへの操作が終わったら <code class="language-plaintext highlighter-rouge">close()</code> メソッドを呼んでファイルを閉じる。ただし、C++の場合には <code class="language-plaintext highlighter-rouge">ifstream</code>, <code class="language-plaintext highlighter-rouge">ofstream</code> を値型で宣言している場合には、それらが破棄されるときに自動的にファイルも閉じられる。</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">reader</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
 </code></pre></div></div>
 
 <h2 id="データの読み書き-テキスト形式">データの読み書き (テキスト形式)</h2>
 
-<p>C言語においては、ファイルからのデータの読み取りは <code class="highlighter-rouge">fprintf</code> のようなIO関数を用いていた。見て分かる通り、これは標準入出力を担当する <code class="highlighter-rouge">printf</code> のファイル版といって良い。一方C++では標準入出力を <code class="highlighter-rouge">cout</code> ならびに <code class="highlighter-rouge">cin</code> を用いて行う。例えば、以下のような形だ。</p>
+<p>C言語においては、ファイルからのデータの読み取りは <code class="language-plaintext highlighter-rouge">fprintf</code> のようなIO関数を用いていた。見て分かる通り、これは標準入出力を担当する <code class="language-plaintext highlighter-rouge">printf</code> のファイル版といって良い。一方C++では標準入出力を <code class="language-plaintext highlighter-rouge">cout</code> ならびに <code class="language-plaintext highlighter-rouge">cin</code> を用いて行う。例えば、以下のような形だ。</p>
 
 <p><strong>標準入力</strong></p>
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
@@ -214,7 +214,7 @@ MathJax = {
 
 <h2 id="データの読み書き-バイナリ形式">データの読み書き (バイナリ形式)</h2>
 
-<p>C言語においては、バイナリ形式の読み込みに <code class="highlighter-rouge">fread</code>、書き込みに <code class="highlighter-rouge">fwrite</code> を用いた。一方でC++の場合には <code class="highlighter-rouge">ifstream</code>ならびに<code class="highlighter-rouge">ofstream</code> クラスのメソッドを用いて読み書きができる。<code class="highlighter-rouge">fread</code> と比較をしながら見ていこう。</p>
+<p>C言語においては、バイナリ形式の読み込みに <code class="language-plaintext highlighter-rouge">fread</code>、書き込みに <code class="language-plaintext highlighter-rouge">fwrite</code> を用いた。一方でC++の場合には <code class="language-plaintext highlighter-rouge">ifstream</code>ならびに<code class="language-plaintext highlighter-rouge">ofstream</code> クラスのメソッドを用いて読み書きができる。<code class="language-plaintext highlighter-rouge">fread</code> と比較をしながら見ていこう。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">x</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
 <span class="n">fread</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">x</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span> <span class="n">fp</span><span class="p">);</span>
@@ -226,7 +226,7 @@ MathJax = {
 <span class="n">reader</span><span class="p">.</span><span class="n">read</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">x</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">);</span>
 </code></pre></div></div>
 
-<p>この操作は書き込みもほとんど同じで、<code class="highlighter-rouge">fwrite</code> と <code class="highlighter-rouge">ofstream::write</code> を比較すると以下のようになる。</p>
+<p>この操作は書き込みもほとんど同じで、<code class="language-plaintext highlighter-rouge">fwrite</code> と <code class="language-plaintext highlighter-rouge">ofstream::write</code> を比較すると以下のようになる。</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">x</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span> <span class="p">};</span>
 <span class="n">fwrite</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">x</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span> <span class="n">fp</span><span class="p">);</span>
@@ -240,9 +240,9 @@ MathJax = {
 
 <p>今回わたすボリュームデータはX線CTで撮影された巻き貝のデータで、<a href="https://imagej.nih.gov/ij/" target="_blank">ImageJ</a>を用いて16bit符号なし整数のデータとして出力したものである。</p>
 
-<p>このデータには、大きさのデータが含まれず、ファイルの先頭から各ボクセルにCT値が格納されている。ファイル名は <code class="highlighter-rouge">shell_512_512_271.raw</code> のようになっており、このデータには縦、横、奥行きに、それぞれ512, 512, 271ボクセルのデータが並んでいる。</p>
+<p>このデータには、大きさのデータが含まれず、ファイルの先頭から各ボクセルにCT値が格納されている。ファイル名は <code class="language-plaintext highlighter-rouge">shell_512_512_271.raw</code> のようになっており、このデータには縦、横、奥行きに、それぞれ512, 512, 271ボクセルのデータが並んでいる。</p>
 
-<p>サンプルプログラムの <code class="highlighter-rouge">volume.h</code> にある <code class="highlighter-rouge">Volume::load</code> にボリュームデータを読み取る関数を実装してみよう。</p>
+<p>サンプルプログラムの <code class="language-plaintext highlighter-rouge">volume.h</code> にある <code class="language-plaintext highlighter-rouge">Volume::load</code> にボリュームデータを読み取る関数を実装してみよう。</p>
 
 </div>
 
