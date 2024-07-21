@@ -37,7 +37,7 @@ Jekyll::Hooks.register :site, :post_write do |site|
   site.data["archives"].each do |name, inputs|
     # Create archive directory
     destdir = File.join(site.dest, "archives")
-    if not Dir.exists?(destdir)
+    if not Dir.exist?(destdir)
       Dir.mkdir(destdir)
     end
 

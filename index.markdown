@@ -82,6 +82,7 @@ permalink: /
 以下の課題で使うテンプレート・プログラムをひとまとめにしたものを以下からダウンロードできる。
 
 * [テンプレート・プログラム]({{ '/archives/cpp-beginners.zip' | relative_url }})
+* [練習用データ](https://drive.google.com/drive/folders/11yHeeVfKmjxel_7d3k9aUIob7DRuhB_H?usp=sharing){:target="_blank"}
 
 ### マーチング・キューブ法によるメッシュ生成
 

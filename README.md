@@ -2,6 +2,7 @@ Programming for Beginners
 ===
 
 ![github pages](https://github.com/tatsy/programming-for-beginners/workflows/github%20pages/badge.svg)
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 はじめに
 ---
@@ -20,4 +21,4 @@ Programming for Beginners
 ライセンス
 ---
 
-MIT License (c) 2020-2021, Tatsuya Yatagawa
+Creative Commons License BY-NC-SA 4.0 (c) 2020-2024, Tatsuya Yatagawa
